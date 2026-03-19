@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StreamVault</title>
+    <link rel="icon" type="image/png" href="StreamVault2.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <!-- SETUP OVERLAY -->
+    <div id="setup-overlay">
+        <div class="setup-box">
+            <div class="logo-mark">Stream<span>Vault</span></div>
+            <p>
+                This site uses the <strong style="color:var(--text)">TMDB API</strong> for movie data and
+                <strong style="color:var(--text)">PrimeSrc.me</strong> for streaming.<br><br>
+                Get your free TMDB API key at
+                <a href="https://www.themoviedb.org/settings/api" target="_blank">themoviedb.org</a>, then paste it
+                below.
+            </p>
+            <input id="api-key-input" type="text" class="setup-input" placeholder="Paste your TMDB API key…" />
+            <button class="btn-gold" onclick="saveApiKey()">Launch StreamVault →</button>
+            <div class="setup-note">Your key is stored locally in your browser and never sent anywhere else.</div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav>
+        <button class="nav-logo" onclick="showHome()">Stream<span>Vault</span></button>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showHome()" id="tab-home">Home</button>
+            <button class="nav-tab" onclick="fetchSection('movie')" id="tab-movies">Movies</button>
+            <button class="nav-tab" onclick="fetchSection('tv')" id="tab-tv">TV Shows</button>
+        </div>
+        <div class="nav-right">
+            <div class="nav-search-wrap">
+                <svg class="nav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
+                </svg>
+                <input id="search-input" type="text" class="nav-search" placeholder="Search movies, shows…"
+                    oninput="onSearchInput(this.value)" onkeydown="if(event.key==='Enter')doSearch(this.value)" />
+            </div>
+            <button class="nav-btn" onclick="showSetup()">⚙ API Key</button>
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main>
+        <!-- HOME PAGE -->
+        <div id="home-page">
+            <div id="hero">
+                <div id="hero-bg"></div>
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--gold)">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                        Featured Tonight
+                    </div>
+                    <div id="hero-title" class="hero-title">Loading…</div>
+                    <div class="hero-meta">
+                        <span id="hero-year">—</span>
+                        <span id="hero-type" class="card-type-badge">—</span>
+                        <span id="hero-rating" class="rating">—</span>
+                    </div>
+                    <div id="hero-overview" class="hero-overview">Discovering great content for you…</div>
+                    <div class="hero-actions">
+                        <button class="btn-play" onclick="watchHero()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
+                            Watch Now
+                        </button>
+                        <button class="btn-outline" onclick="detailHero()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                            More Info
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-dots" id="hero-dots"></div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">Trending This Week</div>
+                </div>
+                <div id="trending-row" class="cards-row"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">Popular Movies</div>
+                </div>
+                <div id="movies-row" class="cards-row"></div>
+            </div>
+            <div class="divider"></div>
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">Popular TV Shows</div>
+                </div>
+                <div id="tv-row" class="cards-row"></div>
+            </div>
+        </div>
+
+        <!-- SEARCH PAGE -->
+        <div id="search-page">
+            <div class="search-header">
+                <div class="search-query-display" id="search-query-display"></div>
+                <div class="search-count" id="search-count"></div>
+            </div>
+            <div id="search-results" class="cards-row"></div>
+        </div>
+
+        <!-- PLAYER PAGE -->
+        <div id="player-page">
+            <div class="player-bar">
+                <button class="back-btn" onclick="goBack()">← Back</button>
+                <div id="next-ep-bar" style="display:none;">
+                    <button class="btn-play" id="next-ep-btn" onclick="playNextEpisode()" style="width:fit-content">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                            <line x1="19" y1="3" x2="19" y2="21" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Next Episode
+                    </button>
+                </div>
+            </div>
+
+            <div class="player-wrapper">
+                <div class="player-container" id="player-container">
+                    <div class="drag-handle" id="drag-handle">
+                        <div class="drag-handle-dots"><span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                        <button class="drag-close-btn" onclick="undockPlayer()" title="Dock back">✕</button>
+                    </div>
+                    <div class="drag-overlay" id="drag-overlay"></div>
+                    <iframe id="player-iframe" allowfullscreen scrolling="no" allow="autoplay; fullscreen"></iframe>
+                    <button class="popout-btn" id="popout-btn" onclick="dockPlayer()">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round">
+                            <rect x="8" y="3" width="13" height="13" rx="2" />
+                            <path d="M3 21V8" />
+                            <path d="M3 21h13" />
+                        </svg>
+                        Pop Out
+                    </button>
+                </div>
+            </div>
+
+            <div class="player-details">
+                <div class="player-title" id="player-title"></div>
+                <div class="player-meta" id="player-meta"></div>
+                <div class="player-overview" id="player-overview"></div>
+                <div id="episodes-section" class="episodes-section" style="display:none">
+                    <div class="section-title" style="margin-bottom:16px">Episodes</div>
+                    <div class="season-selector" id="season-selector"></div>
+                    <div class="episodes-grid" id="episodes-grid"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-title">You Might Also Like</div>
+                </div>
+                <div id="similar-row" class="cards-row"></div>
+            </div>
+        </div>
+    </main>
+
+    <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round">
+            <polyline points="18 15 12 9 6 15" />
+        </svg>
+    </button>
+
+    <!-- TOAST -->
+    <div id="toast"></div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:8px"> StreamVault</div>
+        Powered by <span>PrimeSrc.me</span> &amp; <span>Mohamed ALi</span> · Cinema Unbound
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
