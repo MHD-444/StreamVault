@@ -654,14 +654,17 @@ main {
 .card-poster-placeholder {
     width: 100%;
     aspect-ratio: 2/3;
+    min-height: 200px;
     background: var(--surface2);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     color: var(--text3);
     font-size: 12px;
     text-align: center;
     padding: 8px;
+    gap: 8px;
 }
 
 .card-info { padding: 10px 10px 12px; }
@@ -1088,68 +1091,247 @@ main {
 }
 
 /* ─── STATS PAGE ─── */
+.stats-hero {
+    padding: 100px 48px 48px;
+    background: linear-gradient(to bottom, rgba(201, 168, 76, 0.06) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+}
+
+.stats-hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.1;
+}
+
+.stats-hero-sub {
+    font-size: 14px;
+    color: var(--text3);
+}
+
+.stats-body {
+    padding: 40px 48px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
 .stat-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 24px;
+    border-radius: 12px;
+    padding: 28px 24px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    transition: border-color var(--transition);
+    gap: 6px;
+    transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity var(--transition);
 }
 
 .stat-card:hover {
-    border-color: var(--gold);
+    border-color: rgba(201, 168, 76, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
+
+.stat-card:hover::before { opacity: 1; }
 
 .stat-value {
     font-family: 'Playfair Display', serif;
-    font-size: 36px;
+    font-size: 40px;
     font-weight: 900;
     color: var(--gold);
     line-height: 1;
 }
 
 .stat-label {
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     color: var(--text3);
+    margin-top: 2px;
 }
 
 .stat-sub {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text2);
-    margin-top: 4px;
+}
+
+.stats-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
 }
 
 .stats-box {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 24px;
+    border-radius: 12px;
+    padding: 28px;
+    transition: border-color var(--transition);
 }
+
+.stats-box:hover { border-color: rgba(201, 168, 76, 0.2); }
 
 .stats-box-title {
     font-family: 'Playfair Display', serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     gap: 8px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
 }
 
-.stats-box-title::before {
-    content: '';
-    display: block;
-    width: 3px;
-    height: 16px;
-    background: var(--gold);
-    border-radius: 2px;
+.stats-box-title svg {
+    color: var(--gold);
+    flex-shrink: 0;
 }
+
+.genre-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.genre-bar-label {
+    font-size: 12px;
+    color: var(--text2);
+    width: 90px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.genre-bar-track {
+    flex: 1;
+    height: 5px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.genre-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--gold), var(--gold2));
+    border-radius: 3px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.genre-bar-count {
+    font-size: 11px;
+    color: var(--text3);
+    width: 20px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.recent-item-stat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    transition: background var(--transition);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.recent-item-stat:last-child { border-bottom: none; }
+
+.recent-item-stat:hover {
+    background: var(--surface2);
+    padding-left: 8px;
+}
+
+.recent-item-stat img {
+    width: 38px;
+    height: 57px;
+    object-fit: cover;
+    border-radius: 5px;
+    background: var(--surface2);
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+}
+
+.recent-item-stat .info {
+    flex: 1;
+    min-width: 0;
+}
+
+.recent-item-stat .info .rtitle {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recent-item-stat .info .rsub {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 3px;
+}
+
+.activity-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    transition: transform 0.15s ease;
+    cursor: default;
+}
+
+.activity-dot:hover { transform: scale(1.4); }
+
+.activity-dot.has-watch {
+    background: var(--gold);
+    border-color: var(--gold);
+    opacity: 0.45;
+}
+
+.activity-dot.has-watch.more { opacity: 0.75; }
+
+.activity-dot.has-watch.most { opacity: 1; }
+
+@media (max-width: 768px) {
+    .stats-hero { padding: 90px 16px 32px; }
+    .stats-body { padding: 24px 16px 80px; }
+    .stats-columns { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr);}
+    #mobile-nav { grid-template-columns: repeat(5, 1fr); }
+}
+
+/* ─── GENRE BAR ─── */
 
 .genre-bar-row {
     display: flex;

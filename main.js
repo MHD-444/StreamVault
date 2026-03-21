@@ -14,6 +14,7 @@ let _pendingEp = null;
 let watchTimer = null;
 let watchStart = null;
 let _pendingTimestamp = 0;
+let savedScrollY = 0;
 let currentSource = 'primesrc';
 let currentEmbed = { type: null, imdb: null, tmdbId: null, season: null, episode: null };
 let currentPage = 1;
@@ -49,13 +50,27 @@ function showSetup() {
 }
 
 function initApp() {
-    loadTrending();
-    loadNewThisWeek();
-    loadPopularMovies();
-    loadPopularTV();
+    const p = new URLSearchParams(location.search);
+    const hasRoute = p.get('type') || p.get('browse') || p.get('search');
+    if (hasRoute) {
+        document.getElementById('home-page').classList.add('hidden');
+    } else {
+        loadTrending();
+        loadNewThisWeek();
+        loadPopularMovies();
+        loadPopularTV();
+    }
     renderContinueWatching();
     window.addEventListener('popstate', handleRoute);
     handleRoute();
+    if (hasRoute) {
+        setTimeout(() => {
+            loadTrending();
+            loadNewThisWeek();
+            loadPopularMovies();
+            loadPopularTV();
+        }, 300);
+    }
 }
 
 // ─── URL ROUTING ───
@@ -77,8 +92,9 @@ function buildTitle(params) {
         return `${name} · S${String(params.season).padStart(2, '0')}E${String(params.episode).padStart(2, '0')} — StreamVault`;
     if (params.type === 'tv') return `${name} — StreamVault`;
     if (params.search) return `Search: ${decodeURIComponent(params.search)} — StreamVault`;
+    if (params.browse === 'stats') return 'Stats — StreamVault';
     if (params.browse) return `${params.browse === 'movie' ? 'Movies' : 'TV Shows'} — StreamVault`;
-    return 'StreamVault';
+    return 'Stream Vault';
 }
 
 function handleRoute() {
@@ -95,12 +111,14 @@ function handleRoute() {
         openDetail(parseInt(id), type, false, true);
         if (startAt) setTimeout(() => startWatchTogetherCountdown(parseInt(startAt)), 2000);
     } else if (p.get('browse')) {
-        fetchSection(p.get('browse'));
+        const browse = p.get('browse');
+        if (browse === 'stats') showStats(true); else fetchSection(browse);
     } else if (search) {
         document.getElementById('search-input').value = decodeURIComponent(search);
         doSearch(decodeURIComponent(search), true);
     }
 }
+
 // ─── API FETCH ───
 async function tmdb(path, params = {}) {
     const q = new URLSearchParams({ api_key: API_KEY, ...params });
@@ -158,12 +176,14 @@ function makeCard(item, index = 0) {
         <div style="margin-top:5px"><span class="card-type-badge">${mediaType === 'movie' ? 'Movie' : 'TV'}</span></div>
     </div>`;
     div.addEventListener('click', () => {
+        savedScrollY = window.scrollY;
         if (item.genre_ids?.length) {
             const h = JSON.parse(localStorage.getItem('sv_history') || '{}');
             if (h[item.id]) { h[item.id].genre_ids = item.genre_ids; localStorage.setItem('sv_history', JSON.stringify(h)); }
         }
         openDetail(item.id, mediaType);
-    });    return div;
+    });
+    return div;
 }
 
 function renderCards(containerId, items) {
@@ -325,7 +345,12 @@ function goBack() {
     stopWatchTimer();
     document.getElementById('player-iframe').src = '';
     document.getElementById('source-bar').style.display = 'none';
-    history.length > 1 ? history.back() : showHome();
+    if (history.length > 1) {
+        history.back();
+        setTimeout(() => window.scrollTo({ top: savedScrollY, behavior: 'instant' }), 80);
+    } else {
+        showHome();
+    }
 }
 
 // ─── SEARCH ───
@@ -446,11 +471,21 @@ function filterGenre(genre) {
     document.getElementById('search-count').textContent = `${filtered.length} results`;
 }
 
+// ─── PLAYER SKELETON ───
+function showPlayerSkeleton() {
+    document.getElementById('player-title').innerHTML = '<div class="skeleton" style="height:40px;width:60%;border-radius:6px;"></div>';
+    document.getElementById('player-meta').innerHTML = Array(4).fill('<div class="skeleton" style="height:20px;width:80px;border-radius:4px;"></div>').join('');
+    document.getElementById('player-overview').innerHTML = '<div class="skeleton" style="height:16px;width:100%;border-radius:4px;margin-bottom:8px;"></div><div class="skeleton" style="height:16px;width:90%;border-radius:4px;margin-bottom:8px;"></div><div class="skeleton" style="height:16px;width:75%;border-radius:4px;"></div>';
+    document.getElementById('cast-section').style.display = 'none';
+    document.getElementById('collection-section').style.display = 'none';
+    document.getElementById('player-networks').style.display = 'none';
+}
+
 // ─── DETAIL / PLAYER ───
 async function openDetail(id, mediaType, autoPlay = false, fromRoute = false) {
     showPage('player-page');
     window.scrollTo(0, 0);
-    document.getElementById('player-title').textContent = 'Loading…';
+    showPlayerSkeleton();
     document.getElementById('player-meta').innerHTML = '';
     document.getElementById('player-overview').textContent = '';
     document.getElementById('episodes-section').style.display = 'none';
@@ -465,9 +500,7 @@ async function openDetail(id, mediaType, autoPlay = false, fromRoute = false) {
         const rating = detail.vote_average ? detail.vote_average.toFixed(1) : '—';
         const t = _pendingTimestamp || 0;
         _pendingTimestamp = 0;
-        const runtime = detail.runtime
-            ? `${detail.runtime}min`
-            : (detail.episode_run_time?.[0] ? `${detail.episode_run_time[0]}min/ep` : '');
+        const runtime = detail.runtime ? `${detail.runtime}min`: (detail.episode_run_time?.[0] ? `${detail.episode_run_time[0]}min/ep` : '');
 
         document.getElementById('player-title').textContent = title;
         document.getElementById('player-meta').innerHTML = `
@@ -476,11 +509,10 @@ async function openDetail(id, mediaType, autoPlay = false, fromRoute = false) {
             <span class="rating">${starIcon()} ${rating}</span>
             ${(detail.genres || []).slice(0, 3).map(g =>
             `<button class="tag-link" onclick="browseGenre(${g.id},'${g.name.replace(/'/g, "\\'")}')">
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-                    ${g.name}
-                </button>`
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                ${g.name}
+            </button>`
         ).join('')}`;
-
         document.getElementById('player-overview').textContent = detail.overview || '';
         renderCast(detail.credits?.cast || []);
         renderCollection(mediaType === 'movie' ? detail.belongs_to_collection : null, id);
@@ -542,10 +574,8 @@ function selectSeason(num, count, imdb, tmdbId) {
 function renderEpisodes(count, season, imdb, tmdbId, activeEp = 1) {
     document.getElementById('episodes-grid').innerHTML =
         Array.from({ length: count }, (_, i) => i + 1).map(ep =>
-            `<button class="ep-btn ${ep === activeEp ? 'active' : ''}"
-                id="ep-btn-${season}-${ep}"
-                onclick="loadEpisode(${season}, ${ep}, '${imdb || ''}', ${tmdbId})">
-                Ep ${ep}
+            `<button class="ep-btn ${ep === activeEp ? 'active' : ''}" id="ep-btn-${season}-${ep}"
+                onclick="loadEpisode(${season}, ${ep}, '${imdb || ''}', ${tmdbId})"> Ep ${ep}
             </button>`
         ).join('');
 }
@@ -904,14 +934,16 @@ function renderContinueWatching() {
             ? Math.min(Math.round((timestamp / runtime) * 100), 99)
             : 0;
 
+        const placeholderIcon = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
         div.innerHTML = poster
-            ? `<div style="position:relative">
-            <img class="card-poster" src="${poster}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-            <div class="card-poster-placeholder" style="display:none">${item.title}</div>${pct > 0 ? `<div class="card-progress"><div class="card-progress-fill" style="width:${pct}%"></div></div>` : ''}
+            ? `<div style="position:relative"> 
+                <img class="card-poster" src="${poster}" alt="${title}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+                <div class="card-poster-placeholder" style="display:none">${placeholderIcon}<span>${title}</span></div>
+                ${comingBadge}
             </div>`
             : `<div style="position:relative">
-            <div class="card-poster-placeholder">${item.title}</div>
-            ${pct > 0 ? `<div class="card-progress"><div class="card-progress-fill" style="width:${pct}%"></div></div>` : ''}
+                <div class="card-poster-placeholder">${placeholderIcon}<span>${title}</span></div>
+                ${comingBadge}
             </div>`;
 
         div.innerHTML += `
@@ -1062,10 +1094,12 @@ function toggleTheme() {
 }
 
 // ─── STATS PAGE ───
-function showStats() {
+function showStats(fromRoute = false) {
     showPage('stats-page');
     setActiveTab('tab-stats');
     setMobileTab('mtab-stats');
+    if (!fromRoute) pushState({ browse: 'stats' });
+    document.title = 'Stats — StreamVault';
     renderStats();
 }
 
@@ -1144,7 +1178,7 @@ function renderStats() {
         d.setDate(d.getDate() - i);
         const key = d.toDateString();
         const count = activityMap[key] || 0;
-        const cls = count === 0 ? '' : count >= 3 ? 'has-watch more' : 'has-watch';
+        const cls = count === 0 ? '' : count >= 4 ? 'has-watch most' : count >= 2 ? 'has-watch more' : 'has-watch';
         dots.push(`<div class="activity-dot ${cls}" title="${key}: ${count} title(s)"></div>`);
     }
     document.getElementById('stats-activity').innerHTML = dots.join('');
