@@ -820,31 +820,11 @@ main {
         border-radius: 10px;
         cursor: default;
     }
-
-    .drag-overlay {
-        display: none !important;
-    }
 }
 
-.player-container.is-floating:active {
-    cursor: grabbing;
-}
+.player-container.is-floating:active { cursor: grabbing; }
 
-.drag-overlay {
-    display: none;
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    cursor: grab;
-}
-
-.drag-overlay:active {
-    cursor: grabbing;
-}
-
-.player-container.is-floating .drag-overlay {
-    display: block;
-}
+.player-container.is-floating { display: block; }
 
 .player-container iframe {
     width: 100%;
@@ -852,59 +832,7 @@ main {
     border: none;
 }
 
-.drag-handle {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 32px;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
-    z-index: 2;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 10px;
-    cursor: grab;
-}
-
-.drag-handle:active {
-    cursor: grabbing;
-}
-
-.player-container.is-floating .drag-handle {
-    display: flex;
-}
-
-.drag-handle-dots {
-    display: flex;
-    gap: 3px;
-}
-
-.drag-handle-dots span {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
-}
-
-.drag-close-btn {
-    background: rgba(255, 255, 255, 0.15);
-    border: none;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    font-size: 11px;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-}
-
-.drag-close-btn:hover {
-    background: rgba(192, 57, 43, 0.7);
-}
+.player-container.is-floating { display: flex; }
 
 .player-bar {
     display: flex;
@@ -958,9 +886,7 @@ main {
     margin-bottom: 32px;
 }
 
-.episodes-section {
-    margin-top: 32px;
-}
+.episodes-section { margin-top: 32px; }
 
 .season-selector {
     display: flex;

@@ -1075,8 +1075,6 @@ function renderStats() {
     const episodes = items.filter(i => i.type === 'tv');
     // ── Total watch time ──
     let totalSeconds = 0;
-    movies.forEach(m => { totalSeconds += m.timestamp || 0; });
-    episodes.forEach(e => { totalSeconds += m.timestamp || 0; });
     items.forEach(i => { totalSeconds += i.timestamp || 0; });
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
