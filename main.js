@@ -322,7 +322,8 @@ function setActiveTab(id) {
 }
 
 function goBack() {
-    stopWatchTimer()
+    stopWatchTimer();
+    document.getElementById('player-iframe').src = '';
     document.getElementById('source-bar').style.display = 'none';
     history.length > 1 ? history.back() : showHome();
 }
@@ -494,7 +495,8 @@ async function openDetail(id, mediaType, autoPlay = false, fromRoute = false) {
             currentEmbed = { type: 'movie', imdb, tmdbId: id, season: null, episode: null };
             document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === 'primesrc'));
             document.getElementById('source-bar').style.display = 'flex';
-            document.getElementById('player-iframe').src = buildEmbedUrl('primesrc', 'movie', imdb, id, null, null, t);
+            const iframe = document.getElementById('player-iframe');
+            if (iframe) iframe.src = buildEmbedUrl('primesrc', 'movie', imdb, id, null, null, t);
             startWatchTimer(id, 'movie', { id, type: 'movie', title, poster: detail.poster_path, year, runtime: detail.runtime || 90 });
         } else {
             currentShow = { id, detail, imdb, slug };
@@ -555,9 +557,9 @@ function loadEpisode(season, episode, imdb, tmdbId, skipPush = false, t = 0) {
     currentEmbed = { type: 'tv', imdb, tmdbId, season, episode };
     document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === 'primesrc'));
     document.getElementById('source-bar').style.display = 'flex';
-    document.getElementById('player-iframe').src = buildEmbedUrl('primesrc', 'tv', imdb, tmdbId, season, episode, t);
+    const iframe = document.getElementById('player-iframe');
+    if (iframe) iframe.src = buildEmbedUrl('primesrc', 'tv', imdb, tmdbId, season, episode, t);
     document.getElementById('player-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
     if (!skipPush && currentShow) {
         const slug = currentShow.slug || slugify(currentShow.detail?.name || '');
         pushState({ type: 'tv', id: tmdbId, name: slug, season, episode });
@@ -575,7 +577,6 @@ function loadEpisode(season, episode, imdb, tmdbId, skipPush = false, t = 0) {
     const bar = document.getElementById('next-ep-bar');
     const nbtn = document.getElementById('next-ep-btn');
     const nextIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/><line x1="19" y1="3" x2="19" y2="21" stroke="currentColor" stroke-width="2"/></svg>`;
-
     if (episode < totalEps) {
         nbtn.dataset.season = season;
         nbtn.dataset.episode = episode + 1;
@@ -1086,7 +1087,7 @@ function renderStats() {
     document.getElementById('stats-grid').innerHTML = [
         { value: hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`, label: 'Total Watch Time', sub: 'across all titles' },
         { value: movies.length, label: 'Movies Started', sub: `from your history` },
-        { value: episodes.length, label: 'Shows Tracked', sub: `unique TV series` },
+        { value: totalEps, label: 'Episodes Watched', sub: `across all shows` },
         { value: days.size, label: 'Days Watched', sub: `different days` },
     ].map(s => `
         <div class="stat-card">
@@ -1104,21 +1105,18 @@ function renderStats() {
         10759: 'Action & Adventure', 10762: 'Kids', 10763: 'News', 10764: 'Reality'
     };
     const genreCounts = {};
-    items.forEach(i => {
-        (i.genre_ids || []).forEach(gid => { const name = genreMap[gid] || null; if (name) genreCounts[name] = (genreCounts[name] || 0) + 1; });
-    });
+    items.forEach(i => {(i.genre_ids || []).forEach(gid => { const name = genreMap[gid] || null; if (name) genreCounts[name] = (genreCounts[name] || 0) + 1; });});
     const topGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
     const maxG = topGenres[0]?.[1] || 1;
-    document.getElementById('stats-genres').innerHTML = topGenres.length
-        ? topGenres.map(([name, count]) => `
-            <div class="genre-bar-row">
-                <div class="genre-bar-label">${name}</div>
-                <div class="genre-bar-track">
-                    <div class="genre-bar-fill" style="width:${Math.round((count / maxG) * 100)}%"></div>
-                </div>
-                <div class="genre-bar-count">${count}</div>
-            </div>`).join('')
-        : '<div style="color:var(--text3);font-size:13px">Watch more to see your top genres</div>';
+    document.getElementById('stats-genres').innerHTML = topGenres.length ? topGenres.map(([name, count]) => `
+        <div class="genre-bar-row">
+            <div class="genre-bar-label">${name}</div>
+            <div class="genre-bar-track">
+                <div class="genre-bar-fill" style="width:${Math.round((count / maxG) * 100)}%"></div>
+            </div>
+            <div class="genre-bar-count">${count}</div>
+        </div>`).join('')
+    : '<div style="color:var(--text3);font-size:13px">Watch more to see your top genres</div>';
 
     // ── Recently watched ──
     const recent = items.sort((a, b) => b.savedAt - a.savedAt).slice(0, 6);

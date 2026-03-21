@@ -1,4 +1,4 @@
-const CACHE = 'streamvault-v1';
+const CACHE = 'streamvault-v2';
 const STATIC = [
     '/',
     '/index.html',
@@ -14,7 +14,7 @@ self.addEventListener('install', e => {
 
 // Activate — clean up old caches
 self.addEventListener('activate', e => {
-    e.waitUntil(caches.keys().then(keys =>Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+    e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 
 // Fetch — cache first for static, network first for API
@@ -34,7 +34,7 @@ self.addEventListener('fetch', e => {
         caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
             if (res.ok && e.request.method === 'GET' && res.type !== 'opaque') {
                 const clone = res.clone();
-                caches.open(CACHE).then(c => c.put(e.request, clone).catch(() => {}));
+                caches.open(CACHE).then(c => c.put(e.request, clone).catch(() => { }));
             }
             return res;
         }).catch(() => caches.match(e.request)))
