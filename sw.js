@@ -4,10 +4,7 @@ const STATIC = [
     '/index.html',
     '/style.css',
     '/main.js',
-    '/manifest.json',
-    '/logo192.png',
-    '/logo512.png',
-    'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap'
+    '/manifest.json'
 ];
 
 // Install — cache static assets
@@ -35,11 +32,11 @@ self.addEventListener('fetch', e => {
     // Cache-first for everything else (fonts, css, js, images)
     e.respondWith(
         caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
-            if (res.ok && e.request.method === 'GET') {
+            if (res.ok && e.request.method === 'GET' && res.type !== 'opaque') {
                 const clone = res.clone();
-                caches.open(CACHE).then(c => c.put(e.request, clone));
+                caches.open(CACHE).then(c => c.put(e.request, clone).catch(() => {}));
             }
             return res;
-        })
-    ));
+        }).catch(() => caches.match(e.request)))
+    );
 });
