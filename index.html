@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>StreamVault</title>
-    <link rel="icon" type="image/png" href="StreamVault.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" type="image/png" href="StreamVault.png"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css"/>
 
-    <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#080808" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="StreamVault" />
-    <link rel="apple-touch-icon" href="StreamVault.png" />
+    <link rel="manifest" href="manifest.json"/>
+    <meta name="theme-color" content="#080808"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+    <meta name="apple-mobile-web-app-title" content="StreamVault"/>
+    <link rel="apple-touch-icon" href="StreamVault.png"/>
 </head>
 
 <body>
@@ -45,7 +44,34 @@
             <button class="nav-tab active" onclick="showHome()" id="tab-home">Home</button>
             <button class="nav-tab" onclick="fetchSection('movie')" id="tab-movies">Movies</button>
             <button class="nav-tab" onclick="fetchSection('tv')" id="tab-tv">TV Shows</button>
+            <button class="nav-tab" ></button>
+            <button class="nav-tab" onclick="showStats()" id="tab-stats">Stats</button>
         </div>
+        <button id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" style="
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            width: 36px; height: 36px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.25s ease;
+            color: var(--text2);
+            flex-shrink: 0;">
+            <svg id="theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+            <svg id="theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" style="display:none">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+        </button>
         <div class="nav-right">
             <div class="nav-search-wrap">
                 <svg class="nav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -54,7 +80,7 @@
                     <path d="m21 21-4.35-4.35" />
                 </svg>
                 <input id="search-input" type="text" class="nav-search" placeholder="Search movies, shows…"
-                    oninput="onSearchInput(this.value)" onkeydown="if(event.key==='Enter')doSearch(this.value)"
+                    oninput="onSearchInput(this.value)" onkeydown="if(event.key==='Enter') doSearch(this.value)"
                     onfocus="showRecentSearches()" onblur="hideRecentSearches()" />
                 <div id="recent-searches" class="recent-searches" style="display:none"></div>
             </div>
@@ -152,76 +178,104 @@
                 <div class="search-query-display" id="search-query-display"></div>
                 <div class="search-count" id="search-count"></div>
             </div>
+
+            <!-- STATS PAGE -->
+            <div id="stats-page" style="display:none; padding: 80px 40px 48px;">
+                <div style="margin-bottom:32px;">
+                    <div class="section-title" style="font-size:28px;margin-bottom:6px;">Your Watch Stats</div>
+                    <div style="font-size:14px;color:var(--text3)">Calculated from your local watch history</div>
+                </div>
+                <div id="stats-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:40px;"> </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;flex-wrap:wrap;" id="stats-detail">
+                    <div class="stats-box">
+                        <div class="stats-box-title">Top Genres</div>
+                        <div id="stats-genres"></div>
+                    </div>
+                    <div class="stats-box">
+                        <div class="stats-box-title">Recently Watched</div>
+                        <div id="stats-recent"></div>
+                    </div>
+                </div>
+                <div style="margin-top:32px;">
+                    <div class="stats-box">
+                        <div class="stats-box-title">Watch Activity</div>
+                        <div id="stats-activity" style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px;"></div>
+                    </div>
+                </div>
+            </div>
+
             <!-- FILTER TOGGLE BUTTON -->
             <button id="filter-toggle" onclick="toggleFilterPanel()" style="display:none;margin-bottom:16px;" class="share-btn">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
                 </svg>
                 <span id="filter-toggle-label">Filters</span>
             </button>
+
             <!-- ADVANCED FILTERS -->
             <div id="filter-panel" style="display:none; margin-bottom:24px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-                    <div class="section-title" style="font-size:16px;">Filters</div>
-                    <button onclick="resetFilters()" style="font-size:12px;color:var(--text3);transition:color var(--transition)" 
-                        onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">Reset all</button>
-                </div>
                 <div class="filter-grid">
                     <!-- Type -->
                     <div class="filter-group">
                         <label class="filter-label">Type</label>
-                        <div style="display:flex;gap:8px;">
-                            <button class="filter-pill active" data-filter="type" data-val="all" onclick="setFilter('type','all',this)">All</button>
-                            <button class="filter-pill" data-filter="type" data-val="movie" onclick="setFilter('type','movie',this)">Movies</button>
-                            <button class="filter-pill" data-filter="type" data-val="tv" onclick="setFilter('type','tv',this)">TV</button>
-                        </div>
+                        <select class="filter-select" id="filter-type" onchange="activeFilters.type=this.value">
+                            <option value="all">All</option>
+                            <option value="movie">Movies</option>
+                            <option value="tv">TV Shows</option>
+                        </select>
                     </div>
                     <!-- Sort -->
                     <div class="filter-group">
                         <label class="filter-label">Sort by</label>
-                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                            <button class="filter-pill active" data-filter="sort" data-val="popularity.desc" onclick="setFilter('sort','popularity.desc',this)">Popular</button>
-                            <button class="filter-pill" data-filter="sort" data-val="vote_average.desc" onclick="setFilter('sort','vote_average.desc',this)">Top Rated</button>
-                            <button class="filter-pill" data-filter="sort" data-val="primary_release_date.desc" onclick="setFilter('sort','primary_release_date.desc',this)">Newest</button>
-                            <button class="filter-pill" data-filter="sort" data-val="primary_release_date.asc" onclick="setFilter('sort','primary_release_date.asc',this)">Oldest</button>
-                        </div>
+                        <select class="filter-select" id="filter-sort" onchange="activeFilters.sort=this.value">
+                            <option value="popularity.desc">Most Popular</option>
+                            <option value="vote_average.desc">Top Rated</option>
+                            <option value="primary_release_date.desc">Newest First</option>
+                            <option value="primary_release_date.asc">Oldest First</option>
+                        </select>
                     </div>
                     <!-- Year Range -->
                     <div class="filter-group">
-                        <label class="filter-label">Year: <span id="year-label">1950 – 2026</span></label>
-                        <div style="display:flex;flex-direction:column;gap:8px;">
-                            <div style="display:flex;align-items:center;gap:10px;">
-                                <span style="font-size:11px;color:var(--text3);width:28px">From</span>
-                                <input type="range" id="year-from" class="filter-range" min="1950" max="2026" value="1950" oninput="updateYearLabel()" />
-                            </div>
-                            <div style="display:flex;align-items:center;gap:10px;">
-                                <span style="font-size:11px;color:var(--text3);width:28px">To</span>
-                                <input type="range" id="year-to" class="filter-range" min="1950" max="2026" value="2026" oninput="updateYearLabel()" />
-                            </div>
+                        <label class="filter-label">Year Range</label>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <input type="number" id="year-from" class="filter-number" min="1900" max="2026" value="1950"
+                                placeholder="From" oninput="updateYearLabel()" />
+                            <span style="color:var(--text3);font-size:13px;">—</span>
+                            <input type="number" id="year-to" class="filter-number" min="1900" max="2026" value="2026"
+                                placeholder="To" oninput="updateYearLabel()" />
                         </div>
                     </div>
                     <!-- Min Rating -->
                     <div class="filter-group">
                         <label class="filter-label">Min Rating: <span id="rating-label">0+</span></label>
-                        <input type="range" id="filter-rating" class="filter-range" min="0" max="9" step="1" value="0" oninput="document.getElementById('rating-label').textContent=this.value+'+'" />
+                        <input type="range" id="filter-rating" class="filter-range" min="0" max="9" step="1" value="0"
+                            oninput="document.getElementById('rating-label').textContent=this.value+'+'" />
                     </div>
                     <!-- Language -->
                     <div class="filter-group">
                         <label class="filter-label">Language</label>
-                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                            <button class="filter-pill active" data-filter="lang" data-val="" onclick="setFilter('lang','',this)">Any</button>
-                            <button class="filter-pill" data-filter="lang" data-val="en" onclick="setFilter('lang','en',this)">English</button>
-                            <button class="filter-pill" data-filter="lang" data-val="fr" onclick="setFilter('lang','fr',this)">French</button>
-                            <button class="filter-pill" data-filter="lang" data-val="ar" onclick="setFilter('lang','ar',this)">Arabic</button>
-                            <button class="filter-pill" data-filter="lang" data-val="ja" onclick="setFilter('lang','ja',this)">Japanese</button>
-                            <button class="filter-pill" data-filter="lang" data-val="ko" onclick="setFilter('lang','ko',this)">Korean</button>
-                            <button class="filter-pill" data-filter="lang" data-val="es" onclick="setFilter('lang','es',this)">Spanish</button>
-                            <button class="filter-pill" data-filter="lang" data-val="hi" onclick="setFilter('lang','hi',this)">Hindi</button>
-                        </div>
+                        <select class="filter-select" id="filter-lang" onchange="activeFilters.lang=this.value">
+                            <option value="">Any Language</option>
+                            <option value="en">English</option>
+                            <option value="fr">French</option>
+                            <option value="ar">Arabic</option>
+                            <option value="ja">Japanese</option>
+                            <option value="ko">Korean</option>
+                            <option value="es">Spanish</option>
+                            <option value="hi">Hindi</option>
+                            <option value="de">German</option>
+                            <option value="it">Italian</option>
+                            <option value="pt">Portuguese</option>
+                            <option value="zh">Chinese</option>
+                            <option value="tr">Turkish</option>
+                        </select>
                     </div>
                 </div>
-                <button class="btn-gold" style="width:auto;padding:10px 32px;margin-top:16px;" onclick="applyFilters()">Apply Filters</button>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;">
+                    <button onclick="resetFilters()" style="font-size:12px;color:var(--text3);transition:color var(--transition)"
+                        onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">↺ Reset all</button>
+                    <button class="btn-gold" style="width:auto;padding:10px 32px;" onclick="applyFilters()">Apply Filters</button>
+                </div>
             </div>
             <div id="genre-bar" style="display:none; flex-wrap:wrap; gap:8px; margin-bottom:20px;">
                 <button class="genre-btn active" data-genre="all" onclick="filterGenre('all')">All</button>
@@ -244,7 +298,6 @@
         <!-- PLAYER PAGE -->
         <div id="player-page">
             <div class="player-bar">
-                <button class="back-btn" onclick="goBack()">← Back</button>
                 <div style="display:flex;align-items:center;gap:10px;">
                     <button class="back-btn" onclick="goBack()" style="margin:0">← Back</button>
                     <button class="share-btn" id="share-btn" onclick="shareUrl()">
@@ -257,6 +310,16 @@
                             <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                         </svg>
                         Share
+                    </button>
+                    <button class="share-btn" id="watch-together-btn" onclick="generateWatchTogetherLink()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                        Watch Together
                     </button>
                 </div>
                 <div id="next-ep-bar" style="display:none;">
@@ -273,34 +336,25 @@
             <div class="player-wrapper">
                 <div class="player-container" id="player-container">
                     <div class="drag-handle" id="drag-handle">
-                        <div class="drag-handle-dots"><span></span><span></span><span></span><span></span><span></span>
-                        </div>
+                        <div class="drag-handle-dots"><span></span><span></span><span></span><span></span><span></span></div>
                         <button class="drag-close-btn" onclick="undockPlayer()" title="Dock back">✕</button>
                     </div>
                     <div class="drag-overlay" id="drag-overlay"></div>
-                    <iframe id="player-iframe" allowfullscreen scrolling="no" allow="autoplay; fullscreen"></iframe>
-                    <button class="popout-btn" id="popout-btn" onclick="dockPlayer()">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                            <rect x="8" y="3" width="13" height="13" rx="2" />
-                            <path d="M3 21V8" />
-                            <path d="M3 21h13" />
-                        </svg>
-                        Pop Out
-                    </button>
+                    <iframe id="player-iframe" scrolling="no" allow="autoplay; fullscreen"></iframe>
                 </div>
+            </div>
 
                 <div id="source-bar"
                     style="display:none; padding:10px 0; display:flex; align-items:center; gap:8px; flex-wrap:wrap; background:#000; padding:10px 16px;">
                     <span style="font-size:14px;color:var(--text);letter-spacing:0.06em;text-transform:uppercase;margin-right:6px;">Server</span>
                     <button class="src-btn active" data-src="primesrc" onclick="switchSource('primesrc')">PrimeSrc</button>
                     <button class="src-btn" data-src="vidsrc" onclick="switchSource('vidsrc')">VidSrc</button>
-                    <button class="src-btn" data-src="vidsrctop" onclick="switchSource('vidsrctop')">VidSrc.to</button>
-                    <button class="src-btn" data-src="embedsu" onclick="switchSource('embedsu')">Embed.su</button>
+                    <!-- <button class="src-btn" data-src="vidsrctop" onclick="switchSource('vidsrctop')">VidSrc.to</button> -->
+                    <!-- <button class="src-btn" data-src="embedsu" onclick="switchSource('embedsu')">Embed.su</button> -->
                     <span id="src-status" style="font-size:11px;color:var(--text3);margin-left:auto;"></span>
                 </div>
-            </div>
 
-            <div class="player-details">
+                <div class="player-details">
                 <div class="player-title" id="player-title"></div>
                 <div class="player-meta" id="player-meta"></div>
                 <div class="player-overview" id="player-overview"></div>
@@ -377,11 +431,31 @@
             </svg>
             <span>Search</span>
         </button>
+        <button class="mobile-tab" id="mtab-stats" onclick="showStats(); setMobileTab('mtab-stats')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
+            </svg>
+            <span>Stats</span>
+        </button>
     </nav>
 
+    <!-- WATCH TOGETHER OVERLAY -->
+    <div id="watch-together-overlay"
+        style="display:none; position:fixed; inset:0; z-index:400; background:rgba(8,8,8,0.92); align-items:center; justify-content:center; flex-direction:column; gap:16px;">
+        <div style="font-family:'Playfair Display',serif; font-size:18px; color:var(--text2); letter-spacing:0.05em;"> Starting in</div>
+        <div id="watch-together-countdown" style="font-family:'Playfair Display',serif; font-size:96px; font-weight:900; color:var(--gold); line-height:1;"> 5</div>
+        <div id="watch-together-title" style="font-size:14px; color:var(--text3);">Loading…</div>
+        <button onclick="cancelWatchTogether()"
+            style="margin-top:8px; font-size:13px; color:var(--text3); border:1px solid var(--border); padding:8px 20px; border-radius:4px; background:var(--surface2);"> Cancel
+        </button>
+    </div>
+
+    <!-- SCROLL TO TOP BUTTON -->
     <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
             <polyline points="18 15 12 9 6 15" />
         </svg>
     </button>
