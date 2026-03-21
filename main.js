@@ -1312,8 +1312,7 @@ async function applyFilters() {
             const dateFromKey = t === 'movie' ? 'primary_release_date.gte' : 'first_air_date.gte';
             const dateToKey = t === 'movie' ? 'primary_release_date.lte' : 'first_air_date.lte';
             const sortKey = (sort === 'primary_release_date.desc' || sort === 'primary_release_date.asc') && t === 'tv'
-                ? sort.replace('primary_release_date', 'first_air_date')
-                : sort;
+                ? sort.replace('primary_release_date', 'first_air_date'): sort;
             const params = {
                 sort_by: sortKey,
                 [dateFromKey]: `${yearFrom}-01-01`,
@@ -1323,8 +1322,7 @@ async function applyFilters() {
                 page: 1
             };
             if (lang) params.with_original_language = lang;
-            return tmdb(`/discover/${t}`, params)
-                .then(d => d.results.map(r => ({ ...r, media_type: t })));
+            return tmdb(`/discover/${t}`, params).then(d => d.results.map(r => ({ ...r, media_type: t })));
         }));
 
         allResults = results.flat().sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
