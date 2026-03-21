@@ -59,18 +59,11 @@ function initApp() {
         loadNewThisWeek();
         loadPopularMovies();
         loadPopularTV();
+        loadTurkishSeries();
     }
     renderContinueWatching();
     window.addEventListener('popstate', handleRoute);
     handleRoute();
-    if (hasRoute) {
-        setTimeout(() => {
-            loadTrending();
-            loadNewThisWeek();
-            loadPopularMovies();
-            loadPopularTV();
-        }, 300);
-    }
 }
 
 // ─── URL ROUTING ───
@@ -158,14 +151,13 @@ function makeCard(item, index = 0) {
 
     div.innerHTML = poster
         ? `<div style="position:relative">
-        <img class="card-poster" src="${poster}" alt="${title}" loading="lazy"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <img class="card-poster" src="${poster}" alt="${title}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
             <div class="card-poster-placeholder" style="display:none">${title}</div>
             ${comingBadge}
         </div>`
         : `<div style="position:relative">
-        <div class="card-poster-placeholder">${title}</div>
-        ${comingBadge}
+            <div class="card-poster-placeholder">${title}</div>
+            ${comingBadge}
         </div>`;
     div.innerHTML += `<div class="card-info">
         <div class="card-title">${title}</div>
@@ -305,6 +297,14 @@ async function loadPopularTV() {
     try { renderCards('tv-row', (await tmdb('/tv/popular')).results.slice(0, 14)); } catch (e) { }
 }
 
+async function loadTurkishSeries() {
+    showSkeletons('turkish-row', 7);
+    try {
+        const data = await tmdb('/discover/tv', {with_original_language: 'tr', sort_by: 'popularity.desc', 'vote_count.gte': 50});
+        renderCards('turkish-row', data.results.slice(0, 14).map(r => ({ ...r, media_type: 'tv' })));
+    } catch (e) { }
+}
+
 // ─── NAVIGATION ───
 function showPage(pageId) {
     document.getElementById('genre-bar').style.display = 'none';
@@ -439,9 +439,7 @@ function showRecentSearches() {
 }
 
 function hideRecentSearches() {
-    setTimeout(() => {
-        document.getElementById('recent-searches').style.display = 'none';
-    }, 150);
+    setTimeout(() => {document.getElementById('recent-searches').style.display = 'none';}, 150);
 }
 
 function pickRecentSearch(query) {
@@ -936,15 +934,15 @@ function renderContinueWatching() {
 
         const placeholderIcon = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
         div.innerHTML = poster
-            ? `<div style="position:relative"> 
-                <img class="card-poster" src="${poster}" alt="${title}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-                <div class="card-poster-placeholder" style="display:none">${placeholderIcon}<span>${title}</span></div>
-                ${comingBadge}
-            </div>`
-            : `<div style="position:relative">
-                <div class="card-poster-placeholder">${placeholderIcon}<span>${title}</span></div>
-                ${comingBadge}
-            </div>`;
+        ? `<div style="position:relative">
+            <img class="card-poster" src="${poster}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="card-poster-placeholder" style="display:none">${placeholderIcon}<span>${item.title}</span></div>
+            ${pct > 0 ? `<div class="card-progress"><div class="card-progress-fill" style="width:${pct}%"></div></div>` : ''}
+        </div>`
+        : `<div style="position:relative">
+            <div class="card-poster-placeholder">${placeholderIcon}<span>${item.title}</span></div>
+            ${pct > 0 ? `<div class="card-progress"><div class="card-progress-fill" style="width:${pct}%"></div></div>` : ''}
+        </div>`;
 
         div.innerHTML += `
         <div class="card-info">
