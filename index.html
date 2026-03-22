@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="style.css?v=4"/>
 
     <link rel="manifest" href="manifest.json"/>
     <meta name="theme-color" content="#080808"/>
@@ -219,18 +219,15 @@
                     <div class="filter-group">
                         <label class="filter-label">Year Range</label>
                         <div style="display:flex;align-items:center;gap:10px;">
-                            <input type="number" id="year-from" class="filter-number" min="1900" max="2026" value="1950"
-                                placeholder="From" oninput="updateYearLabel()" />
+                            <input type="number" id="year-from" class="filter-number" min="1900" max="2026" value="1950" placeholder="From" oninput="updateYearLabel()" />
                             <span style="color:var(--text3);font-size:13px;">—</span>
-                            <input type="number" id="year-to" class="filter-number" min="1900" max="2026" value="2026"
-                                placeholder="To" oninput="updateYearLabel()" />
+                            <input type="number" id="year-to" class="filter-number" min="1900" max="2026" value="2026" placeholder="To" oninput="updateYearLabel()" />
                         </div>
                     </div>
                     <!-- Min Rating -->
                     <div class="filter-group">
                         <label class="filter-label">Min Rating: <span id="rating-label">0+</span></label>
-                        <input type="range" id="filter-rating" class="filter-range" min="0" max="9" step="1" value="0"
-                            oninput="document.getElementById('rating-label').textContent=this.value+'+'" />
+                        <input type="range" id="filter-rating" class="filter-range" min="0" max="9" step="1" value="0" oninput="document.getElementById('rating-label').textContent=this.value+'+'" />
                     </div>
                     <!-- Language -->
                     <div class="filter-group">
@@ -249,6 +246,59 @@
                             <option value="pt">Portuguese</option>
                             <option value="zh">Chinese</option>
                             <option value="tr">Turkish</option>
+                        </select>
+                    </div>
+                    <!-- Genre -->
+                    <div class="filter-group">
+                        <label class="filter-label">Genre</label>
+                        <select class="filter-select" id="filter-genre" onchange="activeFilters.genre=this.value">
+                            <option value="">Any Genre</option>
+                            <option value="28">Action</option>
+                            <option value="35">Comedy</option>
+                            <option value="18">Drama</option>
+                            <option value="27">Horror</option>
+                            <option value="878">Sci-Fi</option>
+                            <option value="12">Adventure</option>
+                            <option value="16">Animation</option>
+                            <option value="80">Crime</option>
+                            <option value="10749">Romance</option>
+                            <option value="53">Thriller</option>
+                            <option value="99">Documentary</option>
+                            <option value="14">Fantasy</option>
+                            <option value="10765">Sci-Fi & Fantasy</option>
+                            <option value="10759">Action & Adventure</option>
+                        </select>
+                    </div>
+                    <!-- Network -->
+                    <div class="filter-group">
+                        <label class="filter-label">Network / Studio</label>
+                        <select class="filter-select" id="filter-network"
+                            onchange="activeFilters.network=this.value;activeFilters.networkType=this.options[this.selectedIndex].dataset.type">
+                            <option value="">Any Network</option>
+                            <optgroup label="Streaming">
+                                <option value="213" data-type="network">Netflix</option>
+                                <option value="1024" data-type="network">Amazon</option>
+                                <option value="2739" data-type="network">Disney+</option>
+                                <option value="453" data-type="network">Hulu</option>
+                                <option value="2552" data-type="network">Apple TV+</option>
+                                <option value="49" data-type="network">HBO</option>
+                            </optgroup>
+                            <optgroup label="TV Networks">
+                                <option value="21" data-type="network">AMC</option>
+                                <option value="16" data-type="network">NBC</option>
+                                <option value="19" data-type="network">FOX</option>
+                                <option value="56" data-type="network">Cartoon Network</option>
+                            </optgroup>
+                            <optgroup label="Studios (Movies)">
+                                <option value="420" data-type="company">Marvel Studios</option>
+                                <option value="174" data-type="company">Warner Bros.</option>
+                                <option value="33" data-type="company">Universal</option>
+                                <option value="4" data-type="company">Paramount</option>
+                                <option value="2" data-type="company">Walt Disney</option>
+                                <option value="521" data-type="company">A24</option>
+                                <option value="923" data-type="company">Legendary</option>
+                                <option value="7295" data-type="company">Blumhouse</option>
+                            </optgroup>
                         </select>
                     </div>
                 </div>
@@ -325,7 +375,7 @@
                             <line x1="8" y1="2" x2="8" y2="6" />
                             <line x1="3" y1="10" x2="21" y2="10" />
                         </svg>
-                        60-Day Activity
+                        30-Day Activity
                     </div>
                     <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">Each square = one day. Brighter = more titles watched.</div>
                     <div id="stats-activity" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
@@ -378,51 +428,57 @@
                     </button>
                 </div>
             </div>
-
             <div class="player-wrapper">
                 <div class="player-container" id="player-container">
-                    <iframe id="player-iframe" scrolling="no" allow="autoplay; fullscreen"></iframe>
+                    <iframe id="player-iframe" scrolling="no" allowfullscreen
+                        allow="autoplay; fullscreen; picture-in-picture; web-share" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
             </div>
-            
-            <div id="source-bar"
-                style="display:none; align-items:center; gap:8px; flex-wrap:wrap; background:#000; padding:10px 16px;">
-                <span
-                    style="font-size:14px;color:var(--text);letter-spacing:0.06em;text-transform:uppercase;margin-right:6px;">Server</span>
+            <div id="source-bar" style="display:none; align-items:center; gap:8px; flex-wrap:wrap; padding:10px 16px;">
+                <span style="font-size:14px;color:var(--text);letter-spacing:0.06em;text-transform:uppercase;margin-right:6px;">Server</span>
                 <button class="src-btn active" data-src="primesrc" onclick="switchSource('primesrc')">PrimeSrc</button>
                 <button class="src-btn" data-src="vidsrc" onclick="switchSource('vidsrc')">VidSrc</button>
-                <span id="src-status" style="font-size:11px;color:var(--text3);margin-left:auto;"></span>
+                <button class="fullscreen-btn" id="fullscreen-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)" style="margin-left:auto;">
+                    <svg id="fullscreen-icon-enter" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <path d="M4 8V4h4"/>
+                        <path d="M20 20v-4h4"/>
+                        <path d="m19.5 5 .5.5L17 8"/>
+                        <path d="M4 20v-4H0"/>
+                        <path d="m3.5 4 .5.5L6 7"/>
+                    </svg>
+                    <svg id="fullscreen-icon-exit" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none">
+                        <path d="M6 4h4v4"/>
+                        <path d="M20 4h-4v4"/>
+                        <path d="M15 19v4h-4"/>
+                        <path d="M4 19h4v4"/>
+                        <path d="M15.5 15 .5 19.5 4 20"/>
+                    </svg>
+                </button>
             </div>
-            
             <div class="player-details">
                 <div class="player-title" id="player-title"></div>
                 <div class="player-meta" id="player-meta"></div>
                 <div class="player-overview" id="player-overview"></div>
-                <div id="player-networks" style="display:none; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
-                </div>
+                <div id="player-networks" style="display:none; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;"></div>
                 <div id="episodes-section" class="episodes-section" style="display:none">
                     <div class="section-title" style="margin-bottom:16px">Episodes</div>
                     <div class="season-selector" id="season-selector"></div>
                     <div class="episodes-grid" id="episodes-grid"></div>
                 </div>
             </div>
-            
             <div id="collection-section" style="display:none" class="section">
                 <div class="section-header">
                     <div class="section-title" id="collection-title">Part of a Collection</div>
                 </div>
                 <div id="collection-row" class="cards-row"></div>
             </div>
-            
             <div id="cast-section" style="display:none" class="section">
                 <div class="section-header">
                     <div class="section-title">Cast</div>
                 </div>
-                <div id="cast-row"
-                    style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;">
-                </div>
+                <div id="cast-row" style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;"> </div>
             </div>
-            
             <div class="section">
                 <div class="section-header">
                     <div class="section-title">You Might Also Like</div>
@@ -435,16 +491,14 @@
     <!-- MOBILE BOTTOM NAV -->
     <nav id="mobile-nav">
         <button class="mobile-tab active" id="mtab-home" onclick="showHome(); setMobileTab('mtab-home')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                 <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
             <span>Home</span>
         </button>
         <button class="mobile-tab" id="mtab-movies" onclick="fetchSection('movie'); setMobileTab('mtab-movies')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
                 <line x1="7" y1="2" x2="7" y2="22" />
                 <line x1="17" y1="2" x2="17" y2="22" />
@@ -457,24 +511,21 @@
             <span>Movies</span>
         </button>
         <button class="mobile-tab" id="mtab-tv" onclick="fetchSection('tv'); setMobileTab('mtab-tv')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
                 <polyline points="17 2 12 7 7 2" />
             </svg>
             <span>TV</span>
         </button>
         <button class="mobile-tab" id="mtab-search" onclick="focusMobileSearch(); setMobileTab('mtab-search')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" />
             </svg>
             <span>Search</span>
         </button>
         <button class="mobile-tab" id="mtab-stats" onclick="showStats(); setMobileTab('mtab-stats')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="20" x2="18" y2="10" />
                 <line x1="12" y1="20" x2="12" y2="4" />
                 <line x1="6" y1="20" x2="6" y2="14" />
@@ -510,5 +561,5 @@
         Powered by <span>PrimeSrc.me</span> &amp; <span>ECHO | Mohamed ALi</span> · Cinema Unbound
     </footer>
 
-    <script src="main.js?v=3"></script></body>
+    <script src="main.js?v=4"></script></body>
 </html>

@@ -3,22 +3,52 @@
     "short_name": "StreamVault",
     "description": "Cinema Unbound — Stream movies and TV shows",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
     "background_color": "#080808",
-    "theme_color": "#080808",
+    "theme_color": "#c9a84c",
     "orientation": "any",
+    "categories": ["entertainment", "video", "streaming", "movies", "tv", "media", "cinema", "watching", "library", "tracker", "stats", "recommendations", "social", "community", "discussions",
+        "news", "updates", "mobile", "desktop", "cross-platform", "pwa", "app", "application", "website", "webapp", "web application", "streamvault", "stream vault", "vault", "streaming vault",
+        "reviews", "cinema vault", "movie vault", "tv vault", "show vault", "entertainment vault", "media vault", "watching vault", "library vault", "tracker vault", "stats vault",
+        "recommendations vault", "social vault", "community vault", "discussions vault", "reviews vault", "news vault", "updates vault", "fun"],
+    "lang": "en",
     "icons": [
         {
             "src": "StreamVault.png",
             "sizes": "192x192",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
         },
         {
             "src": "StreamVault.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "StreamVault.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
         }
-    ]
+    ],
+    "shortcuts": [
+        {
+            "name": "Movies",
+            "url": "/?browse=movie",
+            "description": "Browse popular movies"
+        },
+        {
+            "name": "TV Shows",
+            "url": "/?browse=tv",
+            "description": "Browse popular TV shows"
+        },
+        {
+            "name": "My Stats",
+            "url": "/?browse=stats",
+            "description": "View your watch statistics"
+        }
+    ],
+    "screenshots": []
 }
