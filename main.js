@@ -26,6 +26,12 @@ let activeGenre = 'all';
 
 // ─── INIT ───
 window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(location.search);
+    const startAt = params.get('startAt');
+    if (startAt) {
+        const urlId = params.get('id');
+        if (urlId) {pendingWatchTogetherStartAt = parseInt(startAt);}
+    }
     if (localStorage.getItem('sv_theme') === 'light') toggleTheme();
     if (API_KEY) {
         document.getElementById('setup-overlay').classList.add('hidden');
@@ -97,7 +103,7 @@ function buildTitle(params) {
     if (params.search) return `StreamVault`;
     if (params.browse === 'stats') return 'StreamVault';
     if (params.browse === 'filter') return 'StreamVault';
-    if (params.browse) return `${params.browse === 'movie' ? 'Movies' : 'TV Shows'} — StreamVault`;
+    if (params.browse) return `StreamVault`;
     return 'StreamVault';
 }
 
@@ -1139,7 +1145,7 @@ function showStats(fromRoute = false) {
     setActiveTab('tab-stats');
     setMobileTab('mtab-stats');
     if (!fromRoute) pushState({ browse: 'stats' });
-    document.title = 'Stats — StreamVault';
+    document.title = 'StreamVault';
     renderStats();
 }
 
@@ -1266,50 +1272,48 @@ let watchTogetherTimer = null;
 let pendingWatchTogetherStartAt = null;
 
 function generateWatchTogetherLink() {
-    const startAt = Date.now() + 20000;
+    const startAt = Date.now() + 30000;
     const params = new URLSearchParams(location.search);
     params.set('startAt', startAt);
     const url = `${location.origin}${location.pathname}?${params.toString()}`;
     if (navigator.share) {
-        navigator.share({ title: document.title, text: '🎬 Watch with me — starts in 20 seconds!', url });
+        navigator.share({ title: 'StreamVault Sync', text: '🎬 Watch with me — starts in 30 seconds!', url }).catch(() => copyLinkToClipboard(url));
     } else {
-        copyToClipboard(url).then(() => {
-            const btn = document.getElementById('watch-together-btn');
-            const orig = btn.innerHTML;
-            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Link copied!`;
-            btn.style.color = '#4caf50';
-            btn.style.borderColor = '#4caf50';
-            setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; btn.style.borderColor = ''; }, 2500);
-        });
+        copyLinkToClipboard(url);
     }
     startWatchTogetherCountdown(startAt);
 }
 
+function copyLinkToClipboard(url) {
+    const btn = document.getElementById('watch-together-btn');
+    if (!btn) return;
+    navigator.clipboard.writeText(url).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = `<span>✅ Link Copied!</span>`;
+        btn.style.borderColor = 'var(--gold)';
+        setTimeout(() => {
+            btn.innerHTML = orig;
+            btn.style.borderColor = '';
+        }, 2500);
+    });
+}
+
 function startWatchTogetherCountdown(startAt) {
-    const msLeft = startAt - Date.now();
-    if (msLeft <= 0) return;
     const overlay = document.getElementById('watch-together-overlay');
     const countEl = document.getElementById('watch-together-countdown');
-    const titleEl = document.getElementById('watch-together-title');
     const iframe = document.getElementById('player-iframe');
-    iframe.src = '';
-    const updateTitle = () => {
-        const t = document.getElementById('player-title')?.textContent;
-        titleEl.textContent = (t && t !== 'Loading…') ? t : '…';
-    };
-    updateTitle();
-    const titlePoller = setInterval(updateTitle, 500);
     overlay.style.display = 'flex';
-    countEl.textContent = Math.ceil(msLeft / 1000);
+    if (iframe) iframe.src = '';
     clearInterval(watchTogetherTimer);
     watchTogetherTimer = setInterval(() => {
         const remaining = Math.ceil((startAt - Date.now()) / 1000);
         if (remaining <= 0) {
             clearInterval(watchTogetherTimer);
-            clearInterval(titlePoller);
             overlay.style.display = 'none';
-            const { type, imdb, tmdbId, season, episode } = currentEmbed;
-            if (type) {iframe.src = buildEmbedUrl(currentSource, type, imdb, tmdbId, season, episode, 0);}
+            const urlData = getMediaInfoFromUrl();
+            const type = currentEmbed.type || urlData.type;
+            const id = currentEmbed.tmdbId || urlData.id;
+            if (type && id && iframe) {iframe.src = buildEmbedUrl(currentSource, type, null, id, currentEmbed.season || urlData.season, currentEmbed.episode || urlData.episode, 0);}
             const p = new URLSearchParams(location.search);
             p.delete('startAt');
             history.replaceState({}, '', `${location.pathname}?${p.toString()}`);
@@ -1322,9 +1326,19 @@ function startWatchTogetherCountdown(startAt) {
 function cancelWatchTogether() {
     clearInterval(watchTogetherTimer);
     document.getElementById('watch-together-overlay').style.display = 'none';
-    pendingWatchTogetherStartAt = null;
     const { type, imdb, tmdbId, season, episode } = currentEmbed;
-    if (type) {document.getElementById('player-iframe').src = buildEmbedUrl(currentSource, type, imdb, tmdbId, season, episode, 0);}
+    const iframe = document.getElementById('player-iframe');
+    if (type && iframe) {iframe.src = buildEmbedUrl(currentSource, type, imdb, tmdbId, season, episode, 0);}
+}
+
+function getMediaInfoFromUrl() {
+    const params = new URLSearchParams(location.search);
+    return {
+        type: params.get('type'),
+        id: params.get('id'),
+        season: params.get('season'),
+        episode: params.get('episode')
+    };
 }
 
 // ─── CLIPBOARD HELPER ───
