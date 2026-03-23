@@ -620,8 +620,16 @@ function loadEpisode(season, episode, imdb, tmdbId, skipPush = false, t = 0) {
         pushState({ type: 'tv', id: tmdbId, name: slug, season, episode });
     }
     if (currentShow) {
-        saveHistory({ id: currentShow.id, type: 'tv', title: currentShow.detail.name, poster: currentShow.detail.poster_path, year: (currentShow.detail.first_air_date || '').slice(0, 4), season, episode, epRuntime: currentShow.detail.episode_run_time?.[0] || 40 });
-        startWatchTimer(currentShow.id, 'tv');
+        startWatchTimer(currentShow.id, 'tv', {
+            id: currentShow.id,
+            type: 'tv',
+            title: currentShow.detail.name,
+            poster: currentShow.detail.poster_path,
+            year: (currentShow.detail.first_air_date || '').slice(0, 4),
+            season,
+            episode,
+            epRuntime: currentShow.detail.episode_run_time?.[0] || 40
+        });
     }
 
     // ── Next episode button ──
