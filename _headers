@@ -3,7 +3,7 @@
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: fullscreen=*, autoplay=*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://image.tmdb.org https://secure.gravatar.com; frame-src https://primesrc.me https://vidsrc.me https://vidsrc.to https://embed.su https://*.vidsrc.me; connect-src 'self' https://api.themoviedb.org https://image.tmdb.org;
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://image.tmdb.org https://secure.gravatar.com; frame-src https://primesrc.me https://vidsrc.me https://vidsrc.to https://embed.su https://*.vidsrc.me https://vidsrcme.ru https://*.vidsrcme.ru; connect-src 'self' https://api.themoviedb.org https://image.tmdb.org https://fonts.googleapis.com https://fonts.gstatic.com;
 
 /main.js
   Cache-Control: no-cache
