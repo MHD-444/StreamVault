@@ -1,4 +1,4 @@
-const CACHE = 'streamvault-v6';
+const CACHE = 'streamvault-v7';
 const STATIC = ['/', '/index.html', '/style.css', '/main.js', '/manifest.json'];
 
 self.addEventListener('install', e => {
