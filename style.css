@@ -716,6 +716,16 @@ main {
     border-radius: 3px;
 }
 
+.hero-backdrop {
+    transition: opacity 0.8s ease-in-out;
+    animation: kenburns 20s infinite alternate;
+}
+
+@keyframes kenburns {
+    from {transform: scale(1);}
+    to {transform: scale(1.1);}
+}
+
 /* ─── SECTION ─── */
 .section { padding: 48px 40px; }
 
@@ -1307,6 +1317,68 @@ main {
     text-align: center;
 }
 
+/* ─── SEARCH SUGGESTIONS ─── */
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background var(--transition);
+    text-decoration: none;
+    color: inherit;
+}
+
+.suggestion-item:hover {
+    background: var(--surface2);
+}
+
+.suggestion-item img {
+    width: 32px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 3px;
+    background: var(--surface2);
+    flex-shrink: 0;
+}
+
+.suggestion-poster-placeholder {
+    width: 32px;
+    height: 48px;
+    border-radius: 3px;
+    background: var(--surface2);
+    flex-shrink: 0;
+}
+
+.suggestion-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.suggestion-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.suggestion-meta {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 2px;
+}
+
+.suggestion-rating {
+    font-size: 11px;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
 /* ─── GENRE FILTER ─── */
 .genre-btn {
     padding: 6px 14px;
@@ -1821,6 +1893,60 @@ main {
     border-color: #4caf50;
 }
 
+/* ─── HISTORY IMPORT/EXPORT ACTIONS ─── */
+.history-controls {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.history-actions-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text2);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: color var(--transition), border-color var(--transition);
+    padding: 8px 12px;
+    white-space: nowrap;
+}
+
+.history-actions-btn:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+}
+
+.stats-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+    .stats-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .history-controls {width: 100%;}
+}
+
+.stats-hero-title {margin-bottom: 0;}
+
+.history-controls {
+    display: flex;
+    gap: 10px;
+    margin: 0;
+}
+
 /* ─── COMING SOON BADGE ─── */
 .coming-soon-badge {
     position: absolute;
@@ -1918,6 +2044,24 @@ footer span { color: var(--gold); }
 }
 
 .empty-state p { font-size: 15px; }
+
+/* ─── EPISODE WATCHED STATE ─── */
+.ep-watched {
+    border-color: rgba(201, 168, 76, 0.25);
+}
+
+.ep-check {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 9px;
+    color: var(--gold);
+    opacity: 0.7;
+    font-style: normal;
+}
+
+.ep-btn.ep-watched .ep-check {
+    opacity: 1;
+}
 
 /* ─── ANIMATIONS ─── */
 @keyframes fadeIn {
