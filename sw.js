@@ -1,51 +1,50 @@
-const CACHE = 'streamvault-v7';
-const STATIC = ['/', '/index.html', '/style.css', '/main.js', '/manifest.json'];
+        const CACHE = 'streamvault-v8';
+        const STATIC = ['/', '/index.html', '/style.css', '/main.js', '/manifest.json'];
 
-self.addEventListener('install', e => {
-    e.waitUntil(caches.open(CACHE).then(c => c.addAll(STATIC)).then(() => self.skipWaiting()));
-});
+        self.addEventListener('install', e => {
+            e.waitUntil(caches.open(CACHE).then(c => c.addAll(STATIC)).then(() => self.skipWaiting()));
+        });
 
-self.addEventListener('activate', e => {
-    e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
-});
+        self.addEventListener('activate', e => {
+            e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+        });
 
-self.addEventListener('fetch', e => {
-    const { request } = e;
-    const url = new URL(request.url);
+        self.addEventListener('fetch', e => {
+            const { request } = e;
+            const url = new URL(request.url);
 
-    if (!request.url.startsWith('http')) return;
+            if (!request.url.startsWith('http')) return;
 
-    const isExternal = url.hostname !== self.location.hostname;
-    if (isExternal) {
-        e.respondWith(fetch(request).catch(() => Response.error()));
-        return;
-    }
+            const isExternal = url.hostname !== self.location.hostname;
+            if (isExternal) {
+                e.respondWith(fetch(request).catch(() => Response.error()));
+                return;
+            }
+            if (request.mode === 'navigate') {
+                e.respondWith(fetch(request).catch(() => caches.match('/index.html').then(r => r || Response.error())));
+                return;
+            }
 
-    if (request.mode === 'navigate') {
-        e.respondWith(fetch(request).catch(() => caches.match('/index.html').then(r => r || Response.error())));
-        return;
-    }
-
-    e.respondWith(
-        caches.match(request).then(cached => {
-            if (cached) return cached;
-            return fetch(request).then(response => {
-                if (!response || response.status !== 200 || response.type === 'opaque') {
+            e.respondWith(
+                caches.match(request).then(cached => {
+                    if (cached) return cached;
                     return fetch(request).then(response => {
-                        if (response && response.status === 200 && response.type !== 'opaque') {
-                            const clone = response.clone();
-                            caches.open(CACHE).then(c => c.put(request, clone));
+                        if (!response || response.status !== 200 || response.type === 'opaque') {
+                            return fetch(request).then(response => {
+                                if (response && response.status === 200 && response.type !== 'opaque') {
+                                    const clone = response.clone();
+                                    caches.open(CACHE).then(c => c.put(request, clone));
+                                }
+                                return response;
+                            }).catch(() => {
+                                if (request.destination === 'image') return caches.match('StreamVault.png');
+                                return Response.error();
+                            });
                         }
+                        const clone = response.clone();
+                        caches.open(CACHE).then(c => c.put(request, clone));
                         return response;
-                    }).catch(() => {
-                        if (request.destination === 'image') return caches.match('StreamVault.png');
-                        return Response.error();
-                    });
-                }
-                const clone = response.clone();
-                caches.open(CACHE).then(c => c.put(request, clone));
-                return response;
-            }).catch(() => Response.error());
-        })
-    );
-});
+                    }).catch(() => Response.error());
+                })
+            );
+        });

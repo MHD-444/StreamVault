@@ -196,13 +196,7 @@ function makeCard(item, index = 0) {
         if (e.ctrlKey || e.metaKey || e.shiftKey) return;
         e.preventDefault();
         savedScrollY = window.scrollY;
-        if (item.genre_ids?.length) {
-            const history = JSON.parse(localStorage.getItem('sv_history') || '{}');
-            if (history[item.id]) {
-                history[item.id].genre_ids = item.genre_ids;
-                localStorage.setItem('sv_history', JSON.stringify(history));
-            }
-        }
+        if (item.genre_ids?.length) {window._pendingGenreIds = { id: item.id, genre_ids: item.genre_ids };}
         openDetail(item.id, mediaType);
     });
     return div;
@@ -345,6 +339,7 @@ function showPage(pageId) {
     document.getElementById('filter-toggle').style.display = 'none';
     document.getElementById('filter-panel').style.display = 'none';
     document.getElementById('scroll-sentinel')?.remove();
+    window.scrollTo(0, 0);
     ['home-page', 'search-page', 'player-page', 'stats-page'].forEach(id => {
         const el = document.getElementById(id);
         if (id === 'home-page') {
@@ -418,9 +413,14 @@ function goBack() {
 // ─── SEARCH ───
 function onSearchInput(val) {
     clearTimeout(searchDebounce);
-    document.getElementById('recent-searches').style.display = 'none';
-    if (!val.trim()) {showRecentSearches(); return;}
-    searchDebounce = setTimeout(() => doSearch(val), 500);
+    if (!val.trim()) {
+        showRecentSearches();
+        return;
+    }
+    showSearchSuggestions(val);
+    if (val.trim().length >= 2) {
+        searchDebounce = setTimeout(() => fetchSearchSuggestions(val), 300);
+    }
 }
 
 async function doSearch(query, fromRoute = false) {
@@ -458,6 +458,71 @@ async function doSearch(query, fromRoute = false) {
     } catch (e) {
         document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>Search failed. Check your API key.</p></div>';
     }
+}
+
+let suggestionCache = {};
+async function fetchSearchSuggestions(query) {
+    if (!query.trim()) return;
+    try {
+        if (!suggestionCache[query]) {
+            const data = await tmdb('/search/multi', { query, page: 1 });
+            suggestionCache[query] = data.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv').slice(0, 6);
+            const keys = Object.keys(suggestionCache);
+            if (keys.length > 20) delete suggestionCache[keys[0]];
+        }
+        const current = document.getElementById('search-input').value.trim();
+        if (current === query) showSearchSuggestions(query);
+    } catch (e) { }
+}
+
+function showSearchSuggestions(query) {
+    const box = document.getElementById('recent-searches');
+    const results = suggestionCache[query];
+    const recent = getRecentSearches();
+
+    // Build header with recent searches
+    const recentHtml = recent.length ? `
+        <div class="recent-header">
+            <span>Recent</span> <button class="recent-clear" onmousedown="event.preventDefault();clearRecentSearches()">Clear</button>
+        </div>
+        ${recent.filter(q => q.toLowerCase().includes(query.toLowerCase())).slice(0, 2).map(q => `
+            <button class="recent-item" onmousedown="event.preventDefault();pickRecentSearch('${q.replace(/'/g, "\\'")}')">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>${q}</span>
+            </button>`).join('')}` : '';
+
+    // Build suggestions
+    const suggestionsHtml = results?.length ? `
+        <div class="recent-header" style="margin-top:${recent.length ? '4px' : '0'}"> <span>Suggestions</span></div>
+        ${results.map(r => {
+        const title = r.title || r.name || '';
+        const year = (r.release_date || r.first_air_date || '').slice(0, 4);
+        const type = r.media_type === 'movie' ? 'Movie' : 'TV';
+        const poster = r.poster_path ? `${TMDB_IMG}w92${r.poster_path}` : null;
+        const titleSlug = slugify(title);
+        const url = `/?type=${r.media_type}&id=${r.id}&name=${titleSlug}`;
+        return `
+                <a class="suggestion-item" href="${url}"
+                    onmousedown="event.preventDefault();pickSuggestion(${r.id},'${r.media_type}','${title.replace(/'/g, "\\'")}')">
+                    ${poster
+                ? `<img src="${poster}" alt="${title}" onerror="this.style.display='none'">`
+                : `<div class="suggestion-poster-placeholder"></div>`}
+                    <div class="suggestion-info">
+                        <div class="suggestion-title">${title}</div>
+                        <div class="suggestion-meta">${year}${year ? ' · ' : ''}${type}</div>
+                    </div>
+                    ${r.vote_average ? `<div class="suggestion-rating">${starIcon()} ${r.vote_average.toFixed(1)}</div>` : ''}
+                </a>`;
+    }).join('')}` : (results ? '<div class="recent-empty">No results found</div>' : '<div class="recent-empty">Searching…</div>');
+    box.innerHTML = recentHtml + suggestionsHtml;
+    box.style.display = 'block';
+}
+
+function pickSuggestion(id, mediaType, title) {
+    document.getElementById('search-input').value = title;
+    document.getElementById('recent-searches').style.display = 'none';
+    saveRecentSearch(title);
+    openDetail(id, mediaType);
 }
 
 // ─── RECENT SEARCHES ───
@@ -568,6 +633,14 @@ async function openDetail(id, mediaType, autoPlay = false, fromRoute = false) {
         const runtime = detail.runtime ? `${detail.runtime}min`: (detail.episode_run_time?.[0] ? `${detail.episode_run_time[0]}min/ep` : '');
 
         document.getElementById('player-title').textContent = title;
+        if (detail.genres?.length) {
+            const h = JSON.parse(localStorage.getItem('sv_history') || '{}');
+            if (h[id]) {
+                h[id].genre_ids = detail.genres.map(g => g.id);
+                localStorage.setItem('sv_history', JSON.stringify(h));
+            }
+            window._pendingGenreIds = { id, genre_ids: detail.genres.map(g => g.id) };
+        }
         document.getElementById('player-meta').innerHTML = `
             <span>${year}</span>
             ${runtime ? `<span>${runtime}</span>` : ''}
@@ -655,10 +728,25 @@ function selectSeason(num, count, imdb, tmdbId) {
 }
 
 function renderEpisodes(count, season, imdb, tmdbId, activeEp = 1) {
+    const history = JSON.parse(localStorage.getItem('sv_history') || '{}');
+    const showId = currentShow?.id;
+    const watchedEps = new Set();
+    if (showId && history[showId]) {
+        const h = history[showId];
+        if (h.season === season) {
+            for (let e = 1; e < h.episode; e++) watchedEps.add(e);
+        } else if (h.season > season) {
+            for (let e = 1; e <= count; e++) watchedEps.add(e);
+        }
+    }
     document.getElementById('episodes-grid').innerHTML =
-        Array.from({length: count }, (_, i) => i + 1).map(ep =>
-            `<button class="ep-btn ${ep === activeEp ? 'active' : ''}" id="ep-btn-${season}-${ep}" onclick="loadEpisode(${season}, ${ep}, '${imdb || ''}', ${tmdbId})"> Ep ${ep} </button>`
-        ).join('');
+        Array.from({ length: count }, (_, i) => i + 1).map(ep => {
+            const watched = watchedEps.has(ep);
+            return `
+            <button class="ep-btn ${ep === activeEp ? 'active' : ''} ${watched ? 'ep-watched' : ''}" id="ep-btn-${season}-${ep}"
+                onclick="loadEpisode(${season}, ${ep}, '${imdb || ''}', ${tmdbId})"> Ep ${ep}${watched ? '<span class="ep-check">✓</span>' : ''}
+            </button>`;
+        }).join('');
 }
 
 function loadEpisode(season, episode, imdb, tmdbId, skipPush = false, t = 0) {
@@ -1008,7 +1096,8 @@ function attachScrollObserver() {
 function saveHistory(item) {
     const history = JSON.parse(localStorage.getItem('sv_history') || '{}');
     const existing = history[item.id] || {};
-    history[item.id] = {...existing, ...item, savedAt: Date.now() };
+    const genre_ids = window._pendingGenreIds?.id === item.id ? window._pendingGenreIds.genre_ids : existing.genre_ids || [];
+    history[item.id] = { ...existing, ...item, genre_ids, savedAt: Date.now() };
     localStorage.setItem('sv_history', JSON.stringify(history));
 }
 
@@ -1340,6 +1429,21 @@ async function loadNewThisWeek() {
     } catch (e) {}
 }
 
+// ─── SEARCH FOCUS SHORTCUT ───
+document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+        const searchInput = document.querySelector('.search-input');
+        if (searchInput) {
+            e.preventDefault();
+            if (document.getElementById('search-page').style.display === 'none') {
+                showPage('search-page');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            searchInput.focus();
+        }
+    }
+});
+
 // ─── WATCH TOGETHER ───
 let watchTogetherTimer = null;
 let pendingWatchTogetherStartAt = null;
@@ -1561,6 +1665,7 @@ function restoreFilters(p) {
     const yearFrom = parseInt(p.get('yearFrom')) || 1950;
     const yearTo = parseInt(p.get('yearTo')) || 2026;
     const rating = parseInt(p.get('rating')) || 0;
+
     document.getElementById('filter-type').value = type;
     document.getElementById('filter-sort').value = sort;
     document.getElementById('filter-lang').value = lang;
@@ -1574,6 +1679,48 @@ function restoreFilters(p) {
     showPage('search-page');
     document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
     applyFilters(true);
+}
+
+// ─── EXPORT / IMPORT HISTORY ───
+function exportHistory() {
+    const history = localStorage.getItem('sv_history') || '{}';
+    const blob = new Blob([history], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `streamvault-history-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('History exported successfully');
+}
+
+function importHistory(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (typeof data !== 'object' || Array.isArray(data)) {showToast('Invalid history file'); return;}
+            const existing = JSON.parse(localStorage.getItem('sv_history') || '{}');
+            const merged = { ...data };
+            for (const [id, item] of Object.entries(existing)) {
+                if (!merged[id] || item.savedAt > merged[id].savedAt) {
+                    merged[id] = item;
+                }
+            }
+            localStorage.setItem('sv_history', JSON.stringify(merged));
+            renderContinueWatching();
+            renderStats();
+            showToast(`Imported ${Object.keys(data).length} titles`);
+        } catch {
+            showToast('Failed to read file — make sure it\'s a valid export');
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
 }
 
 // ─── TOAST ───
