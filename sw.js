@@ -1,4 +1,4 @@
-const CACHE = 'streamvault-v9';
+const CACHE = 'streamvault-v10';
 const STATIC = [
     '/',
     '/index.html',
@@ -12,7 +12,21 @@ const STATIC = [
 ];
 
 self.addEventListener('install', e => {
-    e.waitUntil(caches.open(CACHE).then(c => c.addAll(STATIC)).then(() => self.skipWaiting()));
+    e.waitUntil(
+        caches.open(CACHE).then(cache => 
+            Promise.all(STATIC.map(url => {
+                return fetch(new Request(url, { cache: 'no-cache' })).catch(() => {
+                    console.warn(`SW: Failed to precache ${url}`);
+                    return new Response('', { status: 404 });
+                }).then(response => {
+                    if (!response || response.status !== 200 || response.status >= 400) {
+                        return null;
+                    }
+                    return cache.put(url, response.clone());
+                });
+            })).then(results => {console.log(`SW: Pre-cached ${results.filter(Boolean).length}/${STATIC.length} assets`);
+        }).catch(err => console.error('SW install failed:', err))).then(() => self.skipWaiting())
+    );
 });
 
 self.addEventListener('activate', e => {
@@ -34,27 +48,28 @@ self.addEventListener('fetch', e => {
         e.respondWith(fetch(request).catch(() => Response.error()));
         return;
     }
-
     if (request.mode === 'navigate') {
-        e.respondWith(fetch(request).catch(() => caches.match('/index.html').then(r => r || Response.error())));
+        e.respondWith(fetch(request).catch(() => caches.match('index.html').then(r => r || Response.error())));
         return;
     }
 
-    e.respondWith(
-        caches.match(request).then(cached => {
-            const fetchPromise = fetch(request).then(response => {
-                if (!response || response.status !== 200 || response.type === 'opaque') {
+e.respondWith(
+        caches.open(CACHE).then(cache => 
+            caches.match(request).then(cached => {
+                if (cached) return cached;
+                return fetch(request).then(response => {
+                    if (response && response.status === 200) {
+                        const clone = response.clone();
+                        caches.open(CACHE).then(c => c.put(request, clone));
+                    }
                     return response;
-                }
-                const responseClone = response.clone();
-                e.waitUntil(caches.open(CACHE).then(cache => cache.put(request, responseClone))); return response;
-            }).catch(() => {
-                if (request.destination === 'image') {
-                    return caches.match('assets/StreamVault.png');
-                }
-                return Response.error();
-            });
-            return cached || fetchPromise;
-        })
+                }).catch(() => {
+                    if (request.mode === 'navigate') {return caches.match('index.html');}
+                    if (request.destination === 'image') {return caches.match('assets/StreamVault.png');}
+                    if (request.destination === 'style' || request.destination === 'script') {return caches.match(request.url.replace(/\?.*$/, ''));}
+                    return new Response('Offline', {status: 503, statusText: 'Service Unavailable'});
+                });
+            })
+        )
     );
 });
