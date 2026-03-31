@@ -36,7 +36,7 @@
     "shortcuts": [
         {
             "name": "Movies",
-            "url": "/?browse=movies",
+            "url": "/?browse=movie",
             "description": "Browse popular movies"
         },
         {

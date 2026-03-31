@@ -16,14 +16,17 @@ let watchStart = null;
 let _pendingTimestamp = 0;
 let savedScrollY = 0;
 let currentSource = 'primesrc';
-let currentEmbed = {type: null, imdb: null, tmdbId: null, season: null, episode: null };
+let currentEmbed = { type: null, imdb: null, tmdbId: null, season: null, episode: null };
 let currentPage = 1;
 let currentSection = null;
 let isLoadingMore = false;
 let hasMorePages = true;
+let isFullscreen = false;
 let allResults = [];
 let activeGenre = 'all';
 let autoplayTimer = null;
+let suggestionCache = {};
+let loadedIds = new Set();
 
 // ─── INIT ───
 window.addEventListener('DOMContentLoaded', () => {
@@ -31,7 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const startAt = params.get('startAt');
     if (startAt) {
         const urlId = params.get('id');
-        if (urlId) {pendingWatchTogetherStartAt = parseInt(startAt);}
+        if (urlId) { pendingWatchTogetherStartAt = parseInt(startAt); }
     }
     if (localStorage.getItem('sv_theme') === 'light') toggleTheme();
     if (API_KEY) {
@@ -44,9 +47,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function saveApiKey() {
     const k = document.getElementById('api-key-input').value.trim();
-    if (!k) {showToast('Please enter your TMDB API key'); return;}
+    if (!k) { showToast('Please enter your TMDB API key'); return; }
     API_KEY = k;
     localStorage.setItem('tmdb_api_key', k);
+    suggestionCache = {};
     document.getElementById('setup-overlay').classList.add('hidden');
     initApp();
 }
@@ -77,6 +81,8 @@ function initApp() {
         loadHomeContent();
     }
     renderContinueWatching();
+    document.getElementById('year-to').value = new Date().getFullYear();
+    document.getElementById('year-to').max = new Date().getFullYear() + 2;
     window.addEventListener('popstate', handleRoute);
     handleRoute();
 }
@@ -118,7 +124,7 @@ function handleRoute() {
     const startAt = p.get('startAt');
     if (type && id) {
         if (type === 'tv' && season && episode)
-            _pendingEp = {season: parseInt(season), episode: parseInt(episode) };
+            _pendingEp = { season: parseInt(season), episode: parseInt(episode) };
         if (startAt) pendingWatchTogetherStartAt = parseInt(startAt);
         openDetail(parseInt(id), type, false, true);
     } else if (p.get('browse')) {
@@ -134,18 +140,18 @@ function handleRoute() {
 
 // ─── API FETCH ───
 async function tmdb(path, params = {}) {
-    const q = new URLSearchParams({api_key: API_KEY, ...params });
+    const q = new URLSearchParams({ api_key: API_KEY, ...params });
     const res = await fetch(`${TMDB_BASE}${path}?${q}`);
     if (!res.ok) {
-        if (res.status === 401) {showToast('Invalid API key — please update it'); showSetup();}
+        if (res.status === 401) { showToast('Invalid API key — please update it'); showSetup(); }
         throw new Error('TMDB fetch failed');
     }
     return res.json();
 }
 
 // ─── RENDER HELPERS ───
-function posterUrl(path, size = 'w342') {return path ? `${TMDB_IMG}${size}${path}` : null;}
-function backdropUrl(path) {return path ? `${TMDB_IMG}w1280${path}` : null;}
+function posterUrl(path, size = 'w342') { return path ? `${TMDB_IMG}${size}${path}` : null; }
+function backdropUrl(path) { return path ? `${TMDB_IMG}w1280${path}` : null; }
 function starIcon() {
     return `<svg width="11" height="11" viewBox="0 0 24 24" fill="var(--gold)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
 }
@@ -196,7 +202,7 @@ function makeCard(item, index = 0) {
         if (e.ctrlKey || e.metaKey || e.shiftKey) return;
         e.preventDefault();
         savedScrollY = window.scrollY;
-        if (item.genre_ids?.length) {window._pendingGenreIds = { id: item.id, genre_ids: item.genre_ids };}
+        if (item.genre_ids?.length) { window._pendingGenreIds = { id: item.id, genre_ids: item.genre_ids }; }
         openDetail(item.id, mediaType);
     });
     return div;
@@ -206,7 +212,78 @@ function renderCards(containerId, items) {
     const el = document.getElementById(containerId);
     el.innerHTML = '';
     items.forEach((item, i) => el.appendChild(makeCard(item, i)));
+
+    if (containerId === 'continue-watching-row') {
+        setTimeout(() => {
+            updateScrollButtons(containerId);
+            el.scrollLeft += 1;
+            el.scrollLeft -= 1;
+        }, 100);
+    }
 }
+
+function scrollRow(id, dir) {
+    const el = document.getElementById(id);
+    const scrollAmount = el.clientWidth * 0.8;
+    el.scrollBy({left: dir * scrollAmount, behavior: 'smooth'});
+    setTimeout(() => updateScrollButtons(id), 400);
+}
+
+function enableDragScroll(el) {
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let moved = false;
+
+    el.addEventListener('click', e => {if (moved) {e.preventDefault(); e.stopPropagation();}});
+    el.addEventListener('touchstart', e => {
+        if (e.target.closest('.scroll-btn')) return;
+        startX = e.touches[0].pageX;
+        scrollLeft = el.scrollLeft;
+    });
+    el.addEventListener('touchmove', e => {
+        const x = e.touches[0].pageX;
+        const walk = (x - startX);
+        el.scrollLeft = scrollLeft - walk * 1.5;
+    });
+}
+
+function updateScrollButtons(rowId) {
+    const row = document.getElementById(rowId);
+    const wrapper = row.parentElement;
+    const leftBtn = wrapper.querySelector('.scroll-btn.left');
+    const rightBtn = wrapper.querySelector('.scroll-btn.right');
+    const scrollLeft = row.scrollLeft;
+    const maxScroll = row.scrollWidth - row.clientWidth;
+
+    if (scrollLeft > 5)
+        leftBtn.classList.add('show');
+    else
+        leftBtn.classList.remove('show');
+    if (scrollLeft + row.clientWidth < row.scrollWidth - 5)
+        rightBtn.classList.add('show');
+    else
+        rightBtn.classList.remove('show');
+}
+
+function initScrollButtons(rowId) {
+    const row = document.getElementById(rowId);
+    row.addEventListener('scroll', () => updateScrollButtons(rowId));
+    updateScrollButtons(rowId);
+}
+
+function initRowFeatures(rowId) {
+    const row = document.getElementById(rowId);
+    if (!row) return;
+    enableDragScroll(row);
+    initScrollButtons(rowId);
+    setTimeout(() => {
+        row.scrollLeft += 1;
+        row.scrollLeft -= 1;
+        updateScrollButtons(rowId);
+    }, 150);
+}
+setTimeout(() => initRowFeatures('continue-watching-row'), 0);
 
 function showSkeletons(containerId, count = 7) {
     document.getElementById(containerId).innerHTML = Array(count).fill(`<div class="skeleton skel-card"></div>`).join('');
@@ -235,12 +312,10 @@ function setHero(items) {
         startX = e.clientX;
         hero.style.cursor = 'grabbing';
     });
-
     document.addEventListener('mousemove', e => {
         if (!isDragging) return;
         if (Math.abs(e.clientX - startX) > 5) moved = true;
     });
-
     document.addEventListener('mouseup', e => {
         if (!isDragging) return;
         isDragging = false;
@@ -252,8 +327,8 @@ function setHero(items) {
         else if (diff > 50) setHeroIndex((heroIndex - 1 + total) % total);
     });
 
-    hero.addEventListener('touchstart', e => {startX = e.touches[0].clientX; moved = false;}, {passive: true });
-    hero.addEventListener('touchmove', e => {if (Math.abs(e.touches[0].clientX - startX) > 5) moved = true;}, {passive: true });
+    hero.addEventListener('touchstart', e => { startX = e.touches[0].clientX; moved = false; }, { passive: true });
+    hero.addEventListener('touchmove', e => { if (Math.abs(e.touches[0].clientX - startX) > 5) moved = true; }, { passive: true });
     hero.addEventListener('touchend', e => {
         if (!moved) return;
         const diff = e.changedTouches[0].clientX - startX;
@@ -317,20 +392,20 @@ async function loadTrending() {
 
 async function loadPopularMovies() {
     showSkeletons('movies-row', 7);
-    try {renderCards('movies-row', (await tmdb('/movie/popular')).results.slice(0, 14));} catch (e) {}
+    try { renderCards('movies-row', (await tmdb('/movie/popular')).results.slice(0, 14)); } catch (e) { }
 }
 
 async function loadPopularTV() {
     showSkeletons('tv-row', 7);
-    try {renderCards('tv-row', (await tmdb('/tv/popular')).results.slice(0, 14));} catch (e) {}
+    try { renderCards('tv-row', (await tmdb('/tv/popular')).results.slice(0, 14)); } catch (e) { }
 }
 
 async function loadTurkishSeries() {
     showSkeletons('turkish-row', 7);
     try {
-        const data = await tmdb('/discover/tv', {with_original_language: 'tr', sort_by: 'first_air_date.desc', 'first_air_date.gte': '2022-01-01', 'vote_count.gte': 10 });
-        renderCards('turkish-row', data.results.slice(0, 14).map(r => ({...r, media_type: 'tv' })));
-    } catch (e) {}
+        const data = await tmdb('/discover/tv', { with_original_language: 'tr', sort_by: 'first_air_date.desc', 'first_air_date.gte': '2022-01-01', 'vote_count.gte': 10 });
+        renderCards('turkish-row', data.results.slice(0, 14).map(r => ({ ...r, media_type: 'tv' })));
+    } catch (e) { }
 }
 
 // ─── NAVIGATION ───
@@ -366,10 +441,10 @@ function showHome() {
     const homePage = document.getElementById('home-page');
     const playerIframe = document.getElementById('player-iframe');
     if (homePage && !homePage.classList.contains('hidden')) {
-        window.scrollTo({top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
     }
-    if (playerIframe) {playerIframe.src = 'about:blank';}
+    if (playerIframe) { playerIframe.src = 'about:blank'; }
     stopWatchTimer();
     const sourceBar = document.getElementById('source-bar');
     if (sourceBar) sourceBar.style.display = 'none';
@@ -382,14 +457,26 @@ function showHome() {
     }
     setActiveTab('tab-home');
     setMobileTab('mtab-home');
-    history.pushState({page: 'home' }, '', location.pathname);
+    history.pushState({ page: 'home' }, '', location.pathname);
     document.title = 'StreamVault';
     window.scrollTo(0, 0);
 }
 
 function setActiveTab(id) {
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(id)?.classList.add('active');
+    document.querySelectorAll('.nav-tab').forEach(t => {
+        if (t.classList.contains('active')) {
+            t.classList.add('nav-leaving');
+            setTimeout(() => t.classList.remove('nav-leaving'), 250);
+        }
+        t.classList.remove('active');
+    });
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.classList.add('active');
+    target.classList.remove('nav-entering');
+    void target.offsetWidth;
+    target.classList.add('nav-entering');
+    setTimeout(() => target.classList.remove('nav-entering'), 350);
 }
 
 function goBack() {
@@ -400,7 +487,7 @@ function goBack() {
         history.back();
         setTimeout(() => {
             try {
-                window.scrollTo({top: savedScrollY, behavior: 'instant' });
+                window.scrollTo({ top: savedScrollY, behavior: 'instant' });
             } catch {
                 window.scrollTo(0, savedScrollY);
             }
@@ -428,16 +515,15 @@ async function doSearch(query, fromRoute = false) {
     saveRecentSearch(query);
     showPage('search-page');
     renderSkeletons('search-results', 12);
+    loadedIds.clear();
     document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
-    if (!fromRoute) pushState({search: encodeURIComponent(query) });
+    if (!fromRoute) pushState({ search: encodeURIComponent(query) });
     document.getElementById('search-query-display').textContent = `"${query}"`;
     document.getElementById('search-count').textContent = 'Searching…';
     try {
-        const [movies, shows] = await Promise.all([tmdb('/search/movie', {query }), tmdb('/search/tv', {query })]);
-        const combined = [
-            ...movies.results.map(r => ({...r, media_type: 'movie' })),
-            ...shows.results.map(r => ({...r, media_type: 'tv' }))
-        ].sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+        const [movies, shows] = await Promise.all([tmdb('/search/movie', { query }), tmdb('/search/tv', { query })]);
+        const combined = [...movies.results.map(r => ({ ...r, media_type: 'movie' })),
+            ...shows.results.map(r => ({ ...r, media_type: 'tv' }))].sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
         document.getElementById('search-count').textContent = `${combined.length} results`;
         if (!combined.length) {
             document.getElementById('search-results').innerHTML = '<div class="empty-state"><div class="icon">🎬</div><p>No results found.</p></div>';
@@ -446,11 +532,19 @@ async function doSearch(query, fromRoute = false) {
             activeGenre = 'all';
             document.querySelectorAll('.genre-btn').forEach(b => b.classList.toggle('active', b.dataset.genre === 'all'));
             document.getElementById('genre-bar').style.display = 'flex';
-            renderCards('search-results', combined);
+            const unique = [];
+            combined.forEach(item => {
+                const id = `${item.media_type}-${item.id}`;
+                if (!loadedIds.has(id)) {
+                    loadedIds.add(id);
+                    unique.push(item);
+                }
+            });
+            renderCards('search-results', unique);
             currentPage = 1;
             hasMorePages = true;
             isLoadingMore = false;
-            currentSection = {mode: 'search', query };
+            currentSection = { mode: 'search', query };
             const el = document.getElementById('search-results');
             el.insertAdjacentHTML('afterend', '<div id="scroll-sentinel"></div>');
             attachScrollObserver();
@@ -460,7 +554,6 @@ async function doSearch(query, fromRoute = false) {
     }
 }
 
-let suggestionCache = {};
 async function fetchSearchSuggestions(query) {
     if (!query.trim()) return;
     try {
@@ -480,6 +573,8 @@ function showSearchSuggestions(query) {
     const results = suggestionCache[query];
     const recent = getRecentSearches();
 
+    box.addEventListener('mousedown', e => e.preventDefault());
+    box.addEventListener('touchstart', e => e.preventDefault());
     // Build header with recent searches
     const recentHtml = recent.length ? `
         <div class="recent-header">
@@ -502,18 +597,17 @@ function showSearchSuggestions(query) {
         const titleSlug = slugify(title);
         const url = `/?type=${r.media_type}&id=${r.id}&name=${titleSlug}`;
         return `
-                <a class="suggestion-item" href="${url}"
-                    onmousedown="event.preventDefault();pickSuggestion(${r.id},'${r.media_type}','${title.replace(/'/g, "\\'")}')">
-                    ${poster
-                ? `<img src="${poster}" alt="${title}" onerror="this.style.display='none'">`
+            <a class="suggestion-item" href="${url}"
+                onmousedown="event.preventDefault();pickSuggestion(${r.id},'${r.media_type}','${title.replace(/'/g, "\\'")}')">
+                ${poster ? `<img src="${poster}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`
                 : `<div class="suggestion-poster-placeholder"></div>`}
-                    <div class="suggestion-info">
-                        <div class="suggestion-title">${title}</div>
-                        <div class="suggestion-meta">${year}${year ? ' · ' : ''}${type}</div>
-                    </div>
-                    ${r.vote_average ? `<div class="suggestion-rating">${starIcon()} ${r.vote_average.toFixed(1)}</div>` : ''}
-                </a>`;
-    }).join('')}` : (results ? '<div class="recent-empty">No results found</div>' : '<div class="recent-empty">Searching…</div>');
+                <div class="suggestion-info">
+                    <div class="suggestion-title">${title}</div>
+                    <div class="suggestion-meta">${year}${year ? ' · ' : ''}${type}</div>
+                </div>
+                ${r.vote_average ? `<div class="suggestion-rating">${starIcon()} ${r.vote_average.toFixed(1)}</div>` : ''}
+            </a>`;
+        }).join('')}` : (results ? '<div class="recent-empty">No results found</div>' : '<div class="recent-empty">Searching…</div>');
     box.innerHTML = recentHtml + suggestionsHtml;
     box.style.display = 'block';
 }
@@ -565,7 +659,10 @@ function showRecentSearches() {
 }
 
 function hideRecentSearches() {
-    setTimeout(() => {document.getElementById('recent-searches').style.display = 'none';}, 150);
+    setTimeout(() => {
+        const box = document.getElementById('recent-searches');
+        if (!box.matches(':hover')) { box.style.display = 'none'; }
+    }, 300);
 }
 
 function pickRecentSearch(query) {
@@ -622,7 +719,7 @@ async function openDetail(id, mediaType, autoPlay = false, fromRoute = false) {
     document.getElementById('next-ep-bar').style.display = 'none';
     document.getElementById('similar-row').innerHTML = '';
     try {
-        const detail = await tmdb(`/${mediaType}/${id}`, {append_to_response: 'external_ids,similar,credits' });
+        const detail = await tmdb(`/${mediaType}/${id}`, { append_to_response: 'external_ids,similar,credits' });
         const imdb = detail.external_ids?.imdb_id || null;
         const title = detail.title || detail.name;
         const slug = slugify(title);
@@ -630,7 +727,7 @@ async function openDetail(id, mediaType, autoPlay = false, fromRoute = false) {
         const rating = detail.vote_average ? detail.vote_average.toFixed(1) : '—';
         const t = _pendingTimestamp || 0;
         _pendingTimestamp = 0;
-        const runtime = detail.runtime ? `${detail.runtime}min`: (detail.episode_run_time?.[0] ? `${detail.episode_run_time[0]}min/ep` : '');
+        const runtime = detail.runtime ? `${detail.runtime}min` : (detail.episode_run_time?.[0] ? `${detail.episode_run_time[0]}min/ep` : '');
 
         document.getElementById('player-title').textContent = title;
         if (detail.genres?.length) {
@@ -658,28 +755,28 @@ async function openDetail(id, mediaType, autoPlay = false, fromRoute = false) {
         if (detail.backdrop_path)
             document.getElementById('player-container').style.background = `url(${backdropUrl(detail.backdrop_path)}) center/cover`;
         if (mediaType === 'movie') {
-            if (!fromRoute) pushState({type: 'movie', id, name: slug });
+            if (!fromRoute) pushState({ type: 'movie', id, name: slug });
             currentSource = 'primesrc';
-            currentEmbed = {type: 'movie', imdb, tmdbId: id, season: null, episode: null };
+            currentEmbed = { type: 'movie', imdb, tmdbId: id, season: null, episode: null };
             document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === 'primesrc'));
             document.getElementById('source-bar').style.display = 'flex';
             const iframe = document.getElementById('player-iframe');
-            if (iframe && !pendingWatchTogetherStartAt) {iframe.src = buildEmbedUrl('primesrc', 'movie', imdb, id, null, null, t);}
-            startWatchTimer(id, 'movie', {id, type: 'movie', title, poster: detail.poster_path, year, runtime: detail.runtime || 90 });
+            if (iframe && !pendingWatchTogetherStartAt) { iframe.src = buildEmbedUrl('primesrc', 'movie', imdb, id, null, null, t); }
+            startWatchTimer(id, 'movie', { id, type: 'movie', title, poster: detail.poster_path, year, runtime: detail.runtime || 90 });
         } else {
-            currentShow = {id, detail, imdb, slug };
+            currentShow = { id, detail, imdb, slug };
             const startS = _pendingEp?.season || 1;
             const startE = _pendingEp?.episode || 1;
             _pendingEp = null;
             currentSeason = startS;
             document.getElementById('episodes-section').style.display = 'block';
             renderSeasons(detail, imdb, id, startS);
-            if (!fromRoute) pushState({type: 'tv', id, name: slug, season: startS, episode: startE });
+            if (!fromRoute) pushState({ type: 'tv', id, name: slug, season: startS, episode: startE });
             loadEpisode(startS, startE, imdb, id, true, t);
         }
         const similar = (detail.similar?.results || []).slice(0, 14);
         if (similar.length)
-            renderCards('similar-row', similar.map(r => ({...r, media_type: mediaType })));
+            renderCards('similar-row', similar.map(r => ({ ...r, media_type: mediaType })));
         if (pendingWatchTogetherStartAt) {
             const sat = pendingWatchTogetherStartAt;
             pendingWatchTogetherStartAt = null;
@@ -753,15 +850,15 @@ function loadEpisode(season, episode, imdb, tmdbId, skipPush = false, t = 0) {
     document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`ep-btn-${season}-${episode}`)?.classList.add('active');
     currentSource = 'primesrc';
-    currentEmbed = {type: 'tv', imdb, tmdbId, season, episode };
+    currentEmbed = { type: 'tv', imdb, tmdbId, season, episode };
     document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === 'primesrc'));
     document.getElementById('source-bar').style.display = 'flex';
     const iframe = document.getElementById('player-iframe');
-    if (iframe && !pendingWatchTogetherStartAt) {iframe.src = buildEmbedUrl('primesrc', 'tv', imdb, tmdbId, season, episode, t);}
-    document.getElementById('player-container').scrollIntoView({behavior: 'smooth', block: 'start' });
+    if (iframe && !pendingWatchTogetherStartAt) { iframe.src = buildEmbedUrl('primesrc', 'tv', imdb, tmdbId, season, episode, t); }
+    document.getElementById('player-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (!skipPush && currentShow) {
         const slug = currentShow.slug || slugify(currentShow.detail?.name || '');
-        pushState({type: 'tv', id: tmdbId, name: slug, season, episode });
+        pushState({ type: 'tv', id: tmdbId, name: slug, season, episode });
     }
     if (currentShow) {
         startWatchTimer(currentShow.id, 'tv', {
@@ -805,7 +902,7 @@ function playNextEpisode() {
     const season = parseInt(btn.dataset.season);
     const episode = parseInt(btn.dataset.episode);
     loadEpisode(season, episode, currentShow.imdb, currentShow.id);
-    document.getElementById('player-container').scrollIntoView({behavior: 'smooth', block: 'start' });
+    document.getElementById('player-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function triggerNextEpisode() {
@@ -831,7 +928,7 @@ function focusMobileSearch() {
     document.getElementById('search-query-display').textContent = 'Search';
     document.getElementById('search-count').textContent = '';
     document.getElementById('search-results').innerHTML = '';
-    window.scrollTo({top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     setTimeout(() => document.getElementById('search-input').focus(), 300);
 }
 
@@ -840,7 +937,7 @@ function renderCast(cast) {
     const section = document.getElementById('cast-section');
     const row = document.getElementById('cast-row');
     const top = cast.slice(0, 20);
-    if (!top.length) {section.style.display = 'none'; return;}
+    if (!top.length) { section.style.display = 'none'; return; }
     section.style.display = 'block';
     row.innerHTML = '';
     top.forEach(actor => {
@@ -848,9 +945,9 @@ function renderCast(cast) {
         div.className = 'cast-card';
         const photo = actor.profile_path ? `${TMDB_IMG}w185${actor.profile_path}` : null;
         div.innerHTML = photo
-        ? `<img class="cast-avatar" src="${photo}" alt="${actor.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            ? `<img class="cast-avatar" src="${photo}" alt="${actor.name}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
         <div class="cast-avatar-placeholder" style="display:none">👤</div>`
-        : `<div class="cast-avatar-placeholder">👤</div>`;
+            : `<div class="cast-avatar-placeholder">👤</div>`;
         div.innerHTML += ` <div class="cast-name">${actor.name}</div> <div class="cast-character">${actor.character || ''}</div>`;
         row.appendChild(div);
     });
@@ -875,14 +972,13 @@ function buildEmbedUrl(source, type, imdb, tmdbId, season, episode, t = 0) {
 function switchSource(source) {
     currentSource = source;
     document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === source));
-    const {type, imdb, tmdbId, season, episode } = currentEmbed;
+    const { type, imdb, tmdbId, season, episode } = currentEmbed;
     if (!type) return;
     const url = buildEmbedUrl(source, type, imdb, tmdbId, season, episode);
     document.getElementById('player-iframe').src = url;
 }
 
 // ─── FULLSCREEN TOGGLE ───
-let isFullscreen = false;
 function toggleFullscreen() {
     const container = document.getElementById('player-container');
     const btn = document.getElementById('fullscreen-btn');
@@ -941,6 +1037,21 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+document.getElementById('search-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+        doSearch(e.target.value);
+        document.getElementById('recent-searches').style.display = 'none';
+    }
+});
+
+document.addEventListener('click', e => {
+    const box = document.getElementById('recent-searches');
+    const input = document.getElementById('search-input');
+    if (!box.contains(e.target) && e.target !== input) {
+        box.style.display = 'none';
+    }
+});
+
 // ─── NETWORKS & GENRES ───
 function renderNetworks(networks, companies, mediaType) {
     const el = document.getElementById('player-networks');
@@ -969,12 +1080,12 @@ function renderNetworks(networks, companies, mediaType) {
     };
     const tags = [];
     // TV networks
-    networks.slice(0, 3).forEach(n => {tags.push({label: KNOWN[n.id] || n.name, type: 'network', id: n.id, mediaType: 'tv' });});
+    networks.slice(0, 3).forEach(n => { tags.push({ label: KNOWN[n.id] || n.name, type: 'network', id: n.id, mediaType: 'tv' }); });
     // Movie companies
     if (mediaType === 'movie') {
-        companies.slice(0, 3).forEach(c => {if (KNOWN[c.id]) {tags.push({label: KNOWN[c.id], type: 'company', id: c.id, mediaType: 'movie' });}});
+        companies.slice(0, 3).forEach(c => { if (KNOWN[c.id]) { tags.push({ label: KNOWN[c.id], type: 'company', id: c.id, mediaType: 'movie' }); } });
     }
-    if (!tags.length) {el.style.display = 'none'; return;}
+    if (!tags.length) { el.style.display = 'none'; return; }
     el.style.display = 'flex';
     el.innerHTML = `
     <span style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-right:4px;">On</span>
@@ -998,12 +1109,12 @@ async function browseGenre(genreId, genreName) {
     setActiveTab('');
     try {
         const [movies, shows] = await Promise.all([
-            tmdb('/discover/movie', {with_genres: genreId, sort_by: 'popularity.desc', page: 1 }),
-            tmdb('/discover/tv', {with_genres: genreId, sort_by: 'popularity.desc', page: 1 })
+            tmdb('/discover/movie', { with_genres: genreId, sort_by: 'popularity.desc', page: 1 }),
+            tmdb('/discover/tv', { with_genres: genreId, sort_by: 'popularity.desc', page: 1 })
         ]);
         allResults = [
-            ...movies.results.map(r => ({...r, media_type: 'movie' })),
-            ...shows.results.map(r => ({...r, media_type: 'tv' }))
+            ...movies.results.map(r => ({ ...r, media_type: 'movie' })),
+            ...shows.results.map(r => ({ ...r, media_type: 'tv' }))
         ].sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
 
         currentPage = 1;
@@ -1031,13 +1142,13 @@ async function browseNetwork(networkId, networkName, type, mediaType) {
     try {
         const param = type === 'network' ? 'with_networks' : 'with_companies';
         const endpoint = mediaType === 'tv' ? '/discover/tv' : '/discover/movie';
-        const data = await tmdb(endpoint, {[param]: networkId, sort_by: 'popularity.desc', page: 1 });
+        const data = await tmdb(endpoint, { [param]: networkId, sort_by: 'popularity.desc', page: 1 });
 
-        allResults = data.results.map(r => ({...r, media_type: mediaType }));
+        allResults = data.results.map(r => ({ ...r, media_type: mediaType }));
         currentPage = 1;
         hasMorePages = data.total_pages > 1;
         isLoadingMore = false;
-        currentSection = {mode: 'network', networkId, type, mediaType, param };
+        currentSection = { mode: 'network', networkId, type, mediaType, param };
         activeGenre = 'all';
         document.querySelectorAll('.genre-btn').forEach(b => b.classList.toggle('active', b.dataset.genre === 'all'));
         document.getElementById('genre-bar').style.display = 'flex';
@@ -1060,33 +1171,37 @@ async function loadMoreResults() {
 
     try {
         let data;
-        const {mediaType, mode, query } = currentSection;
+        const { mediaType, mode, query } = currentSection;
         if (mode === 'search') {
-            data = await tmdb('/search/multi', {query, page: currentPage + 1 });
+            data = await tmdb('/search/multi', { query, page: currentPage + 1 });
         } else if (mode === 'network') {
-            const {networkId, type, mediaType: mt, param } = currentSection;
+            const { networkId, type, mediaType: mt, param } = currentSection;
             const endpoint = mt === 'tv' ? '/discover/tv' : '/discover/movie';
-            data = await tmdb(endpoint, {[param]: networkId, sort_by: 'popularity.desc', page: currentPage + 1 });
-            data.results = data.results.map(r => ({...r, media_type: mt }));
+            data = await tmdb(endpoint, { [param]: networkId, sort_by: 'popularity.desc', page: currentPage + 1 });
+            data.results = data.results.map(r => ({ ...r, media_type: mt }));
         } else {
-            data = await tmdb(`/${mediaType}/popular`, {page: currentPage + 1 });
+            data = await tmdb(`/${mediaType}/popular`, { page: currentPage + 1 });
         }
         currentPage++;
         hasMorePages = currentPage < data.total_pages;
 
-        const items = mode === 'search'
-            ? data.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv')
-            : data.results.map(r => ({...r, media_type: mediaType }));
+        const items = mode === 'search' ? data.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv') : data.results.map(r => ({ ...r, media_type: mediaType }));
         const container = document.getElementById('search-results');
-        items.forEach((item, i) => container.appendChild(makeCard(item, i)));
-    } catch (e) {}
+        items.forEach((item, i) => {
+            const uniqueId = `${item.media_type}-${item.id}`;
+            if (!loadedIds.has(uniqueId)) {
+                loadedIds.add(uniqueId);
+                container.appendChild(makeCard(item, i));
+            }
+        });
+    } catch (e) { }
 
     isLoadingMore = false;
     const sentinel2 = document.getElementById('scroll-sentinel');
     if (sentinel2) sentinel2.innerHTML = hasMorePages ? '' : '<p style="text-align:center;color:var(--text3);font-size:13px;padding:24px">No more results</p>';
 }
 
-const scrollObserver = new IntersectionObserver(entries => {if (entries[0].isIntersecting) loadMoreResults();}, {rootMargin: '200px' });
+const scrollObserver = new IntersectionObserver(entries => { if (entries[0].isIntersecting) loadMoreResults(); }, { rootMargin: '200px' });
 function attachScrollObserver() {
     const sentinel = document.getElementById('scroll-sentinel');
     if (sentinel) scrollObserver.observe(sentinel);
@@ -1118,7 +1233,7 @@ function renderContinueWatching() {
     const row = document.getElementById('continue-watching-row');
     const items = getHistory().slice(0, 14);
 
-    if (!items.length) {section.style.display = 'none'; return;}
+    if (!items.length) { section.style.display = 'none'; return; }
     section.style.display = 'block';
     row.innerHTML = '';
 
@@ -1132,15 +1247,15 @@ function renderContinueWatching() {
         const sub = item.type === 'tv' ? `S${item.season} E${item.episode}` : item.year || '';
         const timestamp = item.timestamp || 0;
         const runtime = item.type === 'movie' ? (item.runtime || 90) * 60 : (item.epRuntime || 40) * 60;
-        const pct = runtime > 0 ? Math.min(Math.round((timestamp / runtime) * 100), 99): 0;
+        const pct = runtime > 0 ? Math.min(Math.round((timestamp / runtime) * 100), 99) : 0;
         const placeholderIcon = `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
         div.innerHTML = poster
-        ? `<div style="position:relative">
+            ? `<div style="position:relative">
             <img class="card-poster" src="${poster}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
             <div class="card-poster-placeholder" style="display:none">${placeholderIcon}<span>${item.title}</span></div>
             ${pct > 0 ? `<div class="card-progress"><div class="card-progress-fill" style="width:${pct}%"></div></div>` : ''}
         </div>`
-        : `<div style="position:relative">
+            : `<div style="position:relative">
             <div class="card-poster-placeholder">${placeholderIcon}<span>${item.title}</span></div>
             ${pct > 0 ? `<div class="card-progress"><div class="card-progress-fill" style="width:${pct}%"></div></div>` : ''}
         </div>`;
@@ -1207,12 +1322,12 @@ function stopWatchTimer() {
 }
 
 // ─── SCROLL TO TOP BUTTON ───
-window.addEventListener('scroll', () => {document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);});
+window.addEventListener('scroll', () => { document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400); });
 
 // ─── SECTION VIEW ───
 async function fetchSection(mediaType) {
     showPage('search-page');
-    pushState({browse: mediaType });
+    pushState({ browse: mediaType });
     document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
     const label = mediaType === 'movie' ? 'Movies' : 'TV Shows';
     const input = document.getElementById('search-input');
@@ -1225,7 +1340,7 @@ async function fetchSection(mediaType) {
     try {
         const data = await tmdb(`/${mediaType}/popular`);
         document.getElementById('search-count').textContent = `${data.total_results} titles`;
-        allResults = data.results.map(r => ({...r, media_type: mediaType }));
+        allResults = data.results.map(r => ({ ...r, media_type: mediaType }));
         activeGenre = 'all';
         document.querySelectorAll('.genre-btn').forEach(b => b.classList.toggle('active', b.dataset.genre === 'all'));
         document.getElementById('genre-bar').style.display = 'flex';
@@ -1233,22 +1348,22 @@ async function fetchSection(mediaType) {
         currentPage = 1;
         hasMorePages = data.total_pages > 1;
         isLoadingMore = false;
-        currentSection = {mode: 'section', mediaType };
+        currentSection = { mode: 'section', mediaType };
         const el = document.getElementById('search-results');
         el.insertAdjacentHTML('afterend', '<div id="scroll-sentinel"></div>');
         attachScrollObserver();
-    } catch (e) {}
+    } catch (e) { }
 }
 
 // ─── COLLECTION ───
 async function renderCollection(belongsToCollection, currentId) {
     const section = document.getElementById('collection-section');
-    if (!belongsToCollection) {section.style.display = 'none'; return;}
+    if (!belongsToCollection) { section.style.display = 'none'; return; }
     try {
         const data = await tmdb(`/collection/${belongsToCollection.id}`);
         const parts = (data.parts || [])
             .sort((a, b) => (a.release_date || '').localeCompare(b.release_date || ''));
-        if (parts.length <= 1) {section.style.display = 'none'; return;}
+        if (parts.length <= 1) { section.style.display = 'none'; return; }
         document.getElementById('collection-title').textContent =
             data.name || 'Part of a Collection';
         const row = document.getElementById('collection-row');
@@ -1264,11 +1379,8 @@ async function renderCollection(belongsToCollection, currentId) {
             const year = (item.release_date || '').slice(0, 4);
             const rating = item.vote_average ? item.vote_average.toFixed(1) : '—';
 
-            div.innerHTML = poster
-                ? `<img class="card-poster" src="${poster}" alt="${item.title}" loading="lazy"
-                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-                <div class="card-poster-placeholder" style="display:none">${item.title}</div>`
-                : `<div class="card-poster-placeholder">${item.title}</div>`;
+            div.innerHTML = poster ? `<img class="card-poster" src="${poster}" alt="${item.title}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+                <div class="card-poster-placeholder" style="display:none">${item.title}</div>` : `<div class="card-poster-placeholder">${item.title}</div>`;
             div.innerHTML += `
                 <div class="card-info">
                     <div class="card-title">${isCurrent ? '▶ ' : ''}${item.title}</div>
@@ -1306,7 +1418,7 @@ function showStats(fromRoute = false) {
     showPage('stats-page');
     setActiveTab('tab-stats');
     setMobileTab('mtab-stats');
-    if (!fromRoute) pushState({browse: 'stats' });
+    if (!fromRoute) pushState({ browse: 'stats' });
     document.title = 'StreamVault';
     renderStats();
 }
@@ -1317,15 +1429,15 @@ function renderStats() {
     const movies = items.filter(i => i.type === 'movie');
     const episodes = items.filter(i => i.type === 'tv');
     let totalSeconds = 0;
-    items.forEach(i => {totalSeconds += i.timestamp || 0;});
+    items.forEach(i => { totalSeconds += i.timestamp || 0; });
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const days = new Set(items.map(i => new Date(i.savedAt).toDateString()));
     document.getElementById('stats-grid').innerHTML = [
-        {value: hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`, label: 'Total Watch Time', sub: 'across all titles' },
-        {value: movies.length, label: 'Movies Started', sub: `from your history` },
-        {value: episodes.reduce((acc, s) => acc + (s.episode || 0), 0), label: 'Episodes Watched', sub: `across all shows` },
-        {value: days.size, label: 'Days Watched', sub: `different days` },
+        { value: hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`, label: 'Total Watch Time', sub: 'across all titles' },
+        { value: movies.length, label: 'Movies Started', sub: `from your history` },
+        { value: episodes.reduce((acc, s) => acc + (s.episode || 0), 0), label: 'Episodes Watched', sub: `across all shows` },
+        { value: days.size, label: 'Days Watched', sub: `different days` },
     ].map(s => `
         <div class="stat-card">
             <div class="stat-value">${s.value}</div>
@@ -1340,7 +1452,7 @@ function renderStats() {
         10759: 'Action & Adventure', 10762: 'Kids', 10763: 'News', 10764: 'Reality'
     };
     const genreCounts = {};
-    items.forEach(i => {(i.genre_ids || []).forEach(gid => {const name = genreMap[gid] || null; if (name) genreCounts[name] = (genreCounts[name] || 0) + 1;});});
+    items.forEach(i => { (i.genre_ids || []).forEach(gid => { const name = genreMap[gid] || null; if (name) genreCounts[name] = (genreCounts[name] || 0) + 1; }); });
     const topGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
     const maxG = topGenres[0]?.[1] || 1;
     document.getElementById('stats-genres').innerHTML = topGenres.length ? topGenres.map(([name, count]) => `
@@ -1351,7 +1463,7 @@ function renderStats() {
             </div>
             <div class="genre-bar-count">${count}</div>
         </div>`).join('')
-    : '<div style="color:var(--text3);font-size:13px">Watch more to see your top genres</div>';
+        : '<div style="color:var(--text3);font-size:13px">Watch more to see your top genres</div>';
 
     // ── Recently watched ──
     const recent = items.sort((a, b) => b.savedAt - a.savedAt).slice(0, 6);
@@ -1360,10 +1472,7 @@ function renderStats() {
         const sub = item.type === 'tv' ? `S${item.season} E${item.episode}` : item.year || '';
         const ago = timeAgo(item.savedAt);
         return `
-            <div class="recent-item-stat">
-                ${poster
-                ? `<img src="${poster}" onerror="this.style.opacity='0'">`
-                : `<div style="width:36px;height:54px;background:var(--surface2);border-radius:4px;flex-shrink:0"></div>`}
+            <div class="recent-item-stat">${poster ? `<img src="${poster}" onerror="this.style.opacity='0'">` : `<div style="width:36px;height:54px;background:var(--surface2);border-radius:4px;flex-shrink:0"></div>`}
                 <div class="info">
                     <div class="rtitle">${item.title}</div>
                     <div class="rsub">${sub} · ${ago}</div>
@@ -1372,7 +1481,7 @@ function renderStats() {
     }).join('') || '<div style="color:var(--text3);font-size:13px">Nothing watched yet</div>';
 
     const activityMap = {};
-    items.forEach(i => {const d = new Date(i.savedAt).toDateString(); activityMap[d] = (activityMap[d] || 0) + 1;});
+    items.forEach(i => { const d = new Date(i.savedAt).toDateString(); activityMap[d] = (activityMap[d] || 0) + 1; });
     const dots = [];
     for (let i = 29; i >= 0; i--) {
         const d = new Date();
@@ -1414,19 +1523,19 @@ async function loadNewThisWeek() {
         const from = fmt(week);
         const to = fmt(today);
         const [movies, shows] = await Promise.all([
-            tmdb('/discover/movie', {'primary_release_date.gte': from, 'primary_release_date.lte': to, sort_by: 'popularity.desc' }),
-            tmdb('/discover/tv', {'first_air_date.gte': from, 'first_air_date.lte': to, sort_by: 'popularity.desc' })
+            tmdb('/discover/movie', { 'primary_release_date.gte': from, 'primary_release_date.lte': to, sort_by: 'popularity.desc' }),
+            tmdb('/discover/tv', { 'first_air_date.gte': from, 'first_air_date.lte': to, sort_by: 'popularity.desc' })
         ]);
         const combined = [
-            ...movies.results.map(r => ({...r, media_type: 'movie' })),
-            ...shows.results.map(r => ({...r, media_type: 'tv' }))
+            ...movies.results.map(r => ({ ...r, media_type: 'movie' })),
+            ...shows.results.map(r => ({ ...r, media_type: 'tv' }))
         ].sort((a, b) => (b.popularity || 0) - (a.popularity || 0)).slice(0, 14);
         if (!combined.length) {
             document.getElementById('new-this-week-row').innerHTML = '<div class="empty-state"><p>Nothing new this week yet.</p></div>';
             return;
         }
         renderCards('new-this-week-row', combined);
-    } catch (e) {}
+    } catch (e) { }
 }
 
 // ─── SEARCH FOCUS SHORTCUT ───
@@ -1454,7 +1563,7 @@ function generateWatchTogetherLink() {
     params.set('startAt', startAt);
     const url = `${location.origin}${location.pathname}?${params.toString()}`;
     if (navigator.share) {
-        navigator.share({title: 'StreamVault Sync', text: '🎬 Watch with me — starts in 30 seconds!', url }).catch(() => copyLinkToClipboard(url));
+        navigator.share({ title: 'StreamVault Sync', text: '🎬 Watch with me — starts in 30 seconds!', url }).catch(() => copyLinkToClipboard(url));
     } else {
         copyLinkToClipboard(url);
     }
@@ -1490,7 +1599,7 @@ function startWatchTogetherCountdown(startAt) {
             const urlData = getMediaInfoFromUrl();
             const type = currentEmbed.type || urlData.type;
             const id = currentEmbed.tmdbId || urlData.id;
-            if (type && id && iframe) {iframe.src = buildEmbedUrl(currentSource, type, null, id, currentEmbed.season || urlData.season, currentEmbed.episode || urlData.episode, 0);}
+            if (type && id && iframe) { iframe.src = buildEmbedUrl(currentSource, type, null, id, currentEmbed.season || urlData.season, currentEmbed.episode || urlData.episode, 0); }
             const p = new URLSearchParams(location.search);
             p.delete('startAt');
             history.replaceState({}, '', `${location.pathname}?${p.toString()}`);
@@ -1503,9 +1612,9 @@ function startWatchTogetherCountdown(startAt) {
 function cancelWatchTogether() {
     clearInterval(watchTogetherTimer);
     document.getElementById('watch-together-overlay').style.display = 'none';
-    const {type, imdb, tmdbId, season, episode } = currentEmbed;
+    const { type, imdb, tmdbId, season, episode } = currentEmbed;
     const iframe = document.getElementById('player-iframe');
-    if (type && iframe) {iframe.src = buildEmbedUrl(currentSource, type, imdb, tmdbId, season, episode, 0);}
+    if (type && iframe) { iframe.src = buildEmbedUrl(currentSource, type, imdb, tmdbId, season, episode, 0); }
 }
 
 function getMediaInfoFromUrl() {
@@ -1535,7 +1644,7 @@ function copyToClipboard(text) {
 // ─── SHARE ───
 function shareUrl() {
     if (navigator.share) {
-        navigator.share({title: document.title, url: location.href });
+        navigator.share({ title: document.title, url: location.href });
         return;
     }
     copyToClipboard(location.href).then(() => {
@@ -1550,7 +1659,8 @@ function shareUrl() {
 }
 
 // ─── ADVANCED FILTERS ───
-let activeFilters = {type: 'all', sort: 'popularity.desc', lang: '', yearFrom: 1950, yearTo: 2026, rating: 0, genre: '', network: '', networkType: '' };
+let activeFilters = { type: 'all', sort: 'popularity.desc', lang: '', yearFrom: 1950, yearTo: new Date().getFullYear(), rating: 0, genre: '', network: '', networkType: '' };
+
 function toggleFilterPanel() {
     const panel = document.getElementById('filter-panel');
     const label = document.getElementById('filter-toggle-label');
@@ -1568,20 +1678,20 @@ function setFilter(key, val, btn) {
 function updateYearLabel() {
     let from = parseInt(document.getElementById('year-from').value) || 1950;
     let to = parseInt(document.getElementById('year-to').value) || 2026;
-    if (from > to) {to = from; document.getElementById('year-to').value = to;}
+    if (from > to) { to = from; document.getElementById('year-to').value = to; }
     activeFilters.yearFrom = from;
     activeFilters.yearTo = to;
 }
 
 function resetFilters() {
-    activeFilters = {type: 'all', sort: 'popularity.desc', lang: '', yearFrom: 1950, yearTo: 2026, rating: 0, genre: '', network: '', networkType: '' };
+    activeFilters = { type: 'all', sort: 'popularity.desc', lang: '', yearFrom: 1950, yearTo: 2026, rating: 0, genre: '', network: '', networkType: '' };
     document.getElementById('filter-type').value = 'all';
     document.getElementById('filter-sort').value = 'popularity.desc';
     document.getElementById('filter-lang').value = '';
     document.getElementById('filter-genre').value = '';
     document.getElementById('filter-network').value = '';
     document.getElementById('year-from').value = 1950;
-    document.getElementById('year-to').value = 2026;
+    document.getElementById('year-to').value = new Date().getFullYear();
     document.getElementById('filter-rating').value = 0;
     document.getElementById('rating-label').textContent = '0+';
 }
@@ -1598,10 +1708,10 @@ async function applyFilters(fromRestore = false) {
     activeFilters.yearFrom = parseInt(document.getElementById('year-from').value) || 1950;
     activeFilters.yearTo = parseInt(document.getElementById('year-to').value) || 2026;
     activeFilters.rating = parseInt(document.getElementById('filter-rating').value) || 0;
-    const {type, sort, lang, yearFrom, yearTo, rating, genre, network, networkType } = activeFilters;
+    const { type, sort, lang, yearFrom, yearTo, rating, genre, network, networkType } = activeFilters;
     const types = type === 'all' ? ['movie', 'tv'] : [type];
 
-    if (!fromRestore) pushState({browse: 'filter', type, sort, lang, yearFrom, yearTo, rating, genre, network, networkType });
+    if (!fromRestore) pushState({ browse: 'filter', type, sort, lang, yearFrom, yearTo, rating, genre, network, networkType });
     document.getElementById('search-query-display').textContent = 'Filtered Results';
     document.getElementById('search-count').textContent = 'Loading…';
     document.getElementById('search-results').innerHTML = '<div class="spinner"></div>';
@@ -1610,8 +1720,8 @@ async function applyFilters(fromRestore = false) {
     try {
         const results = await Promise.all(types.map(async t => {
             if (currentQuery) {
-                const data = await tmdb(`/search/${t === 'movie' ? 'movie' : 'tv'}`, {query: currentQuery, page: 1 });
-                let items = data.results.map(r => ({...r, media_type: t }));
+                const data = await tmdb(`/search/${t === 'movie' ? 'movie' : 'tv'}`, { query: currentQuery, page: 1 });
+                let items = data.results.map(r => ({ ...r, media_type: t }));
                 if (genre) items = items.filter(r => (r.genre_ids || []).includes(parseInt(genre)));
                 if (lang) items = items.filter(r => r.original_language === lang);
                 if (yearFrom) items = items.filter(r => parseInt((r.release_date || r.first_air_date || '0').slice(0, 4)) >= yearFrom);
@@ -1623,7 +1733,7 @@ async function applyFilters(fromRestore = false) {
             const dateToKey = t === 'movie' ? 'primary_release_date.lte' : 'first_air_date.lte';
             const sortKey = (sort === 'primary_release_date.desc' || sort === 'primary_release_date.asc') && t === 'tv'
                 ? sort.replace('primary_release_date', 'first_air_date') : sort;
-            const params = {sort_by: sortKey, [dateFromKey]: `${yearFrom}-01-01`, [dateToKey]: `${yearTo}-12-31`, 'vote_average.gte': rating, 'vote_count.gte': 50, page: 1 };
+            const params = { sort_by: sortKey, [dateFromKey]: `${yearFrom}-01-01`, [dateToKey]: `${yearTo}-12-31`, 'vote_average.gte': rating, 'vote_count.gte': 50, page: 1 };
             if (lang) params.with_original_language = lang;
             if (genre) params.with_genres = genre;
             if (network) {
@@ -1637,7 +1747,7 @@ async function applyFilters(fromRestore = false) {
                     if (networkType === 'company' && t === 'tv') return Promise.resolve([]);
                 }
             }
-            return tmdb(`/discover/${t}`, params).then(d => d.results.map(r => ({...r, media_type: t })));
+            return tmdb(`/discover/${t}`, params).then(d => d.results.map(r => ({ ...r, media_type: t })));
         }));
         allResults = results.flat().sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
         currentPage = 1; hasMorePages = false; isLoadingMore = false; currentSection = null;
@@ -1675,7 +1785,7 @@ function restoreFilters(p) {
     document.getElementById('year-to').value = yearTo;
     document.getElementById('filter-rating').value = rating;
     document.getElementById('rating-label').textContent = rating + '+';
-    activeFilters = {type, sort, lang, genre, network, networkType, yearFrom, yearTo, rating };
+    activeFilters = { type, sort, lang, genre, network, networkType, yearFrom, yearTo, rating };
     showPage('search-page');
     document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
     applyFilters(true);
@@ -1703,7 +1813,7 @@ function importHistory(event) {
     reader.onload = e => {
         try {
             const data = JSON.parse(e.target.result);
-            if (typeof data !== 'object' || Array.isArray(data)) {showToast('Invalid history file'); return;}
+            if (typeof data !== 'object' || Array.isArray(data)) { showToast('Invalid history file'); return; }
             const existing = JSON.parse(localStorage.getItem('sv_history') || '{}');
             const merged = { ...data };
             for (const [id, item] of Object.entries(existing)) {
