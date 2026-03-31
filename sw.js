@@ -16,9 +16,7 @@ self.addEventListener('install', e => {
 });
 
 self.addEventListener('activate', e => {
-    e.waitUntil(
-        caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())
-    );
+    e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 
 self.addEventListener('fetch', e => {
@@ -38,7 +36,7 @@ self.addEventListener('fetch', e => {
     }
 
     if (request.mode === 'navigate') {
-        e.respondWith(fetch(request).catch(() => caches.match('/index.html').then(r => r || Response.error()) ));
+        e.respondWith(fetch(request).catch(() => caches.match('/index.html').then(r => r || Response.error())));
         return;
     }
 
@@ -49,12 +47,13 @@ self.addEventListener('fetch', e => {
                     return response;
                 }
                 const responseClone = response.clone();
-                e.waitUntil(caches.open(CACHE).then(cache => cache.put(request, responseClone))); return response;}).catch(() => {
-                    if (request.destination === 'image') {
-                        return caches.match('assets/StreamVault.png');
-                    }
-                    return Response.error();
-                });
+                e.waitUntil(caches.open(CACHE).then(cache => cache.put(request, responseClone))); return response;
+            }).catch(() => {
+                if (request.destination === 'image') {
+                    return caches.match('assets/StreamVault.png');
+                }
+                return Response.error();
+            });
             return cached || fetchPromise;
         })
     );
