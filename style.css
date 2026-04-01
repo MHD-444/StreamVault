@@ -22,7 +22,10 @@
     padding: 0;
 }
 
-html {scroll-behavior: smooth;}
+html {
+    scroll-behavior: smooth;
+    overflow-anchor: none;
+}
 
 body {
     background: var(--bg);
@@ -44,99 +47,649 @@ body::before {
 
 /* ─── LIGHT THEME ─── */
 body.light {
-    --bg: #f8f6f2;
-    --surface: #ffffff;
-    --surface2: #efede7;
-    --surface3: #e5e2d9;
-    --gold: #c2902d;
-    --gold2: #a3761d;
-    --text: #1a1814;
-    --text2: #5c554a;
-    --text3: #968f82;
-    --border: #e2ddd3;
-    --shadow-sm: 0 2px 8px rgba(26, 24, 20, 0.04);
-    --shadow-md: 0 8px 24px rgba(26, 24, 20, 0.08);
+    --bg: #f2ede6;
+    --surface: #faf8f4;
+    --surface2: #ede8df;
+    --surface3: #e4ddd2;
+    --gold: #b8821f;
+    --gold2: #9a6c15;
+    --red: #b03020;
+    --text: #1c1712;
+    --text2: #5a4f3f;
+    --text3: #9a8e7e;
+    --border: #d9d0c2;
+    --shadow-xs: 0 1px 3px rgba(60, 45, 20, 0.06);
+    --shadow-sm: 0 2px 10px rgba(60, 45, 20, 0.08);
+    --shadow-md: 0 8px 28px rgba(60, 45, 20, 0.12);
+    --shadow-lg: 0 20px 48px rgba(60, 45, 20, 0.16);
 }
 
+/* Warm paper grain on light bg */
+body.light::before {background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.028'/%3E%3C/svg%3E");}
+
+/* ── Navbar ── */
 body.light nav {
-    background: rgba(248, 246, 242, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(194, 144, 45, 0.15);
+    background: rgba(242, 237, 230, 0.88);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom: 1px solid rgba(184, 130, 31, 0.14);
+    box-shadow: 0 1px 0 rgba(60, 45, 20, 0.06);
 }
 
+body.light .nav-logo {color: var(--gold);}
+
+body.light .nav-logo span {color: var(--text);}
+
+body.light .nav-tab {color: var(--text3);}
+
+body.light .nav-tab:hover {
+    color: var(--text);
+    background: rgba(60, 45, 20, 0.05);
+}
+
+body.light .nav-tab.active {
+    color: var(--gold);
+    background: rgba(184, 130, 31, 0.08);
+}
+
+body.light .nav-tab.active svg {stroke: var(--gold);}
+
+body.light .nav-tab.active::after {background: var(--gold);}
+
+body.light .nav-tab::before {background: rgba(184, 130, 31, 0.08);}
+
+body.light .nav-search {
+    background: rgba(255, 252, 246, 0.9);
+    border: 1px solid var(--border);
+    color: var(--text);
+    box-shadow: var(--shadow-xs), inset 0 1px 2px rgba(60, 45, 20, 0.04);
+}
+
+body.light .nav-search::placeholder {color: var(--text3);}
+
+body.light .nav-search:focus {
+    border-color: rgba(184, 130, 31, 0.5);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px rgba(184, 130, 31, 0.1), inset 0 1px 2px rgba(60, 45, 20, 0.04);
+}
+
+body.light .nav-search-icon {color: var(--text3);}
+
+body.light .nav-icon-btn {
+    background: rgba(255, 252, 246, 0.9);
+    border: 1px solid var(--border);
+    color: var(--text3);
+    box-shadow: var(--shadow-xs);
+}
+
+body.light .nav-icon-btn:hover {
+    color: var(--gold);
+    border-color: rgba(184, 130, 31, 0.4);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ── Hero ── */
 body.light #hero-bg::after {
-    background: linear-gradient(to right, rgba(26, 24, 20, 0.8) 0%, rgba(26, 24, 20, 0.3) 60%, transparent 100%), linear-gradient(to top, var(--bg) 0%, rgba(26, 24, 20, 0.2) 50%, transparent 100%);
+    background: linear-gradient(to right, rgba(28, 23, 18, 0.82) 0%, rgba(28, 23, 18, 0.35) 55%, transparent 100%),
+        linear-gradient(to top, var(--bg) 0%, rgba(28, 23, 18, 0.18) 45%, transparent 100%);
 }
 
 body.light .hero-badge {
-    background: rgba(194, 144, 45, 0.1);
-    border: 1px solid rgba(194, 144, 45, 0.3);
-    color: var(--gold2);
+    background: rgba(184, 130, 31, 0.12);
+    border: 1px solid rgba(184, 130, 31, 0.28);
+    color: var(--gold);
     font-weight: 600;
+    letter-spacing: 0.1em;
 }
 
+body.light .hero-title {color: #fff;}
+
+body.light .hero-overview {color: rgba(255, 252, 246, 0.78);}
+
+body.light .btn-play {
+    background: var(--gold);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(184, 130, 31, 0.3);
+}
+
+body.light .btn-play:hover {
+    background: var(--gold2);
+    box-shadow: 0 8px 30px rgba(184, 130, 31, 0.42);
+}
+
+body.light .btn-outline {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    color: #fff;
+    backdrop-filter: blur(8px);
+}
+
+body.light .btn-outline:hover {background: rgba(255, 255, 255, 0.2);}
+
+body.light .hero-dot {background: rgba(60, 45, 20, 0.25);}
+
+body.light .hero-dot.active {background: var(--gold);}
+
+/* ── Cards ── */
 body.light .card {
     background: var(--surface);
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
 body.light .card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-4px);
-    border-color: var(--gold);
+    transform: translateY(-6px);
+    border-color: rgba(184, 130, 31, 0.5);
+    box-shadow: var(--shadow-lg);
 }
 
-body.light .filter-select,
-body.light .filter-number,
-body.light .nav-search {
-    background: var(--surface);
+body.light .card::after {background: var(--gold);}
+
+body.light .card-title {color: var(--text);}
+
+body.light .card-meta {color: var(--text3);}
+
+body.light .card-rating {color: var(--gold);}
+
+body.light .card-type-badge {
+    background: rgba(184, 130, 31, 0.1);
+    color: var(--gold);
+}
+
+body.light .card-poster-placeholder {
+    background: var(--surface2);
+    color: var(--text3);
+}
+
+/* Row fade edges */
+body.light .row-wrapper::before {background: linear-gradient(to right, var(--bg), transparent);}
+
+body.light .row-wrapper::after {background: linear-gradient(to left, var(--bg), transparent);}
+
+/* Scroll buttons */
+body.light .scroll-btn {
+    background: rgba(250, 248, 244, 0.85);
     border: 1px solid var(--border);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
-}
-
-body.light .filter-select:focus,
-body.light .filter-number:focus,
-body.light .nav-search:focus {
-    border-color: var(--gold);
-    background: var(--surface);
-}
-
-body.light .src-btn,
-body.light .season-btn,
-body.light .ep-btn,
-body.light .filter-pill {
-    background: var(--surface);
     color: var(--text2);
-    border: 1px solid var(--border);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(8px);
 }
 
-body.light .src-btn:hover,
-body.light .filter-pill.active {
+body.light .scroll-btn:hover {
     background: var(--gold);
-    color: #ffffff;
     border-color: var(--gold);
+    color: #fff;
 }
 
-body.light #player-page.active {background: #f8f6f2;}
+/* ── Sections ── */
+body.light .section-title {color: var(--text);}
 
-body.light .player-container {background: #000;}
+body.light .section-title::before {background: var(--gold);}
 
-body.light .player-bar, body.light .player-details {background: var(--surface);}
+body.light .see-all {color: var(--text3);}
+
+body.light .see-all:hover {color: var(--gold);}
+
+/* ── Filter controls ── */
+body.light .filter-select, body.light .filter-number {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    box-shadow: var(--shadow-xs), inset 0 1px 2px rgba(60, 45, 20, 0.04);
+}
+
+body.light .filter-select:focus, body.light .filter-number:focus {
+    border-color: rgba(184, 130, 31, 0.5);
+    box-shadow: 0 0 0 3px rgba(184, 130, 31, 0.1);
+}
+
+body.light .filter-select option {
+    background: var(--surface);
+    color: var(--text);
+}
+
+body.light .filter-grid {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+body.light .filter-label {color: var(--text3);}
+
+/* ── Pill buttons (source / season / episode / filter) ── */
+body.light .src-btn, body.light .season-btn, body.light .ep-btn,
+body.light .filter-pill, body.light .genre-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    box-shadow: var(--shadow-xs);
+}
+
+body.light .src-btn:hover, body.light .src-btn.active, body.light .season-btn:hover,
+body.light .ep-btn:hover, body.light .genre-btn:hover {
+    border-color: rgba(184, 130, 31, 0.45);
+    color: var(--gold);
+    background: rgba(184, 130, 31, 0.05);
+    box-shadow: var(--shadow-sm);
+}
+
+body.light .season-btn.active, body.light .ep-btn.active,
+body.light .filter-pill.active, body.light .genre-btn.active {
+    background: rgba(184, 130, 31, 0.1);
+    border-color: rgba(184, 130, 31, 0.4);
+    color: var(--gold);
+    box-shadow: none;
+}
+
+body.light .ep-watched {border-color: rgba(184, 130, 31, 0.3);}
+
+body.light .ep-check {color: var(--gold);}
+
+/* ── Fullscreen btn ── */
+body.light .fullscreen-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    box-shadow: var(--shadow-xs);
+}
+
+body.light .fullscreen-btn:hover {
+    border-color: rgba(184, 130, 31, 0.45);
+    color: var(--gold);
+    background: rgba(184, 130, 31, 0.06);
+}
+
+/* ── Player page ── */
+body.light #player-page.active {background: var(--bg);}
+
+body.light .player-container {
+    background: #000;
+    border-bottom: 1px solid var(--border);
+}
+
+body.light .player-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-xs);
+}
+
+body.light .player-details {background: var(--bg);}
 
 body.light .player-title {color: var(--text);}
 
-body.light .player-meta, body.light .player-overview {color: var(--text2);}
+body.light .player-meta {color: var(--text2);}
 
-body.light .player-container {border-bottom: 1px solid var(--border);}
+body.light .player-meta .rating {color: var(--gold);}
 
-body.light .skeleton {
-    background: linear-gradient(90deg, #eeeae3 25%, #f5f2eb 50%, #eeeae3 75%);
-    background-size: 200% 100%;
+body.light .player-meta .genre-tag {
+    background: var(--surface2);
+    border-color: var(--border);
+    color: var(--text2);
 }
+
+body.light .player-overview {color: var(--text2);}
+
+/* ── Source bar ── */
+body.light #source-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-xs);
+}
+
+/* ── Back / Share buttons ── */
+body.light .back-btn,
+body.light .share-btn {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text2);
+    box-shadow: var(--shadow-xs);
+}
+
+body.light .back-btn:hover,
+body.light .share-btn:hover {
+    color: var(--gold);
+    border-color: rgba(184, 130, 31, 0.45);
+    background: rgba(184, 130, 31, 0.05);
+    box-shadow: var(--shadow-sm);
+}
+
+body.light .share-btn.copied {
+    color: #3a8a4a;
+    border-color: #3a8a4a;
+}
+
+/* ── Divider ── */
+body.light .divider {background: var(--border);}
+
+/* ── Tag links ── */
+body.light .tag-link {
+    background: var(--surface2);
+    border-color: var(--border);
+    color: var(--text2);
+}
+
+body.light .tag-link:hover {
+    color: var(--gold);
+    border-color: rgba(184, 130, 31, 0.45);
+    background: rgba(184, 130, 31, 0.06);
+}
+
+/* ── Skeleton loaders ── */
+body.light .skeleton {
+    background: linear-gradient(90deg, #e8e2d8 25%, #f2ede4 50%, #e8e2d8 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease infinite;
+}
+
+/* ── Scroll to top ── */
+body.light #scroll-top {
+    background: var(--gold);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(184, 130, 31, 0.35);
+}
+
+body.light #scroll-top:hover {background: var(--gold2);}
+
+/* ── Toast ── */
+body.light #toast {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text2);
+    box-shadow: var(--shadow-md);
+}
+
+/* ── Recent searches dropdown ── */
+body.light .recent-searches {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow-md);
+}
+
+body.light .recent-header {
+    color: var(--text3);
+    border-bottom-color: var(--border);
+}
+
+body.light .recent-clear {color: var(--text3);}
+
+body.light .recent-clear:hover {color: var(--red);}
+
+body.light .recent-item {color: var(--text2);}
+
+body.light .recent-item:hover {
+    background: var(--surface2);
+    color: var(--text);
+}
+
+body.light .recent-item svg {color: var(--text3);}
+
+body.light .recent-empty {color: var(--text3);}
+
+/* ── Suggestion dropdown ── */
+body.light .suggestion-item:hover {background: var(--surface2);}
+
+body.light .suggestion-title {color: var(--text);}
+
+body.light .suggestion-meta {color: var(--text3);}
+
+body.light .suggestion-rating {color: var(--gold);}
+
+/* ── Stats page ── */
+body.light .stats-hero {
+    background: linear-gradient(135deg, rgba(184, 130, 31, 0.07) 0%, rgba(184, 130, 31, 0.02) 60%, transparent 100%);
+    border-bottom-color: var(--border);
+}
+
+body.light .stats-hero-title {color: var(--text);}
+
+body.light .stats-hero-sub {color: var(--text3);}
+
+body.light .stat-card {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+body.light .stat-card::before {background: linear-gradient(to right, var(--gold), transparent);}
+
+body.light .stat-card:hover {
+    border-color: rgba(184, 130, 31, 0.35);
+    box-shadow: var(--shadow-md);
+}
+
+body.light .stat-value {color: var(--gold);}
+
+body.light .stat-label {color: var(--text3);}
+
+body.light .stat-sub {color: var(--text2);}
+
+body.light .stats-box {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+body.light .stats-box:hover {border-color: rgba(184, 130, 31, 0.25);}
+
+body.light .stats-box-title {
+    color: var(--text);
+    border-bottom-color: var(--border);
+}
+
+body.light .stats-box-title svg {color: var(--gold);}
+
+body.light .genre-bar-label {color: var(--text2);}
+
+body.light .genre-bar-track {background: var(--surface2);}
+
+body.light .genre-bar-count {color: var(--text3);}
+
+body.light .recent-item-stat {border-bottom-color: var(--border);}
+
+body.light .recent-item-stat:hover {background: var(--surface2);}
+
+body.light .recent-item-stat img {
+    border-color: var(--border);
+    background: var(--surface2);
+}
+
+body.light .recent-item-stat .info .rtitle {color: var(--text);}
+
+body.light .recent-item-stat .info .rsub {color: var(--text3);}
+
+body.light .activity-dot {
+    background: var(--surface2);
+    border-color: var(--border);
+}
+
+body.light .activity-dot.has-watch {
+    background: var(--gold);
+    border-color: var(--gold);
+}
+
+/* ── History controls ── */
+body.light .history-actions-btn {
+    background: var(--surface);
+    border-color: var(--border);
+    color: var(--text2);
+    box-shadow: var(--shadow-xs);
+}
+
+body.light .history-actions-btn:hover {
+    color: var(--gold);
+    border-color: rgba(184, 130, 31, 0.45);
+    background: rgba(184, 130, 31, 0.05);
+}
+
+/* ── Cast cards ── */
+body.light .cast-avatar {
+    border-color: var(--border);
+    background: var(--surface2);
+}
+
+body.light .cast-avatar:hover {border-color: var(--gold);}
+
+body.light .cast-avatar-placeholder {
+    background: var(--surface2);
+    border-color: var(--border);
+    color: var(--text3);
+}
+
+body.light .cast-name {color: var(--text);}
+
+body.light .cast-character {color: var(--text3);}
+
+/* ── Setup overlay ── */
+body.light #setup-overlay {background: rgba(242, 237, 230, 0.97);}
+
+body.light .setup-box {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: var(--shadow-lg);
+}
+
+body.light .setup-box p {color: var(--text2);}
+
+body.light .setup-box a {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+}
+
+body.light .setup-input {
+    background: var(--surface2);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+body.light .setup-input:focus {
+    border-color: rgba(184, 130, 31, 0.5);
+    box-shadow: 0 0 0 3px rgba(184, 130, 31, 0.1);
+}
+
+body.light .setup-note {color: var(--text3);}
+
+body.light .btn-gold {
+    background: var(--gold);
+    color: #fff;
+}
+
+body.light .btn-gold:hover {background: var(--gold2);}
+
+/* ── Mobile nav (light) ── */
+body.light #mobile-nav {
+    background: rgba(242, 237, 230, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -1px 0 rgba(60, 45, 20, 0.06);
+}
+
+body.light .mobile-tab {color: var(--text3);}
+
+body.light .mobile-tab.active {
+    color: var(--gold);
+    background: rgba(184, 130, 31, 0.09);
+}
+
+body.light .mobile-tab.active svg {stroke: var(--gold);}
+
+/* ── Coming soon badge ── */
+body.light .coming-soon-badge {
+    background: rgba(184, 130, 31, 0.9);
+    color: #fff;
+}
+
+/* ── Watch together overlay ── */
+body.light #watch-together-overlay {background: rgba(242, 237, 230, 0.97);}
+
+body.light #watch-together-countdown {color: var(--gold);}
+
+body.light #watch-together-title {color: var(--text3);}
+
+body.light .cancel-btn {
+    color: var(--text3);
+    border-color: var(--border);
+}
+
+body.light .cancel-btn:hover {
+    color: var(--text);
+    border-color: var(--text2);
+    background: rgba(60, 45, 20, 0.05);
+}
+
+/* ── Autoplay card ── */
+body.light #next-ep-autoplay {
+    background: rgba(250, 248, 244, 0.97);
+    border-color: rgba(184, 130, 31, 0.4);
+    box-shadow: var(--shadow-lg);
+}
+
+body.light #next-ep-title {
+    color: var(--text);
+}
+
+body.light .play-now-btn {
+    background: var(--gold);
+    color: #fff;
+}
+
+body.light .play-now-btn:hover {
+    background: var(--gold2);
+}
+
+body.light #autoplay-num {
+    color: var(--gold);
+}
+
+/* ── Footer ── */
+body.light footer {
+    border-top-color: var(--border);
+    color: var(--text3);
+}
+
+body.light footer span {
+    color: var(--gold);
+}
+
+/* ── Spinner ── */
+body.light .spinner {
+    border-color: var(--border);
+    border-top-color: var(--gold);
+}
+
+/* ── CW remove button ── */
+body.light .cw-remove-btn {
+    background: var(--surface2);
+    border-color: var(--border);
+    color: var(--text3);
+}
+
+body.light .cw-remove-btn:hover {
+    background: var(--red);
+    border-color: var(--red);
+    color: #fff;
+}
+
+/* ── Empty state ── */
+body.light .empty-state {color: var(--text3);}
+
+/* ── Search page ── */
+body.light #search-page {background: var(--bg);}
+
+body.light .search-query-display {color: var(--text);}
+
+body.light .search-count {color: var(--text3);}
+
+/* ── Scrollbar ── */
+body.light ::-webkit-scrollbar-track {background: var(--bg);}
+
+body.light ::-webkit-scrollbar-thumb {
+    background: var(--surface3);
+    border-color: var(--bg);
+}
+
+body.light ::-webkit-scrollbar-thumb:hover {background: var(--gold);}
 
 /* ─── BASE STYLES ─── */
 a {
@@ -313,15 +866,10 @@ button, a, .mobile-tab, .card {touch-action: manipulation;}
     transition: all var(--transition);
 }
 
-.src-btn:hover {
+.src-btn:hover, .src-btn.active {
     border-color: var(--gold);
     color: var(--gold);
-}
-
-.src-btn.active {
     background: rgba(201, 168, 76, 0.12);
-    border-color: var(--gold);
-    color: var(--gold);
 }
 
 .fullscreen-btn {
@@ -370,12 +918,10 @@ button, a, .mobile-tab, .card {touch-action: manipulation;}
     width: 100vw !important;
 }
 
-/* iOS afari */
 @supports ((-webkit-appearance:none) or (-webkit-touch-callout: none)) {
     .player-container:-webkit-full-screen {background: #000;}
 }
 
-/* Mobile Safe Areas */
 @supports (padding: env(safe-area-inset-top)) {
     body:-webkit-full-screen {
         padding-top: env(safe-area-inset-top);
@@ -385,7 +931,6 @@ button, a, .mobile-tab, .card {touch-action: manipulation;}
     }
 }
 
-/* Landscape Mobile - Hide UI */
 @media (orientation: landscape) and (max-height: 500px) {
     .player-container {
         max-height: 100vh;
@@ -395,7 +940,9 @@ button, a, .mobile-tab, .card {touch-action: manipulation;}
         right: 0;
         z-index: 1000;
     }
+
     #source-bar, .player-details {display: none !important;}
+
     .player-bar {
         position: fixed;
         top: 0;
@@ -587,42 +1134,15 @@ a.nav-tab {
 
 .nav-tab span, .nav-tab {transition: color 0.25s ease;}
 
-/* Light theme nav overrides */
-body.light nav {
-    background: rgba(240, 236, 228, 0.92);
-    border-bottom-color: rgba(138, 101, 32, 0.12);
-}
-
-body.light .nav-search {
-    background: var(--surface2);
-    border-color: var(--border);
-    color: var(--text);
-}
-
-body.light .nav-search:focus {
-    background: var(--surface);
-    border-color: var(--gold);
-}
-
-body.light .nav-icon-btn {
-    background: var(--surface2);
-    border-color: var(--border);
-    color: var(--text2);
-}
-
-body.light .nav-icon-btn:hover {
-    color: var(--gold);
-    border-color: var(--gold);
-    background: var(--surface);
-}
-
-/* ─── NAV TAB ENTER / LEAVE ─── */
+/* ─── NAV TAB ANIMATIONS ─── */
 @keyframes navEnter {
     0% {
         transform: translateY(3px);
         opacity: 0.5;
     }
-    60% {transform: translateY(-1px);}
+    60% {
+        transform: translateY(-1px);
+    }
     100% {
         transform: translateY(0);
         opacity: 1;
@@ -630,7 +1150,9 @@ body.light .nav-icon-btn:hover {
 }
 
 @keyframes navLeave {
-    0% {opacity: 1;}
+    0% {
+        opacity: 1;
+    }
     100% {
         opacity: 0.4;
         transform: translateY(2px);
@@ -825,12 +1347,8 @@ main {padding-top: 70px;}
 }
 
 @keyframes kenburns {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.1);
-    }
+    from {transform: scale(1);}
+    to {transform: scale(1.1);}
 }
 
 /* ─── SECTION ─── */
@@ -1104,6 +1622,7 @@ main {padding-top: 70px;}
         opacity: 1;
         pointer-events: auto;
     }
+
     .scroll-btn.show {
         opacity: 0;
         pointer-events: none;
@@ -1118,8 +1637,29 @@ main {padding-top: 70px;}
     .scroll-btn {pointer-events: auto;}
 }
 
-/* ─── SKELETON LOADERS ─── */
+/* ─── CONTINUE WATCHING REMOVE BUTTON ─── */
+.cw-remove-btn {
+    font-size: 10px;
+    color: var(--text3);
+    padding: 2px 7px;
+    background: var(--surface3);
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    line-height: 1.6;
+}
 
+.cw-remove-btn:hover {
+    color: #fff;
+    background: var(--red);
+    border-color: var(--red);
+    transform: scale(1.1);
+}
+
+.cw-remove-btn:active {transform: scale(0.95);}
+
+/* ─── SKELETON LOADERS ─── */
 .skeleton {
     background: linear-gradient(90deg, var(--surface) 25%, var(--surface2) 50%, var(--surface) 75%);
     background-size: 200% 100%;
@@ -1127,7 +1667,9 @@ main {padding-top: 70px;}
     border-radius: var(--radius);
 }
 
-.skel-card {aspect-ratio: 2/3;}
+.skel-card {
+    aspect-ratio: 2/3;
+}
 
 @keyframes shimmer {
     to {background-position: -200% 0;}
@@ -1684,8 +2226,7 @@ main {padding-top: 70px;}
 
 .filter-number:focus {border-color: var(--gold);}
 
-.filter-number::-webkit-outer-spin-button,
-.filter-number::-webkit-inner-spin-button {
+.filter-number::-webkit-outer-spin-button, .filter-number::-webkit-inner-spin-button {
     -webkit-appearance: none;
     appearance: none;
     margin: 0;
@@ -2220,7 +2761,9 @@ main {padding-top: 70px;}
     transition: border-color var(--transition);
 }
 
-.cast-avatar:hover {border-color: var(--gold);}
+.cast-avatar:hover {
+    border-color: var(--gold);
+}
 
 .cast-avatar-placeholder {
     width: 70px;
@@ -2299,8 +2842,12 @@ footer span {color: var(--gold);}
 
 /* ─── ANIMATIONS ─── */
 @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes slideUp {

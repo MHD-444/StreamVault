@@ -3,38 +3,39 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self';  script-src 'self' 'unsafe-inline' https://api.themoviedb.org; 
-        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;  img-src 'self' data: https://image.tmdb.org https://*.tmdb.org; 
-        frame-src 'self' https://primesrc.me https://vidsrc.me https://vidsrc.to https://vidsrcme.ru https://*.vidsrcme.ru https://vidsrc.xyz https://vidsrc.cc; 
-        connect-src 'self' https://api.themoviedb.org;">
+    <meta http-equiv="Permissions-Policy" content="picture-in-picture=(self *); fullscreen=(self *); autoplay=(self *); geolocation=(); microphone=(); camera=(); payment=(); usb=(); magnetometer=(); gyroscope=(); accelerometer=();">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
+        script-src 'self' 'unsafe-inline' https://api.themoviedb.org;  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;
+        img-src 'self' data: https://image.tmdb.org https://*.tmdb.org https://box.netrocdn.site https://*.netrocdn.site;
+        frame-src 'self' https://primesrc.me https://www.2embed.cc https://moviesapi.club https://moviesapi.to;
+        connect-src 'self' https://api.themoviedb.org; media-src *; frame-ancestors 'self'; upgrade-insecure-requests;">
 
     <title>StreamVault</title>
-    <link rel="icon" type="image/png" href="/assets/StreamVault.png"/>
+    <link rel="icon" type="image/png" href="/assets/streamvault.png"/>
     <link rel="preconnect" href="https://primesrc.me"/>
-    <link rel="preconnect" href="https://vidsrcme.ru"/>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="style.css?v=9"/>
+    <link rel="stylesheet" href="style.css?v=11"/>
     <link rel="manifest" href="manifest.json"/>
     <meta name="theme-color" content="#080808"/>
     <meta name="mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
     <meta name="apple-mobile-web-app-title" content="StreamVault"/>
-    <link rel="apple-touch-icon" href="/assets/StreamVault.png"/>
+    <link rel="apple-touch-icon" href="/assets/streamvault.png"/>
     <meta name="title" content="StreamVault — Your Ultimate Cinema Vault">
     <meta name="description" content="Stream your favorite movies and series in high quality. Powered by ECHO.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://streamvault-lac.vercel.app/">
     <meta property="og:title" content="StreamVault">
     <meta property="og:description" content="Explore a massive library of movies and TV shows. No ads, just streaming.">
-    <meta property="og:image" content="/assets/StreamVault.png">
+    <meta property="og:image" content="/assets/streamvault.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://streamvault-lac.vercel.app/">
     <meta property="twitter:title" content="StreamVault">
     <meta property="twitter:description" content="Explore a massive library of movies and TV shows.">
-    <meta property="twitter:image" content="/assets/StreamVault.png">
+    <meta property="twitter:image" content="/assets/streamvault.png">
     <meta name="theme-color" content="#c9a84c">
 </head>
 
@@ -167,7 +168,7 @@
             <div id="continue-watching-section" style="display:none">
                 <div class="section">
                     <div class="section-header">
-                        <div class="section-title">Continue Watching</div>
+                        <div class="section-title">🔥 Continue Watching</div>
                     </div>
                     <div class="row-wrapper">
                         <button class="scroll-btn left" onclick="scrollRow('continue-watching-row', -1)">
@@ -205,14 +206,14 @@
             <div class="divider"></div>
             <div class="section">
                 <div class="section-header">
-                    <div class="section-title">Popular Movies</div>
+                    <div class="section-title">⭐ Popular Movies</div>
                 </div>
                 <div id="movies-row" class="cards-row"></div>
             </div>
             <div class="divider"></div>
             <div class="section">
                 <div class="section-header">
-                    <div class="section-title">Popular TV Shows</div>
+                    <div class="section-title">⭐ Popular TV Shows</div>
                 </div>
                 <div id="tv-row" class="cards-row"></div>
             </div>
@@ -521,23 +522,25 @@
                 </div>
             </div>
             <div id="source-bar" style="display:none; align-items:center; gap:8px; flex-wrap:wrap; padding:10px 16px;">
-                <span style="font-size:14px;color:var(--text);letter-spacing:0.06em;text-transform:uppercase;margin-right:6px;">Server</span>
+                <span style="font-size:14px;color:var(--text);letter-spacing:0.06em;text-transform:uppercase;margin-right:6px;">Servers</span>
                 <button class="src-btn active" data-src="primesrc" onclick="switchSource('primesrc')">PrimeSrc</button>
-                <button class="src-btn" data-src="vidsrc" onclick="switchSource('vidsrc')">VidSrc</button>
+                <button class="src-btn" data-src="embed2" onclick="switchSource('embed2')">2Embed</button>
+                <button class="src-btn" data-src="moviesapi" onclick="switchSource('moviesapi')">MoviesAPI</button>
                 <button class="fullscreen-btn" id="fullscreen-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)" style="margin-left:auto;">
                     <svg id="fullscreen-icon-enter" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                        <path d="M4 8V4h4"/>
-                        <path d="M20 20v-4h4"/>
-                        <path d="m19.5 5 .5.5L17 8"/>
-                        <path d="M4 20v-4H0"/>
-                        <path d="m3.5 4 .5.5L6 7"/>
+                        <path d="M4 8V4h4" />
+                        <path d="M20 20v-4h4" />
+                        <path d="m19.5 5 .5.5L17 8" />
+                        <path d="M4 20v-4H0" />
+                        <path d="m3.5 4 .5.5L6 7" />
                     </svg>
-                    <svg id="fullscreen-icon-exit" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none">
-                        <path d="M6 4h4v4"/>
-                        <path d="M20 4h-4v4"/>
-                        <path d="M15 19v4h-4"/>
-                        <path d="M4 19h4v4"/>
-                        <path d="M15.5 15 .5 19.5 4 20"/>
+                    <svg id="fullscreen-icon-exit" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" style="display:none">
+                        <path d="M6 4h4v4" />
+                        <path d="M20 4h-4v4" />
+                        <path d="M15 19v4h-4" />
+                        <path d="M4 19h4v4" />
+                        <path d="M15.5 15 .5 19.5 4 20" />
                     </svg>
                 </button>
             </div>
@@ -643,5 +646,5 @@
         Powered by <span>PrimeSrc.me</span>&amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
     </footer>
 
-    <script src="main.js?v=9"></script></body>
+    <script src="main.js?v=11"></script></body>
 </html>
