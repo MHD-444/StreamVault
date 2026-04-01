@@ -5,10 +5,10 @@ const STATIC = [
     '/style.css',
     '/main.js',
     '/manifest.json',
-    'assets/StreamVault.png',
-    'assets/logo32.png',
-    'assets/logo192.png',
-    'assets/logo512.png'
+    '/assets/StreamVault.png',
+    '/assets/logo32.png',
+    '/assets/logo192.png',
+    '/assets/logo512.png'
 ];
 
 self.addEventListener('install', e => {
@@ -65,7 +65,7 @@ e.respondWith(
                     return response;
                 }).catch(() => {
                     if (request.mode === 'navigate') {return caches.match('index.html');}
-                    if (request.destination === 'image') {return caches.match('assets/StreamVault.png');}
+                    if (request.destination === 'image') {return caches.match('/assets/StreamVault.png');}
                     if (request.destination === 'style' || request.destination === 'script') {return caches.match(request.url.replace(/\?.*$/, ''));}
                     return new Response('Offline', {status: 503, statusText: 'Service Unavailable'});
                 });
