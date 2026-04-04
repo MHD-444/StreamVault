@@ -1,41 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="Permissions-Policy" content="picture-in-picture=(self *); fullscreen=(self *); autoplay=(self *); geolocation=(); microphone=(); camera=(); payment=(); usb=(); magnetometer=(); gyroscope=(); accelerometer=();">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; 
-        script-src 'self' 'unsafe-inline' https://api.themoviedb.org;  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;
-        img-src 'self' data: https://image.tmdb.org https://*.tmdb.org https://box.netrocdn.site https://*.netrocdn.site;
-        frame-src 'self' https://primesrc.me https://www.2embed.cc https://moviesapi.club https://moviesapi.to;
-        connect-src 'self' https://api.themoviedb.org; media-src *; frame-ancestors 'self'; upgrade-insecure-requests;">
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https:; img-src 'self' data: https:; frame-src https:; connect-src 'self' https:;">
+    <meta http-equiv="Permissions-Policy" content="fullscreen=(self), autoplay=(self), picture-in-picture=(self)">
     <title>StreamVault</title>
-    <link rel="icon" type="image/png" href="/assets/streamvault.png"/>
-    <link rel="preconnect" href="https://primesrc.me"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="style.css?v=11"/>
-    <link rel="manifest" href="manifest.json"/>
-    <meta name="theme-color" content="#080808"/>
-    <meta name="mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-    <meta name="apple-mobile-web-app-title" content="StreamVault"/>
-    <link rel="apple-touch-icon" href="/assets/streamvault.png"/>
+    <link rel="icon" type="image/png" href="assets/streamvault.png" />
+    <link rel="preconnect" href="https://primesrc.me" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css?v=12" />
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#080808" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="StreamVault" />
+    <link rel="apple-touch-icon" href="assets/streamvault.png" />
     <meta name="title" content="StreamVault — Your Ultimate Cinema Vault">
     <meta name="description" content="Stream your favorite movies and series in high quality. Powered by ECHO.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://streamvault-lac.vercel.app/">
     <meta property="og:title" content="StreamVault">
     <meta property="og:description" content="Explore a massive library of movies and TV shows. No ads, just streaming.">
-    <meta property="og:image" content="/assets/streamvault.png">
+    <meta property="og:image" content="assets/streamvault.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://streamvault-lac.vercel.app/">
     <meta property="twitter:title" content="StreamVault">
     <meta property="twitter:description" content="Explore a massive library of movies and TV shows.">
-    <meta property="twitter:image" content="/assets/streamvault.png">
+    <meta property="twitter:image" content="assets/streamvault.png">
     <meta name="theme-color" content="#c9a84c">
 </head>
 
@@ -48,7 +43,7 @@
                 <strong style="color:var(--text)">PrimeSrc.me</strong>for streaming.<br><br>Get your free TMDB API key at
                 <a href="https://www.themoviedb.org/settings/api" target="_blank">themoviedb.org</a>, then paste it below.
             </p>
-            <input id="api-key-input" type="text" class="setup-input" placeholder="Paste your TMDB API key…"/>
+            <input id="api-key-input" type="text" class="setup-input" placeholder="Paste your TMDB API key…" />
             <button class="btn-gold" onclick="saveApiKey()">Launch StreamVault →</button>
             <div class="setup-note">Your key is stored locally in your browser and never sent anywhere else.</div>
         </div>
@@ -60,65 +55,74 @@
         <div class="nav-tabs">
             <a class="nav-tab active" href="/" id="tab-home" onclick="event.preventDefault();showHome()">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/> <polyline points="9 22 9 12 15 12 15 22"/>
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
                 </svg>
                 Home
             </a>
-            <a class="nav-tab" href="/?browse=movie" id="tab-movies" onclick="event.preventDefault();fetchSection('movie')">
+            <a class="nav-tab" href="/?browse=movie" id="tab-movies"
+                onclick="event.preventDefault();fetchSection('movie')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <rect x="2" y="2" width="20" height="20" rx="2"/>
-                    <line x1="7" y1="2" x2="7" y2="22"/>
-                    <line x1="17" y1="2" x2="17" y2="22"/>
-                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <rect x="2" y="2" width="20" height="20" rx="2" />
+                    <line x1="7" y1="2" x2="7" y2="22" />
+                    <line x1="17" y1="2" x2="17" y2="22" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
                 </svg>
                 Movies
             </a>
             <a class="nav-tab" href="/?browse=tv" id="tab-tv" onclick="event.preventDefault();fetchSection('tv')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <rect x="2" y="7" width="20" height="15" rx="2"/>
-                    <polyline points="17 2 12 7 7 2"/>
+                    <rect x="2" y="7" width="20" height="15" rx="2" />
+                    <polyline points="17 2 12 7 7 2" />
                 </svg>
                 TV Shows
             </a>
+            <a class="nav-tab" href="/?browse=mylist" id="tab-mylist" onclick="event.preventDefault();showMyList()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                </svg>
+                My List
+            </a>
             <a class="nav-tab" href="/?browse=stats" id="tab-stats" onclick="event.preventDefault();showStats()">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <line x1="18" y1="20" x2="18" y2="10"/>
-                    <line x1="12" y1="20" x2="12" y2="4"/>
-                    <line x1="6" y1="20" x2="6" y2="14"/>
+                    <line x1="18" y1="20" x2="18" y2="10" />
+                    <line x1="12" y1="20" x2="12" y2="4" />
+                    <line x1="6" y1="20" x2="6" y2="14" />
                 </svg>
                 Stats
             </a>
         </div>
         <div class="nav-right">
             <div class="nav-search-wrap">
-                <svg class="nav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.35-4.35"/>
+                <svg class="nav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.35-4.35" />
                 </svg>
                 <input id="search-input" type="text" class="nav-search" placeholder="Search movies, shows…"
-                    oninput="onSearchInput(this.value)" onkeydown="if(event.key==='Enter') doSearch(this.value)" onfocus="showRecentSearches()" onblur="hideRecentSearches()"/>
+                    oninput="onSearchInput(this.value)" onkeydown="if(event.key==='Enter') doSearch(this.value)" onfocus="showRecentSearches()" onblur="hideRecentSearches()" />
                 <div id="recent-searches" class="recent-searches" style="display:none"></div>
             </div>
             <button id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" class="nav-icon-btn">
                 <svg id="theme-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
                 <svg id="theme-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none">
-                    <circle cx="12" cy="12" r="5"/>
-                    <line x1="12" y1="1" x2="12" y2="3"/>
-                    <line x1="12" y1="21" x2="12" y2="23"/>
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                    <line x1="1" y1="12" x2="3" y2="12"/>
-                    <line x1="21" y1="12" x2="23" y2="12"/>
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="23" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="1" y1="12" x2="3" y2="12" />
+                    <line x1="21" y1="12" x2="23" y2="12" />
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
                 </svg>
             </button>
             <button class="nav-icon-btn" onclick="showSetup()" title="API Key">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14" />
                 </svg>
             </button>
         </div>
@@ -133,7 +137,7 @@
                 <div class="hero-content">
                     <div class="hero-badge">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--gold)">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                         </svg>
                         Featured Tonight
                     </div>
@@ -147,15 +151,15 @@
                     <div class="hero-actions">
                         <button class="btn-play" onclick="watchHero()">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                <polygon points="5 3 19 12 5 21 5 3"/>
+                                <polygon points="5 3 19 12 5 21 5 3" />
                             </svg>
                             Watch Now
                         </button>
                         <button class="btn-outline" onclick="detailHero()">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="12" y1="8" x2="12" y2="12"/>
-                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="12" />
+                                <line x1="12" y1="16" x2="12.01" y2="16" />
                             </svg>
                             More Info
                         </button>
@@ -173,13 +177,13 @@
                     <div class="row-wrapper">
                         <button class="scroll-btn left" onclick="scrollRow('continue-watching-row', -1)">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M15 18l-6-6 6-6"/>
+                                <path d="M15 18l-6-6 6-6" />
                             </svg>
                         </button>
                         <div id="continue-watching-row" class="cards-row-1"></div>
                         <button class="scroll-btn right" onclick="scrollRow('continue-watching-row', 1)">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M9 6l6 6-6 6"/>
+                                <path d="M9 6l6 6-6 6" />
                             </svg>
                         </button>
                     </div>
@@ -236,7 +240,7 @@
             <!-- FILTER TOGGLE BUTTON -->
             <button id="filter-toggle" onclick="toggleFilterPanel()" style="display:none;margin-bottom:16px;" class="share-btn">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
                 </svg>
                 <span id="filter-toggle-label">Filters</span>
             </button>
@@ -267,15 +271,15 @@
                     <div class="filter-group">
                         <label class="filter-label">Year Range</label>
                         <div style="display:flex;align-items:center;gap:10px;">
-                            <input type="number" id="year-from" class="filter-number" min="1900" max="2026" value="1950" placeholder="From" oninput="updateYearLabel()"/>
+                            <input type="number" id="year-from" class="filter-number" min="1900" max="2026" value="1950" placeholder="From" oninput="updateYearLabel()" />
                             <span style="color:var(--text3);font-size:13px;">—</span>
-                            <input type="number" id="year-to" class="filter-number" min="1900" max="2026" value="" placeholder="To" oninput="updateYearLabel()"/>
+                            <input type="number" id="year-to" class="filter-number" min="1900" max="2026" value="" placeholder="To" oninput="updateYearLabel()" />
                         </div>
                     </div>
                     <!-- Min Rating -->
                     <div class="filter-group">
                         <label class="filter-label">Min Rating: <span id="rating-label">0+</span></label>
-                        <input type="range" id="filter-rating" class="filter-range" min="0" max="9" step="1" value="0" oninput="document.getElementById('rating-label').textContent=this.value+'+'"/>
+                        <input type="range" id="filter-rating" class="filter-range" min="0" max="9" step="1" value="0" oninput="document.getElementById('rating-label').textContent=this.value+'+'" />
                     </div>
                     <!-- Language -->
                     <div class="filter-group">
@@ -320,8 +324,7 @@
                     <!-- Network -->
                     <div class="filter-group">
                         <label class="filter-label">Network / Studio</label>
-                        <select class="filter-select" id="filter-network"
-                            onchange="activeFilters.network=this.value;activeFilters.networkType=this.options[this.selectedIndex].dataset.type">
+                        <select class="filter-select" id="filter-network" onchange="activeFilters.network=this.value;activeFilters.networkType=this.options[this.selectedIndex].dataset.type">
                             <option value="">Any Network</option>
                             <optgroup label="Streaming">
                                 <option value="213" data-type="network">Netflix</option>
@@ -352,7 +355,8 @@
                 </div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;">
                     <button onclick="resetFilters()" style="font-size:12px;color:var(--text3);transition:color var(--transition)"
-                        onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">↺ Reset all</button>
+                        onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">↺ Reset all
+                    </button>
                     <button class="btn-gold" style="width:auto;padding:10px 32px;" onclick="applyFilters()">Apply Filters</button>
                 </div>
             </div>
@@ -380,7 +384,7 @@
                 <div class="stats-hero-content">
                     <div class="hero-badge" style="margin-bottom:12px;">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--gold)">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                         </svg>
                         Your Profile
                     </div>
@@ -389,21 +393,21 @@
                         <div class="history-controls">
                             <button class="history-actions-btn" onclick="exportHistory()">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                    <polyline points="7 10 12 15 17 10"/>
-                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
                                 </svg>
                                 Export
                             </button>
                             <button class="history-actions-btn" onclick="document.getElementById('import-file').click()">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                    <polyline points="17 8 12 3 7 8"/>
-                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="17 8 12 3 7 8" />
+                                    <line x1="12" y1="3" x2="12" y2="15" />
                                 </svg>
                                 Import
                             </button>
-                            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importHistory(event)"/>
+                            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importHistory(event)" />
                         </div>
                     </div>
                     <div class="stats-hero-sub">Calculated from your local watch history</div>
@@ -415,7 +419,7 @@
                     <div class="stats-box">
                         <div class="stats-box-title">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
                             </svg>
                             Top Genres
                         </div>
@@ -424,8 +428,8 @@
                     <div class="stats-box">
                         <div class="stats-box-title">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polyline points="12 6 12 12 16 14"/>
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
                             </svg>
                             Recently Watched
                         </div>
@@ -437,10 +441,10 @@
                 <div class="stats-box" style="margin-top:24px;">
                     <div class="stats-box-title">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
+                            <rect x="3" y="4" width="18" height="18" rx="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
                         </svg>
                         30-Day Activity
                     </div>
@@ -448,7 +452,8 @@
                     <div id="stats-activity" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
                     <div style="display:flex;align-items:center;gap:6px;margin-top:12px;">
                         <span style="font-size:11px;color:var(--text3)">Less</span>
-                        <div style="width:12px;height:12px;border-radius:3px;background:var(--surface2);border:1px solid var(--border)"></div>
+                        <div style="width:12px;height:12px;border-radius:3px;background:var(--surface2);border:1px solid var(--border)">
+                        </div>
                         <div style="width:12px;height:12px;border-radius:3px;background:var(--gold);opacity:0.4"></div>
                         <div style="width:12px;height:12px;border-radius:3px;background:var(--gold);opacity:0.7"></div>
                         <div style="width:12px;height:12px;border-radius:3px;background:var(--gold);"></div>
@@ -458,48 +463,67 @@
             </div>
         </div>
 
+        <!-- MY LIST PAGE -->
+        <div id="mylist-page" style="display:none; padding: 32px 24px; max-width: 1400px; margin: 0 auto;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+                <div>
+                    <div class="section-title" style="margin:0">My List</div>
+                    <div id="mylist-count" style="font-size:13px; color:var(--text3); margin-top:4px;">0 titles saved</div>
+                </div>
+            </div>
+            <div id="mylist-empty" style="display:none; text-align:center; padding:80px 24px; color:var(--text3);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4" style="margin-bottom:16px">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                </svg>
+                <div style="font-size:16px; margin-bottom:8px;">Your list is empty</div>
+                <div style="font-size:13px;">Hit the + My List button on any movie or show to save it here.</div>
+            </div>
+            <div id="mylist-grid" class="cards-grid"></div>
+        </div>
+
         <!-- PLAYER PAGE -->
         <div id="player-page">
-            <div class="player-bar">
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <button class="back-btn" onclick="goBack()" style="margin:0">← Back</button>
-                    <button class="share-btn" id="share-btn" onclick="shareUrl()">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="18" cy="5" r="3"/>
-                            <circle cx="6" cy="12" r="3"/>
-                            <circle cx="18" cy="19" r="3"/>
-                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+
+            <!-- TOP BAR -->
+            <div style="display:flex;align-items:center;justify-content:flex-start;gap:6px;padding:10px 20px;border-bottom:1px solid var(--border);">
+                <button class="back-btn" onclick="goBack()">← Back</button>
+                <div style="display:flex;gap:8px;">
+                    <button class="share-btn" onclick="shareUrl()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="18" cy="5" r="3" />
+                            <circle cx="6" cy="12" r="3" />
+                            <circle cx="18" cy="19" r="3" />
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                         </svg>
                         Share
                     </button>
-                    <!--
-                    <button class="share-btn" id="watch-together-btn" onclick="generateWatchTogetherLink()">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    <button class="share-btn" onclick="toggleMyList()">
+                        <svg id="my-list-icon-add2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
-                        Watch Together
+                        <svg id="my-list-icon-check2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        <span id="my-list-label2">My List</span>
                     </button>
-                    -->
                 </div>
-                <div id="next-ep-bar" style="display:none;">
+                <div id="next-ep-bar" style="display:none;margin-left:auto;">
                     <button class="btn-play" id="next-ep-btn" onclick="playNextEpisode()" style="width:fit-content">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                            <line x1="19" y1="3" x2="19" y2="21" stroke="currentColor" stroke-width="2"/>
+                            <polygon points="5 3 19 12 5 21 5 3" />
+                            <line x1="19" y1="3" x2="19" y2="21" stroke="currentColor" stroke-width="2" />
                         </svg>
                         Next Episode
                     </button>
                 </div>
             </div>
+
+            <!-- PLAYER EMBED -->
             <div class="player-wrapper">
                 <div class="player-container" id="player-container">
-                    <iframe id="player-iframe" scrolling="no" allowfullscreen allow="autoplay; fullscreen; picture-in-picture; web-share" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <iframe id="player-iframe" scrolling="no" allow="autoplay; picture-in-picture" referrerpolicy="no-referrer"></iframe>
                     <div id="next-ep-autoplay" class="hidden">
                         <div class="autoplay-card">
                             <div class="autoplay-info">
@@ -508,21 +532,23 @@
                             </div>
                             <div id="autoplay-ring">
                                 <svg width="44" height="44">
-                                    <circle cx="22" cy="22" r="18" stroke="var(--surface3)" stroke-width="3" fill="none"/>
-                                    <circle id="autoplay-progress" cx="22" cy="22" r="18" stroke="var(--gold)" stroke-width="3" fill="none"/>
+                                    <circle cx="22" cy="22" r="18" stroke="var(--surface3)" stroke-width="3" fill="none" />
+                                    <circle id="autoplay-progress" cx="22" cy="22" r="18" stroke="var(--gold)" stroke-width="3" fill="none" />
                                 </svg>
                                 <span id="autoplay-num">10</span>
                             </div>
                         </div>
                         <div class="autoplay-controls">
                             <button onclick="triggerNextEpisode()" class="play-now-btn">Play Now</button>
-                            <button onclick="cancelAutoplay()" class="cancel-link" style="color:var(--text3); font-size:12px; cursor:pointer;">Dismiss</button>
+                            <button onclick="cancelAutoplay()" class="cancel-link" style="color:var(--text3);font-size:12px;cursor:pointer;">Dismiss</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="source-bar" style="display:none; align-items:center; gap:8px; flex-wrap:wrap; padding:10px 16px;">
-                <span style="font-size:14px;color:var(--text);letter-spacing:0.06em;text-transform:uppercase;margin-right:6px;">Servers</span>
+
+            <!-- SOURCE BAR -->
+            <div id="source-bar" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 24px;border-bottom:1px solid var(--border);">
+                <span style="font-size:13px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;margin-right:4px;">Servers</span>
                 <button class="src-btn active" data-src="primesrc" onclick="switchSource('primesrc')">PrimeSrc</button>
                 <button class="src-btn" data-src="embed2" onclick="switchSource('embed2')">2Embed</button>
                 <button class="src-btn" data-src="moviesapi" onclick="switchSource('moviesapi')">MoviesAPI</button>
@@ -534,44 +560,58 @@
                         <path d="M4 20v-4H0" />
                         <path d="m3.5 4 .5.5L6 7" />
                     </svg>
-                    <svg id="fullscreen-icon-exit" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" style="display:none">
+                    <svg id="fullscreen-icon-exit" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none">
                         <path d="M6 4h4v4" />
                         <path d="M20 4h-4v4" />
                         <path d="M15 19v4h-4" />
                         <path d="M4 19h4v4" />
-                        <path d="M15.5 15 .5 19.5 4 20" />
                     </svg>
                 </button>
             </div>
-            <div class="player-details">
-                <div class="player-title" id="player-title"></div>
-                <div class="player-meta" id="player-meta"></div>
-                <div class="player-overview" id="player-overview"></div>
-                <div id="player-networks" style="display:none; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:16px;"></div>
-                <div id="episodes-section" class="episodes-section" style="display:none">
-                    <div class="section-title" style="margin-bottom:16px">Episodes</div>
-                    <div class="season-selector" id="season-selector"></div>
-                    <div class="episodes-grid" id="episodes-grid"></div>
+
+            <!-- DETAIL BODY -->
+            <div class="pd-body">
+                <div class="pd-main">
+                    <div class="player-details">
+                        <div class="player-title" id="player-title"></div>
+                        <div class="player-meta" id="player-meta"></div>
+                        <div class="player-overview" id="player-overview"></div>
+                        <div id="player-networks" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px;"></div>
+                        <div id="next-ep-bar" style="display:none;margin-bottom:16px;">
+                            <button class="pd-next-btn" id="next-ep-btn" onclick="playNextEpisode()">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                    <polygon points="5 3 19 12 5 21 5 3" />
+                                    <line x1="19" y1="3" x2="19" y2="21" stroke="currentColor" stroke-width="2" />
+                                </svg>
+                                Next Episode
+                            </button>
+                        </div>
+                        <div id="episodes-section" class="episodes-section" style="display:none">
+                            <div class="section-title" style="margin-bottom:16px">Episodes</div>
+                            <div class="season-selector" id="season-selector"></div>
+                            <div class="episodes-grid" id="episodes-grid"></div>
+                        </div>
+                    </div>
+                    <div class="pd-tabs" id="pd-tabs">
+                        <button class="pd-tab active" data-tab="cast" onclick="switchDetailTab('cast',this)">Cast</button>
+                        <button class="pd-tab" data-tab="collection" id="tab-collection" onclick="switchDetailTab('collection',this)" style="display:none">Collection</button>
+                        <button class="pd-tab" data-tab="more" onclick="switchDetailTab('more',this)">More Like This</button>
+                    </div>
+                    <div id="pd-tab-cast" class="pd-tab-panel">
+                        <div id="cast-section" style="display:none">
+                            <div id="cast-row" class="cast-grid"></div>
+                        </div>
+                    </div>
+                    <div id="pd-tab-collection" class="pd-tab-panel" style="display:none">
+                        <div id="collection-section" style="display:none">
+                            <div class="pd-collection-title" id="collection-title"></div>
+                            <div id="collection-row" class="cards-row"></div>
+                        </div>
+                    </div>
+                    <div id="pd-tab-more" class="pd-tab-panel" style="display:none">
+                        <div id="similar-row" class="pd-similar-grid"></div>
+                    </div>
                 </div>
-            </div>
-            <div id="collection-section" style="display:none" class="section">
-                <div class="section-header">
-                    <div class="section-title" id="collection-title">Part of a Collection</div>
-                </div>
-                <div id="collection-row" class="cards-row"></div>
-            </div>
-            <div id="cast-section" style="display:none" class="section">
-                <div class="section-header">
-                    <div class="section-title">Cast</div>
-                </div>
-                <div id="cast-row" style="display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;"></div>
-            </div>
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-title">You Might Also Like</div>
-                </div>
-                <div id="similar-row" class="cards-row"></div>
             </div>
         </div>
     </main>
@@ -580,43 +620,49 @@
     <nav id="mobile-nav">
         <button class="mobile-tab active" id="mtab-home" onclick="showHome(); setMobileTab('mtab-home')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
             <span>Home</span>
         </button>
         <button class="mobile-tab" id="mtab-movies" onclick="fetchSection('movie'); setMobileTab('mtab-movies')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
-                <line x1="7" y1="2" x2="7" y2="22"/>
-                <line x1="17" y1="2" x2="17" y2="22"/>
-                <line x1="2" y1="12" x2="22" y2="12"/>
-                <line x1="2" y1="7" x2="7" y2="7"/>
-                <line x1="2" y1="17" x2="7" y2="17"/>
-                <line x1="17" y1="7" x2="22" y2="7"/>
-                <line x1="17" y1="17" x2="22" y2="17"/>
+                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                <line x1="7" y1="2" x2="7" y2="22" />
+                <line x1="17" y1="2" x2="17" y2="22" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <line x1="2" y1="7" x2="7" y2="7" />
+                <line x1="2" y1="17" x2="7" y2="17" />
+                <line x1="17" y1="7" x2="22" y2="7" />
+                <line x1="17" y1="17" x2="22" y2="17" />
             </svg>
             <span>Movies</span>
         </button>
         <button class="mobile-tab" id="mtab-tv" onclick="fetchSection('tv'); setMobileTab('mtab-tv')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="7" width="20" height="15" rx="2" ry="2"/>
-                <polyline points="17 2 12 7 7 2"/>
+                <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
+                <polyline points="17 2 12 7 7 2" />
             </svg>
             <span>TV</span>
         </button>
         <button class="mobile-tab" id="mtab-search" onclick="focusMobileSearch(); setMobileTab('mtab-search')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/>
-                <path d="m21 21-4.35-4.35"/>
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
             </svg>
             <span>Search</span>
         </button>
+        <button class="mobile-tab" id="mtab-mylist" onclick="showMyList(); setMobileTab('mtab-mylist')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+            </svg>
+            <span>My List</span>
+        </button>
         <button class="mobile-tab" id="mtab-stats" onclick="showStats(); setMobileTab('mtab-stats')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="20" x2="18" y2="10"/>
-                <line x1="12" y1="20" x2="12" y2="4"/>
-                <line x1="6" y1="20" x2="6" y2="14"/>
+                <line x1="18" y1="20" x2="18" y2="10" />
+                <line x1="12" y1="20" x2="12" y2="4" />
+                <line x1="6" y1="20" x2="6" y2="14" />
             </svg>
             <span>Stats</span>
         </button>
@@ -624,7 +670,7 @@
 
     <!-- WATCH TOGETHER OVERLAY -->
     <div id="watch-together-overlay">
-        <div style="font-family:'Playfair Display',serif; font-size:16px; color:var(--text2); letter-spacing:0.1em; text-transform: uppercase;">Starting in</div>
+        <div style="font-family:'Playfair Display',serif; font-size:16px; color:var(--text2); letter-spacing:0.1em; text-transform: uppercase;"> Starting in</div>
         <div id="watch-together-countdown">5</div>
         <div id="watch-together-title">Loading…</div>
         <button class="cancel-btn" onclick="cancelWatchTogether()">Cancel and Play Now</button>
@@ -633,7 +679,7 @@
     <!-- SCROLL TO TOP BUTTON -->
     <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-            <polyline points="18 15 12 9 6 15"/>
+            <polyline points="18 15 12 9 6 15" />
         </svg>
     </button>
 
@@ -642,9 +688,10 @@
 
     <!-- FOOTER -->
     <footer>
-        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:8px">StreamVault</div>
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:8px"> StreamVault</div>
         Powered by <span>PrimeSrc.me</span>&amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
     </footer>
 
-    <script src="main.js?v=11"></script></body>
+    <script src="main.js?v=12"></script>
+</body>
 </html>
