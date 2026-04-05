@@ -2131,8 +2131,7 @@ function showCardContextMenu(e, url, title) {
         <div class="sv-ctx-divider"></div>
         <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-newtab">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            Open in new tab
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Open in new tab
         </button>
         <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-copylink">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -2148,7 +2147,9 @@ function showCardContextMenu(e, url, title) {
     document.getElementById('sv-ctx-newtab').addEventListener('click', () => { window.open(fullUrl, '_blank', 'noopener'); menu.remove(); });
     document.getElementById('sv-ctx-copylink').addEventListener('click', () => { navigator.clipboard.writeText(fullUrl).then(() => showToast('Link copied!')); menu.remove(); });
     const close = e2 => { if (!menu.contains(e2.target)) { menu.remove(); document.removeEventListener('mousedown', close); } };
+    const closeOnScroll = () => { menu.remove(); window.removeEventListener('scroll', closeOnScroll, true); };
     setTimeout(() => document.addEventListener('mousedown', close), 0);
+    window.addEventListener('scroll', closeOnScroll, true);
 }
 
 // ─── WATCH TOGETHER ───
