@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=14" />
+    <link rel="stylesheet" href="style.css?v=15" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -53,15 +53,14 @@
     <nav>
         <a class="nav-logo" href="/" onclick="event.preventDefault();showHome()">Stream<span>Vault</span></a>
         <div class="nav-tabs">
-            <a class="nav-tab active" href="/" id="tab-home" onclick="event.preventDefault();showHome()">
+                <a class="nav-tab active" href="/" id="tab-home" onclick="event.preventDefault();showHome()" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/','Home')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                     <polyline points="9 22 9 12 15 12 15 22" />
                 </svg>
                 Home
             </a>
-            <a class="nav-tab" href="/?browse=movie" id="tab-movies"
-                onclick="event.preventDefault();fetchSection('movie')">
+            <a class="nav-tab" href="/?browse=movie" id="tab-movies" onclick="event.preventDefault();fetchSection('movie')" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?browse=movie','Movies')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <rect x="2" y="2" width="20" height="20" rx="2" />
                     <line x1="7" y1="2" x2="7" y2="22" />
@@ -70,20 +69,27 @@
                 </svg>
                 Movies
             </a>
-            <a class="nav-tab" href="/?browse=tv" id="tab-tv" onclick="event.preventDefault();fetchSection('tv')">
+            <a class="nav-tab" href="/?browse=tv" id="tab-tv" onclick="event.preventDefault();fetchSection('tv')" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?browse=tv','TV Shows')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <rect x="2" y="7" width="20" height="15" rx="2" />
                     <polyline points="17 2 12 7 7 2" />
                 </svg>
                 TV Shows
             </a>
-            <a class="nav-tab" href="/?browse=mylist" id="tab-mylist" onclick="event.preventDefault();showMyList()">
+            <a class="nav-tab" href="/?browse=collections" id="tab-collections" onclick="event.preventDefault();showCollections()" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?browse=collections','Collections')">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" />
+                    <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                </svg>
+                Collections
+            </a>
+            <a class="nav-tab" href="/?browse=mylist" id="tab-mylist" onclick="event.preventDefault();showMyList()" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?browse=mylist','My List')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
                 </svg>
                 My List
             </a>
-            <a class="nav-tab" href="/?browse=stats" id="tab-stats" onclick="event.preventDefault();showStats()">
+            <a class="nav-tab" href="/?browse=stats" id="tab-stats" onclick="event.preventDefault();showStats()" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?browse=stats','Stats')">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <line x1="18" y1="20" x2="18" y2="10" />
                     <line x1="12" y1="20" x2="12" y2="4" />
@@ -93,6 +99,13 @@
             </a>
         </div>
         <div class="nav-right">
+            <button class="nav-icon-btn" onclick="openShortcuts()" title="Keyboard shortcuts (?)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+            </button>
             <div class="nav-search-wrap">
                 <svg class="nav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <circle cx="11" cy="11" r="8" />
@@ -135,6 +148,15 @@
 
     <!-- MAIN -->
     <main>
+        <!-- COLLECTIONS PAGE -->
+        <div id="collections-page" style="display:none; padding: 90px 40px 80px;">
+            <div class="search-header">
+                <div class="search-query-display">Collections</div>
+                <div class="search-count" id="collections-count"></div>
+            </div>
+            <div id="collections-grid" class="cards-row" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));gap:20px;"></div>
+        </div>
+
         <!-- HOME PAGE -->
         <div id="home-page">
             <div id="hero">
@@ -628,14 +650,14 @@
 
     <!-- MOBILE BOTTOM NAV -->
     <nav id="mobile-nav">
-        <button class="mobile-tab active" id="mtab-home" onclick="showHome(); setMobileTab('mtab-home')">
+        <button class="mobile-tab active" id="mtab-home" onclick="showHome(); setMobileTab('mtab-home')" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/','Home')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                 <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
             <span>Home</span>
         </button>
-        <button class="mobile-tab" id="mtab-movies" onclick="fetchSection('movie'); setMobileTab('mtab-movies')">
+        <button class="mobile-tab" id="mtab-movies" onclick="fetchSection('movie'); setMobileTab('mtab-movies')" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?browse=movie','Movies')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
                 <line x1="7" y1="2" x2="7" y2="22" />
@@ -648,27 +670,34 @@
             </svg>
             <span>Movies</span>
         </button>
-        <button class="mobile-tab" id="mtab-tv" onclick="fetchSection('tv'); setMobileTab('mtab-tv')">
+        <button class="mobile-tab" id="mtab-tv" onclick="fetchSection('tv'); setMobileTab('mtab-tv')" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?browse=tv','TV Shows')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="7" width="20" height="15" rx="2" ry="2" />
                 <polyline points="17 2 12 7 7 2" />
             </svg>
             <span>TV</span>
         </button>
-        <button class="mobile-tab" id="mtab-search" onclick="focusMobileSearch(); setMobileTab('mtab-search')">
+        <button class="mobile-tab" id="mtab-search" onclick="focusMobileSearch(); setMobileTab('mtab-search')" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?search=','Search')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" />
             </svg>
             <span>Search</span>
         </button>
-        <button class="mobile-tab" id="mtab-mylist" onclick="showMyList(); setMobileTab('mtab-mylist')">
+        <button class="mobile-tab" id="mtab-collections" onclick="showCollections(); setMobileTab('mtab-collections')" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?browse=collections','Collections')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" />
+                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+            </svg>
+            <span>Sets</span>
+        </button>
+        <button class="mobile-tab" id="mtab-mylist" onclick="showMyList(); setMobileTab('mtab-mylist')" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?browse=mylist','My List')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
             </svg>
             <span>My List</span>
         </button>
-        <button class="mobile-tab" id="mtab-stats" onclick="showStats(); setMobileTab('mtab-stats')">
+        <button class="mobile-tab" id="mtab-stats" onclick="showStats(); setMobileTab('mtab-stats')" oncontextmenu="event.preventDefault();showCardContextMenu(event,'/?browse=stats','Stats')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="20" x2="18" y2="10" />
                 <line x1="12" y1="20" x2="12" y2="4" />
@@ -693,7 +722,29 @@
         </svg>
     </button>
 
-    <!-- TOAST -->
+    <!-- KEYBOARD SHORTCUTS MODAL -->
+    <div id="shortcuts-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;">
+        <div class="shortcuts-box">
+            <div class="shortcuts-header">
+                <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;">Keyboard Shortcuts</div>
+                <button onclick="closeShortcuts()" style="color:var(--text3);font-size:20px;line-height:1;">✕</button>
+            </div>
+            <div class="shortcuts-grid">
+                <div class="shortcut-row"><kbd>/</kbd><span>Focus search</span></div>
+                <div class="shortcut-row"><kbd>?</kbd><span>Show this panel</span></div>
+                <div class="shortcut-row"><kbd>F</kbd><span>Toggle fullscreen (on player)</span></div>
+                <div class="shortcut-row"><kbd>Esc</kbd><span>Close modal / go back</span></div>
+                <div class="shortcut-row"><kbd>H</kbd><span>Go to Home</span></div>
+                <div class="shortcut-row"><kbd>M</kbd><span>Go to My List</span></div>
+                <div class="shortcut-row"><kbd>S</kbd><span>Go to Stats</span></div>
+                <div class="shortcut-row"><kbd>C</kbd><span>Go to Collections</span></div>
+                <div class="shortcut-row"><kbd>↑ ↓</kbd><span>Navigate suggestions</span></div>
+                <div class="shortcut-row"><kbd>Enter</kbd><span>Confirm search</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICATION / TOAST -->
     <div id="toast"></div>
 
     <!-- FOOTER -->
@@ -702,6 +753,6 @@
         Powered by <span>PrimeSrc.me</span>&amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
     </footer>
 
-    <script src="main.js?v=14"></script>
+    <script src="main.js?v=15"></script>
 </body>
 </html>

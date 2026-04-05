@@ -350,6 +350,16 @@ body.light .player-meta .genre-tag {
 
 body.light .player-overview {color: var(--text2);}
 
+body.light .shortcuts-box {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+body.light kbd {
+    background: var(--surface2);
+    border-color: var(--border);
+}
+
 /* ── Source bar ── */
 body.light #source-bar {
     background: var(--surface);
@@ -524,6 +534,11 @@ body.light .activity-dot {
 body.light .activity-dot.has-watch {
     background: var(--gold);
     border-color: var(--gold);
+}
+
+body.light .mylist-watched-badge {
+    background: var(--gold);
+    color: #fff;
 }
 
 /* ── History controls ── */
@@ -3014,8 +3029,68 @@ main {padding-top: 70px;}
     gap: 16px;
 }
 
+.mylist-watched-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(201, 168, 76, 0.92);
+    color: #080808;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 3px 7px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    backdrop-filter: blur(4px);
+}
+
 @media (min-width: 640px) {
     #mylist-page .cards-grid {grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));}
+}
+
+.collection-card {
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.collection-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--gold);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.collection-backdrop {
+    aspect-ratio: 16/9;
+    background: var(--surface2) center/cover no-repeat;
+    position: relative;
+}
+
+.collection-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 16px;
+}
+
+.collection-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.collection-meta {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.65);
 }
 
 /* ─── PROGRESS BAR ─── */
@@ -3633,6 +3708,53 @@ body.light .mylist-remove-btn:hover {
     margin-bottom: 16px;
 }
 
+.shortcuts-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+    animation: fadeIn 0.2s ease;
+}
+
+.shortcuts-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.shortcuts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.shortcut-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--text2);
+}
+
+kbd {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 3px 9px;
+    font-size: 12px;
+    font-family: monospace;
+    color: var(--text);
+    box-shadow: 0 2px 0 var(--border);
+    min-width: 32px;
+    text-align: center;
+}
+
 /* ─── MORE LIKE THIS GRID ─── */
 .pd-similar-grid {
     display: grid;
@@ -3706,6 +3828,10 @@ body.light .mylist-remove-btn:hover {
 ::-webkit-scrollbar-thumb:hover {background: var(--gold);}
 
 /* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+    .nav-icon-btn {display: none !important;}
+}
+
 @media (max-width: 768px) {
     nav {
         padding: 0 16px;
