@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=13" />
+    <link rel="stylesheet" href="style.css?v=14" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -470,11 +470,16 @@
 
         <!-- MY LIST PAGE -->
         <div id="mylist-page" style="display:none; padding: 32px 24px; max-width: 1400px; margin: 0 auto;">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
                 <div>
                     <div class="section-title" style="margin:0">My List</div>
                     <div id="mylist-count" style="font-size:13px; color:var(--text3); margin-top:4px;">0 titles saved</div>
                 </div>
+            </div>
+            <div style="display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap;">
+                <button class="genre-btn active" id="mylist-filter-all" onclick="filterMyList('all')">All</button>
+                <button class="genre-btn" id="mylist-filter-movie" onclick="filterMyList('movie')">Movies</button>
+                <button class="genre-btn" id="mylist-filter-tv" onclick="filterMyList('tv')">TV Shows</button>
             </div>
             <div id="mylist-empty" style="display:none; text-align:center; padding:80px 24px; color:var(--text3);">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.4" style="margin-bottom:16px">
@@ -697,6 +702,6 @@
         Powered by <span>PrimeSrc.me</span>&amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
     </footer>
 
-    <script src="main.js?v=13"></script>
+    <script src="main.js?v=14"></script>
 </body>
 </html>
