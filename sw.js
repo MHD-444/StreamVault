@@ -1,4 +1,4 @@
-const CACHE = 'streamvault-v12';
+const CACHE = 'streamvault-v13';
 const STATIC = [
     '/',
     '/index.html',

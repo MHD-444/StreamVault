@@ -206,15 +206,13 @@ function makeCard(item, index = 0) {
     if (poster) {
         posterWrap.innerHTML = `
             <img class="card-poster" src="${poster}" alt="${safeTitle}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-            <div class="card-poster-placeholder" style="display:none">${safeTitle}</div>
-            ${comingBadge}
+            <div class="card-poster-placeholder" style="display:none">${safeTitle}</div>${comingBadge}
             <div class="cw-hover-overlay">
                 <div class="cw-hover-left">
                     <button class="cw-hover-btn cw-play-btn" title="Play">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                     </button>
-                    <button class="cw-hover-btn cw-list-btn" title="My List" data-in-list="${inListNow}">
-                        ${inListNow
+                    <button class="cw-hover-btn cw-list-btn" title="My List" data-in-list="${inListNow}">${inListNow
                 ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`
                 : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`
             }
@@ -228,15 +226,13 @@ function makeCard(item, index = 0) {
             </div>`;
     } else {
         posterWrap.innerHTML = `
-            <div class="card-poster-placeholder">${safeTitle}</div>
-            ${comingBadge}
+            <div class="card-poster-placeholder">${safeTitle}</div>${comingBadge}
             <div class="cw-hover-overlay">
                 <div class="cw-hover-left">
                     <button class="cw-hover-btn cw-play-btn" title="Play">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
                     </button>
-                    <button class="cw-hover-btn cw-list-btn" title="My List" data-in-list="${inListNow}">
-                        ${inListNow
+                    <button class="cw-hover-btn cw-list-btn" title="My List" data-in-list="${inListNow}">${inListNow
                 ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`
                 : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`
             }
@@ -250,21 +246,16 @@ function makeCard(item, index = 0) {
             </div>`;
     }
 
-    // Poster click → quick detail
     posterWrap.addEventListener('click', e => {
         if (e.target.closest('.cw-hover-btn')) return;
         openQuickDetail(item.id, mediaType, item);
     });
-
-    // Play button → open detail with autoplay
     posterWrap.querySelector('.cw-play-btn').addEventListener('click', e => {
         e.stopPropagation();
         savedScrollY = window.scrollY;
         if (item.genre_ids?.length) window._pendingGenreIds = { id: item.id, genre_ids: item.genre_ids };
         openDetail(item.id, mediaType, true);
     });
-
-    // My List button
     const listBtn = posterWrap.querySelector('.cw-list-btn');
     listBtn.addEventListener('click', e => {
         e.stopPropagation();
@@ -283,8 +274,6 @@ function makeCard(item, index = 0) {
             showToast('Added to My List');
         }
     });
-
-    // Details button → quick detail modal
     posterWrap.querySelector('.cw-detail-btn').addEventListener('click', e => {
         e.stopPropagation();
         openQuickDetail(item.id, mediaType, item);
@@ -311,7 +300,7 @@ function makeCard(item, index = 0) {
         history.pushState({}, '', cardUrl);
         openDetail(item.id, mediaType);
     });
-
+    div.addEventListener('contextmenu', e => {e.preventDefault(); showCardContextMenu(e, cardUrl, title);});
     div.appendChild(posterWrap);
     div.appendChild(infoWrap);
     return div;
@@ -851,14 +840,33 @@ function goBack() {
 // ─── SEARCH ───
 function onSearchInput(val) {
     clearTimeout(searchDebounce);
+    const clearBtn = document.getElementById('search-clear-btn');
+    if (clearBtn) clearBtn.style.display = val.length ? 'flex' : 'none';
     if (!val.trim()) {
         showRecentSearches();
         return;
     }
     showSearchSuggestions(val);
     if (val.trim().length >= 2) {
-        searchDebounce = setTimeout(() => fetchSearchSuggestions(val), 300);
+        searchDebounce = setTimeout(() => fetchSearchSuggestions(val), 280);
     }
+}
+
+function scoreResult(item, query) {
+    const q = query.toLowerCase();
+    const title = (item.title || item.name || '').toLowerCase();
+    let score = item.popularity || 0;
+    if (title === q) score += 5000;
+    else if (title.startsWith(q)) score += 2000;
+    else if (title.includes(q)) score += 800;
+    const words = q.split(/\s+/);
+    const matchedWords = words.filter(w => title.includes(w)).length;
+    score += (matchedWords / words.length) * 400;
+    if (item.vote_count > 1000) score += 200;
+    if (item.vote_average > 7) score += 100;
+    const year = parseInt((item.release_date || item.first_air_date || '').slice(0, 4));
+    if (year >= 2015) score += 50;
+    return score;
 }
 
 async function doSearch(query, fromRoute = false) {
@@ -868,12 +876,24 @@ async function doSearch(query, fromRoute = false) {
     renderSkeletons('search-results', 12);
     loadedIds.clear();
     document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
-    if (!fromRoute) pushState({search: query});
+    if (!fromRoute) pushState({ search: query });
     document.getElementById('search-query-display').textContent = `"${query}"`;
     document.getElementById('search-count').textContent = 'Searching…';
     try {
-        const [movies, shows] = await Promise.all([tmdb('/search/movie', {query}), tmdb('/search/tv', {query})]);
-        const combined = [...movies.results.map(r => ({...r, media_type: 'movie'})), ...shows.results.map(r => ({...r, media_type: 'tv'}))].sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+        const [m1, t1, m2, t2] = await Promise.all([
+            tmdb('/search/movie', { query, page: 1 }),
+            tmdb('/search/tv', { query, page: 1 }),
+            tmdb('/search/movie', { query, page: 2 }).catch(() => ({ results: [] })),
+            tmdb('/search/tv', { query, page: 2 }).catch(() => ({ results: [] })),
+        ]);
+        const movies = [...m1.results, ...m2.results].map(r => ({ ...r, media_type: 'movie' }));
+        const shows = [...t1.results, ...t2.results].map(r => ({ ...r, media_type: 'tv' }));
+        const seen = new Set();
+        const combined = [...movies, ...shows]
+            .filter(r => { const k = `${r.media_type}-${r.id}`; if (seen.has(k)) return false; seen.add(k); return true; })
+            .filter(r => r.poster_path || r.vote_count > 0)
+            .sort((a, b) => scoreResult(b, query) - scoreResult(a, query));
+
         document.getElementById('search-count').textContent = `${combined.length} results`;
         if (!combined.length) {
             document.getElementById('search-results').innerHTML = '<div class="empty-state"><div class="icon">🎬</div><p>No results found.</p></div>';
@@ -882,19 +902,12 @@ async function doSearch(query, fromRoute = false) {
             activeGenre = 'all';
             document.querySelectorAll('.genre-btn').forEach(b => b.classList.toggle('active', b.dataset.genre === 'all'));
             document.getElementById('genre-bar').style.display = 'flex';
-            const unique = [];
-            combined.forEach(item => {
-                const id = `${item.media_type}-${item.id}`;
-                if (!loadedIds.has(id)) {
-                    loadedIds.add(id);
-                    unique.push(item);
-                }
-            });
-            renderCards('search-results', unique);
+            combined.forEach(item => loadedIds.add(`${item.media_type}-${item.id}`));
+            renderCards('search-results', combined);
             currentPage = 1;
-            hasMorePages = movies.total_pages > 1 || shows.total_pages > 1;
+            hasMorePages = false;
             isLoadingMore = false;
-            currentSection = {mode: 'search', query};
+            currentSection = { mode: 'search', query };
             const el = document.getElementById('search-results');
             el.insertAdjacentHTML('afterend', '<div id="scroll-sentinel"></div>');
             attachScrollObserver();
@@ -909,9 +922,13 @@ async function fetchSearchSuggestions(query) {
     try {
         if (!suggestionCache[query]) {
             const data = await tmdb('/search/multi', {query, page: 1});
-            suggestionCache[query] = data.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv').slice(0, 6);
+            const results = data.results
+                .filter(r => r.media_type === 'movie' || r.media_type === 'tv')
+                .sort((a, b) => scoreResult(b, query) - scoreResult(a, query))
+                .slice(0, 7);
+            suggestionCache[query] = results;
             const keys = Object.keys(suggestionCache);
-            if (keys.length > 20) delete suggestionCache[keys[0]];
+            if (keys.length > 30) delete suggestionCache[keys[0]];
         }
         const current = document.getElementById('search-input').value.trim();
         if (current === query) showSearchSuggestions(query);
@@ -924,38 +941,38 @@ function showSearchSuggestions(query) {
     const recent = getRecentSearches();
 
     box.addEventListener('mousedown', e => e.preventDefault());
-    box.addEventListener('touchstart', e => e.preventDefault());
-    const recentHtml = recent.length ? `
+    box.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+
+    const filteredRecent = recent.filter(q => q.toLowerCase().includes(query.toLowerCase())).slice(0, 2);
+    const recentHtml = filteredRecent.length ? `
         <div class="recent-header">
-            <span>Recent</span> <button class="recent-clear" onmousedown="event.preventDefault();clearRecentSearches()">Clear</button>
+            <span>Recent</span>
+            <button class="recent-clear" onmousedown="event.preventDefault();clearRecentSearches()">Clear</button>
         </div>
-        ${recent.filter(q => q.toLowerCase().includes(query.toLowerCase())).slice(0, 2).map(q => `
+        ${filteredRecent.map(q => `
             <button class="recent-item" onmousedown="event.preventDefault();pickRecentSearch('${q.replace(/'/g, "\\'")}')">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 <span>${esc(q)}</span>
             </button>`).join('')}` : '';
 
-    // Build suggestions
-    const suggestionsHtml = results?.length ? `
-        <div class="recent-header" style="margin-top:${recent.length ? '4px' : '0'}"> <span>Suggestions</span></div>
-        ${results.map(r => {
-            const title = r.title || r.name || '';
-            const year = (r.release_date || r.first_air_date || '').slice(0, 4);
-            const type = r.media_type === 'movie' ? 'Movie' : 'TV';
-            const poster = r.poster_path ? `${TMDB_IMG}w92${r.poster_path}` : null;
-            const titleSlug = slugify(title);
-            const url = `/?type=${r.media_type}&id=${r.id}&name=${titleSlug}`;
-            return `
-                <a class="suggestion-item" href="${url}" onmousedown="event.preventDefault();pickSuggestion(${r.id},'${r.media_type}','${title.replace(/'/g, "\\'")}')">
-                    ${poster ? `<img src="${poster}" alt="${esc(title)}" loading="lazy" onerror="this.style.display='none'">`
-                    : `<div class="suggestion-poster-placeholder"></div>`}
-                    <div class="suggestion-info">
-                        <div class="suggestion-title">${esc(title)}</div>
-                        <div class="suggestion-meta">${esc(year)}${year ? ' · ' : ''}${type}</div>
-                    </div>
-                    ${r.vote_average ? `<div class="suggestion-rating">${starIcon()} ${r.vote_average.toFixed(1)}</div>` : ''}
-                </a>`;
-        }).join('')}` : (results ? '<div class="recent-empty">No results found</div>' : '<div class="recent-empty">Searching…</div>');
+    const suggestionsHtml = results?.length ? `<div class="recent-header" style="margin-top:${filteredRecent.length ? '4px' : '0'}"><span>Suggestions</span></div>${results.map(r => {
+        const title = r.title || r.name || '';
+        const year = (r.release_date || r.first_air_date || '').slice(0, 4);
+        const type = r.media_type === 'movie' ? 'Movie' : 'TV';
+        const poster = r.poster_path ? `${TMDB_IMG}w92${r.poster_path}` : null;
+        const rating = r.vote_average ? r.vote_average.toFixed(1) : null;
+        return `
+            <button class="suggestion-item" onmousedown="event.preventDefault();pickSuggestion(${r.id},'${r.media_type}','${title.replace(/'/g, "\\'")}')">${poster
+            ? `<img src="${poster}" alt="${esc(title)}" loading="lazy" onerror="this.style.display='none'">`
+            : `<div class="suggestion-poster-placeholder"></div>`}
+                <div class="suggestion-info">
+                    <div class="suggestion-title">${esc(title)}</div>
+                    <div class="suggestion-meta">${esc(year)}${year ? ' · ' : ''}${type}${rating ? ' · ★ ' + rating : ''}</div>
+                </div>
+                <svg class="suggestion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>`;
+    }).join('')}` : (results ? '<div class="recent-empty">No results found</div>' : '<div class="recent-empty" id="suggestions-loading"><span class="suggestions-spinner"></span> Searching…</div>');
+
     box.innerHTML = recentHtml + suggestionsHtml;
     box.style.display = 'block';
 }
@@ -987,22 +1004,19 @@ function showRecentSearches() {
     const recent = getRecentSearches();
     const box = document.getElementById('recent-searches');
     const current = document.getElementById('search-input').value.trim();
-
     if (current) return;
-    if (!recent.length) {
-        box.innerHTML = '<div class="recent-empty">No recent searches</div>';
-    } else {
-        box.innerHTML = `
-            <div class="recent-header">
-                <span>Recent</span>
-                <button class="recent-clear" onmousedown="event.preventDefault();clearRecentSearches()">Clear all</button>
-            </div>
-            ${recent.map(q => `
-                <button class="recent-item" onmousedown="event.preventDefault();pickRecentSearch('${q.replace(/'/g, "\\'")}')">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <span>${esc(q)}</span>
-                </button>`).join('')}`;
-    }
+    box.innerHTML = recent.length ? `
+        <div class="recent-header">
+            <span>Recent Searches</span>
+            <button class="recent-clear" onmousedown="event.preventDefault();clearRecentSearches()">Clear all</button>
+        </div>
+        ${recent.map(q => `
+            <button class="recent-item" onmousedown="event.preventDefault();pickRecentSearch('${q.replace(/'/g, "\\'")}')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>${esc(q)}</span>
+                <svg class="recent-item-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>`).join('')}`
+        : '<div class="recent-empty">Start typing to search movies & shows</div>';
     box.style.display = 'block';
 }
 
@@ -1741,6 +1755,10 @@ function renderContinueWatching() {
                 media_type: item.type
             });
         });
+        div.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            showCardContextMenu(e, `/?type=${item.type}&id=${item.id}&name=${slugify(item.title || '')}`, item.title || '');
+        });
         row.appendChild(div);
     });
 }
@@ -2071,7 +2089,9 @@ function renderMyList() {
                 <span class="card-type-badge">${item.type === 'movie' ? 'Movie' : 'TV'}</span>
             </div>
             <div style="margin-top:6px">
-                <button class="cw-remove-btn" onclick="event.stopPropagation();removeFromMyList(${item.id})" style="position:relative;z-index:2;">✕</button>
+                <button class="cw-remove-btn mylist-remove-btn" onclick="event.stopPropagation();removeFromMyList(${item.id})" style="position:relative;z-index:2;" title="Remove from My List">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Remove
+                </button>
             </div>
         </div>`;
 
@@ -2085,6 +2105,10 @@ function renderMyList() {
             openDetail(item.id, item.type);
         });
         div.style.position = 'relative';
+        div.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            showCardContextMenu(e, `/?type=${item.type}&id=${item.id}&name=${slugify(item.title)}`, item.title || '');
+        });
         div.appendChild(anchor);
         grid.appendChild(div);
     });
@@ -2095,6 +2119,36 @@ function removeFromMyList(id) {
     saveMyList(list);
     renderMyList();
     showToast('Removed from My List');
+}
+
+function showCardContextMenu(e, url, title) {
+    document.getElementById('sv-context-menu')?.remove();
+    const menu = document.createElement('div');
+    menu.id = 'sv-context-menu';
+    menu.className = 'sv-context-menu';
+    menu.innerHTML = `
+        <div class="sv-ctx-item sv-ctx-header">${esc(title.length > 28 ? title.slice(0, 28) + '…' : title)}</div>
+        <div class="sv-ctx-divider"></div>
+        <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-newtab">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open in new tab
+        </button>
+        <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-copylink">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            Copy link
+        </button>`;
+    document.body.appendChild(menu);
+    const vw = window.innerWidth, vh = window.innerHeight;
+    menu.style.left = (e.clientX + 190 > vw ? e.clientX - 190 : e.clientX) + 'px';
+    menu.style.top = (e.clientY + 110 > vh ? e.clientY - 110 : e.clientY) + 'px';
+    requestAnimationFrame(() => menu.classList.add('sv-ctx-visible'));
+    const fullUrl = location.origin + url;
+    document.getElementById('sv-ctx-newtab').addEventListener('click', () => { window.open(fullUrl, '_blank', 'noopener'); menu.remove(); });
+    document.getElementById('sv-ctx-copylink').addEventListener('click', () => { navigator.clipboard.writeText(fullUrl).then(() => showToast('Link copied!')); menu.remove(); });
+    const close = e2 => { if (!menu.contains(e2.target)) { menu.remove(); document.removeEventListener('mousedown', close); } };
+    setTimeout(() => document.addEventListener('mousedown', close), 0);
 }
 
 // ─── WATCH TOGETHER ───
