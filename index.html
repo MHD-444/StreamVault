@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=15" />
+    <link rel="stylesheet" href="style.css?v=16" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -555,7 +555,8 @@
             <!-- PLAYER EMBED -->
             <div class="player-wrapper">
                 <div class="player-container" id="player-container">
-                    <iframe id="player-iframe" scrolling="no" allow="autoplay; picture-in-picture" referrerpolicy="no-referrer"></iframe>
+                    <!--<iframe id="player-iframe" scrolling="no" allow="autoplay; picture-in-picture" referrerpolicy="no-referrer"></iframe>-->
+                    <iframe id="player-iframe" allowfullscreen="" referrerpolicy="origin"></iframe>
                     <div id="next-ep-autoplay" class="hidden">
                         <div class="autoplay-card">
                             <div class="autoplay-info">
@@ -581,9 +582,9 @@
             <!-- SOURCE BAR -->
             <div id="source-bar" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 24px;border-bottom:1px solid var(--border);">
                 <span style="font-size:13px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;margin-right:4px;">Servers</span>
-                <button class="src-btn active" data-src="primesrc" onclick="switchSource('primesrc')">PrimeSrc</button>
-                <button class="src-btn" data-src="embed2" onclick="switchSource('embed2')">2Embed</button>
-                <button class="src-btn" data-src="moviesapi" onclick="switchSource('moviesapi')">MoviesAPI</button>
+                <button class="src-btn active" data-src="primesrc" onclick="switchSource('primesrc')" oncontextmenu="event.preventDefault();showSourceContextMenu(event,'primesrc','PrimeSrc')">PrimeSrc</button>
+                <button class="src-btn" data-src="embed2" onclick="switchSource('embed2')" oncontextmenu="event.preventDefault();showSourceContextMenu(event,'embed2','2Embed')">2Embed</button>
+                <button class="src-btn" data-src="moviesapi" onclick="switchSource('moviesapi')" oncontextmenu="event.preventDefault();showSourceContextMenu(event,'moviesapi','MoviesAPI')">MoviesAPI</button>
                 <button class="fullscreen-btn" id="fullscreen-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)" style="margin-left:auto;">
                     <svg id="fullscreen-icon-enter" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                         <path d="M4 8V4h4" />
@@ -753,6 +754,6 @@
         Powered by <span>PrimeSrc.me</span>&amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
     </footer>
 
-    <script src="main.js?v=15"></script>
+    <script src="main.js?v=16"></script>
 </body>
 </html>
