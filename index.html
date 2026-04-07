@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=16" />
+    <link rel="stylesheet" href="style.css?v=17" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -360,6 +360,8 @@
                                 <option value="453" data-type="network">Hulu</option>
                                 <option value="2552" data-type="network">Apple TV+</option>
                                 <option value="49" data-type="network">HBO</option>
+                                <option value="3186" data-type="network">Crunchyroll</option>
+                                <option value="4353" data-type="network">Paramount+</option>
                             </optgroup>
                             <optgroup label="TV Networks">
                                 <option value="21" data-type="network">AMC</option>
@@ -376,6 +378,8 @@
                                 <option value="521" data-type="company">A24</option>
                                 <option value="923" data-type="company">Legendary</option>
                                 <option value="7295" data-type="company">Blumhouse</option>
+                                <option value="9996" data-type="company">DC Films</option>
+                                <option value="82968" data-type="company">Amazon Studios</option>
                             </optgroup>
                         </select>
                     </div>
@@ -418,7 +422,7 @@
                     <div class="stats-title-row">
                         <div class="stats-hero-title">Watch Statistics</div>
                         <div class="history-controls">
-                            <button class="history-actions-btn" onclick="exportHistory()">
+                            <button class="history-actions-btn" onclick="openExportCard()">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                     <polyline points="7 10 12 15 17 10" />
@@ -426,7 +430,7 @@
                                 </svg>
                                 Export
                             </button>
-                            <button class="history-actions-btn" onclick="document.getElementById('import-file').click()">
+                            <button class="history-actions-btn" onclick="openImportCard()">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                     <polyline points="17 8 12 3 7 8" />
@@ -434,7 +438,6 @@
                                 </svg>
                                 Import
                             </button>
-                            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importHistory(event)" />
                         </div>
                     </div>
                     <div class="stats-hero-sub">Calculated from your local watch history</div>
@@ -734,14 +737,67 @@
                 <div class="shortcut-row"><kbd>/</kbd><span>Focus search</span></div>
                 <div class="shortcut-row"><kbd>?</kbd><span>Show this panel</span></div>
                 <div class="shortcut-row"><kbd>F</kbd><span>Toggle fullscreen (on player)</span></div>
-                <div class="shortcut-row"><kbd>Esc</kbd><span>Close modal / go back</span></div>
+                <div class="shortcut-row"><kbd>Esc</kbd><span>Go back</span></div>
                 <div class="shortcut-row"><kbd>H</kbd><span>Go to Home</span></div>
-                <div class="shortcut-row"><kbd>M</kbd><span>Go to My List</span></div>
+                <div class="shortcut-row"><kbd>L</kbd><span>Go to My List</span></div>
                 <div class="shortcut-row"><kbd>S</kbd><span>Go to Stats</span></div>
                 <div class="shortcut-row"><kbd>C</kbd><span>Go to Collections</span></div>
-                <div class="shortcut-row"><kbd>↑ ↓</kbd><span>Navigate suggestions</span></div>
-                <div class="shortcut-row"><kbd>Enter</kbd><span>Confirm search</span></div>
             </div>
+        </div>
+    </div>
+
+    <!-- IMPORT CARD -->
+    <div id="import-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;">
+        <div class="import-card">
+            <div class="shortcuts-header">
+                <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">Import Backup</div>
+                <button onclick="closeImportCard()" style="color:var(--text3);font-size:20px;line-height:1;">✕</button>
+            </div>
+            <div id="import-dropzone" class="import-dropzone">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text3);margin-bottom:12px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                <div style="font-size:14px;color:var(--text2);margin-bottom:6px;">Drop your backup file here</div>
+                <div style="font-size:12px;color:var(--text3);margin-bottom:16px;">or</div>
+                <button class="btn-gold" style="width:auto;padding:10px 24px;" onclick="document.getElementById('import-file').click()">Select File</button>
+            </div>
+            <div class="import-toggle-row">
+                <div>
+                    <div style="font-size:13px;font-weight:500;color:var(--text);">Replace instead of merge</div>
+                    <div style="font-size:11px;color:var(--text3);margin-top:2px;">Overwrites existing data instead of combining</div>
+                </div>
+                <button class="import-toggle" id="import-replace-toggle" onclick="toggleImportReplace()" data-on="false">
+                    <div class="import-toggle-knob"></div>
+                </button>
+            </div>
+            <div id="import-status" style="font-size:12px;color:var(--text3);text-align:center;min-height:18px;margin-top:4px;"></div>
+        </div>
+    </div>
+
+    <!-- EXPORT CARD -->
+    <div id="export-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;">
+        <div class="import-card">
+            <div class="shortcuts-header">
+                <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">Export Data</div>
+                <button onclick="closeExportCard()" style="color:var(--text3);font-size:20px;line-height:1;">✕</button>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin:20px 0;">
+                <label class="export-option-row"><input type="checkbox" id="exp-history" checked><span>Watch History <span style="color:var(--text3);font-size:11px">(Continue Watching data)</span></span></label>
+                <label class="export-option-row"><input type="checkbox" id="exp-mylist" checked><span>My List <span style="color:var(--text3);font-size:11px">(saved titles)</span></span></label>
+                <label class="export-option-row"><input type="checkbox" id="exp-recent"><span>Recent Searches <span style="color:var(--text3);font-size:11px">(search history)</span></span></label>
+                <label class="export-option-row"><input type="checkbox" id="exp-theme"><span>Preferences <span style="color:var(--text3);font-size:11px">(theme, source)</span></span></label>
+            </div>
+            <button class="btn-gold" style="width:100%;" onclick="runExport()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" style="margin-right:6px;vertical-align:middle;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download Backup
+            </button>
         </div>
     </div>
 
@@ -754,6 +810,6 @@
         Powered by <span>PrimeSrc.me</span>&amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
     </footer>
 
-    <script src="main.js?v=16"></script>
+    <script src="main.js?v=17"></script>
 </body>
 </html>

@@ -609,6 +609,11 @@ body.light .btn-gold {
 
 body.light .btn-gold:hover {background: var(--gold2);}
 
+body.light .import-card {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
 /* ── Mobile nav (light) ── */
 body.light #mobile-nav {
     background: rgba(242, 237, 230, 0.88);
@@ -632,6 +637,9 @@ body.light .coming-soon-badge {
     background: rgba(184, 130, 31, 0.9);
     color: #fff;
 }
+
+/* ── Watched badge ── */
+body.light .card-watched-badge {background: rgba(16, 150, 80, 0.90);}
 
 /* ── Watch together overlay ── */
 body.light #watch-together-overlay {background: rgba(242, 237, 230, 0.97);}
@@ -2096,6 +2104,13 @@ main {padding-top: 70px;}
     color: var(--text3);
 }
 
+.search-query-display {transition: opacity 0.2s ease, transform 0.2s ease;}
+
+.search-query-display.title-changing {
+    opacity: 0;
+    transform: translateY(6px);
+}
+
 /* ─── RECENT SEARCHES ─── */
 .nav-search-wrap {position: relative;}
 
@@ -2236,6 +2251,10 @@ main {padding-top: 70px;}
     font-size: 11px;
     color: var(--text3);
     margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .suggestion-arrow {
@@ -2360,9 +2379,103 @@ main {padding-top: 70px;}
     font-weight: 500;
 }
 
+/* ─── IMPORT Card ─── */
+.import-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+    animation: fadeIn 0.2s ease;
+}
+
+.import-dropzone {
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 32px 20px;
+    text-align: center;
+    margin: 20px 0;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: default;
+}
+
+.import-dropzone.drag-over {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.06);
+}
+
+.import-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+}
+
+.import-toggle {
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background: var(--surface3);
+    border: 1px solid var(--border);
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.import-toggle[data-on="true"] {
+    background: var(--gold);
+    border-color: var(--gold);
+}
+
+.import-toggle-knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    transition: transform 0.2s;
+}
+
+.import-toggle[data-on="true"] .import-toggle-knob {transform: translateX(20px);}
+
+/* ─── EXPORT ─── */
+.export-option-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text2);
+    border: 1px solid var(--border);
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.export-option-row:hover {
+    background: var(--surface2);
+    border-color: rgba(201, 168, 76, 0.3);
+}
+
+.export-option-row input[type="checkbox"] {
+    accent-color: var(--gold);
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
 /* ─── STATS PAGE ─── */
 .stats-hero {
-    padding: 48px 48px;
+    padding: 45px 45px;
     background: linear-gradient(to bottom, rgba(201, 168, 76, 0.06) 0%, transparent 100%);
     border-bottom: 1px solid var(--border);
     margin-bottom: 0;
@@ -3205,6 +3318,25 @@ main {padding-top: 70px;}
     white-space: nowrap;
 }
 
+/* ─── WATCHED BADGE ─── */
+.card-watched-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(20, 180, 100, 0.88);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 3px 7px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    backdrop-filter: blur(4px);
+    white-space: nowrap;
+}
+
 /* ─── CAST ─── */
 .cast-card {
     flex: 0 0 90px;
@@ -3783,6 +3915,47 @@ kbd {
     }
 }
 
+@keyframes overlayFadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes overlayFadeOut {
+    from {opacity: 1;}
+    to {opacity: 0;}
+}
+
+@keyframes cardSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes cardSlideOut {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(14px) scale(0.97);
+    }
+}
+
+.overlay-closing {
+    animation: overlayFadeOut 0.26s ease forwards;
+    pointer-events: none;
+}
+
+.card-opening {animation: cardSlideIn 0.26s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;}
+
+.card-closing {animation: cardSlideOut 0.22s ease forwards;}
+
 /* ─── PAGE TRANSITIONS ─── */
 #home-page, #search-page, #player-page, #stats-page {animation: none;}
 
@@ -3891,7 +4064,10 @@ kbd {
         height: 56px;
     }
     .suggestion-title {font-size: 14px;}
-    .suggestion-meta {font-size: 12px;}
+    .suggestion-meta {
+        font-size: 12px;
+        margin-top: 3px;
+    }
     .recent-item {
         padding: 13px 16px;
         font-size: 14px;
