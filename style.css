@@ -147,6 +147,8 @@ body.light .sv-context-menu {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
+body.light .sv-ctx-danger {color: #c0392b !important;}
+
 body.light .sv-ctx-btn {color: var(--text);}
 
 body.light .sv-ctx-btn:hover {background: var(--surface3);}
@@ -1220,10 +1222,6 @@ a.nav-tab {
 /* ─── MAIN CONTENT ─── */
 main {padding-top: 70px;}
 
-@media (max-width: 768px) {
-    main {padding-top: 70px;}
-}
-
 /* ─── HERO ─── */
 #hero {
     height: 88vh;
@@ -1476,26 +1474,6 @@ main {padding-top: 70px;}
     width: 100%;
     height: auto;
     border-radius: 8px;
-}
-
-@media (max-width: 480px) {
-    .cards-row {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 8px;
-    }
-    .cards-row-1 .card {min-width: 50px;}
-    .nav-right {gap: 4px;}
-    .nav-search-wrap {flex: 1;}
-    .nav-search {width: 100%;}
-}
-
-@media (max-width: 900px) {
-    .cards-row-1 {grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));}
-    .cards-row-1 .card {min-width: 60px;}
-}
-
-@media (min-width: 1440px) {
-    .cards-row-1 {grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));}
 }
 
 .card {
@@ -1949,6 +1927,27 @@ main {padding-top: 70px;}
     background: rgba(201, 168, 76, 0.12);
     border-color: var(--gold);
     color: var(--gold);
+}
+
+.ep-btn.ep-unreleased {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-style: dashed;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 6px;
+    font-size: 12px;
+}
+
+.ep-unreleased-label {
+    display: block;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 /* ─── PREMIUM AUTOPLAY FLOATING DESIGN ─── */
@@ -2763,13 +2762,6 @@ main {padding-top: 70px;}
     flex-shrink: 0;
 }
 
-@media (max-width: 480px) {
-    .qm-backdrop-img {height: 200px;}
-    .qm-gradient {height: 200px;}
-    .qm-gradient {height: 200px;}
-    .qm-backdrop-img {height: 200px;}
-}
-
 .qm-gradient {
     position: absolute;
     top: 0;
@@ -3187,10 +3179,6 @@ main {padding-top: 70px;}
     backdrop-filter: blur(4px);
 }
 
-@media (min-width: 640px) {
-    #mylist-page .cards-grid {grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));}
-}
-
 .collection-card {
     border-radius: 12px;
     overflow: hidden;
@@ -3312,14 +3300,6 @@ main {padding-top: 70px;}
     gap: 16px;
     margin-bottom: 4px;
     flex-wrap: wrap;
-}
-
-@media (max-width: 600px) {
-    .stats-title-row {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .history-controls {width: 100%;}
 }
 
 .stats-hero-title {margin-bottom: 0;}
@@ -3795,6 +3775,17 @@ body.light .mylist-remove-btn:hover {
     pointer-events: none;
 }
 
+.sv-ctx-mobile {padding-bottom: env(safe-area-inset-bottom);}
+
+.sv-ctx-mobile .sv-ctx-item {
+    padding: 16px 20px;
+    font-size: 15px;
+}
+
+.sv-ctx-mobile .sv-ctx-header {padding: 20px 20px 12px;}
+
+.sv-ctx-danger {color: #e05555 !important;}
+
 .sv-context-menu.sv-ctx-visible {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -4029,11 +4020,21 @@ kbd {
 ::-webkit-scrollbar-thumb:hover {background: var(--gold);}
 
 /* ─── RESPONSIVE ─── */
+@media (min-width: 1440px) {
+    .cards-row-1 {grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));}
+}
+
 @media (max-width: 1024px) {
     .nav-icon-btn {display: none !important;}
 }
 
+@media (max-width: 900px) {
+    .cards-row-1 {grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));}
+    .cards-row-1 .card {min-width: 60px;}
+}
+
 @media (max-width: 768px) {
+    main {padding-top: 70px;}
     nav {
         padding: 0 16px;
         backdrop-filter: none;
@@ -4126,5 +4127,94 @@ kbd {
         opacity: 1;
         width: 38px;
         height: 38px;
+    }
+    .ep-btn {
+        min-height: 44px;
+        font-size: 13px;
+    }
+    .season-btn {
+        min-height: 40px;
+        padding: 10px 16px;
+    }
+    #hero {
+        height: 70vh;
+        min-height: 400px;
+    }
+    .player-container {
+        min-height: 56vw;
+    }
+    #source-bar {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .cards-row {grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));}
+    .qm-box {
+        max-height: 92vh;
+        border-radius: 16px 16px 0 0;
+        margin-top: auto;
+    }
+    .qm-backdrop {align-items: flex-end;}
+    #filter-panel {
+        margin: 0 -16px;
+        border-radius: 0;
+    }
+    #collections-grid {grid-template-columns: 1fr !important;}
+    .cast-card {width: 72px;}
+    .cast-avatar {
+        width: 72px;
+        height: 72px;
+    }
+}
+
+@media (max-width: 600px) {
+    #mylist-page .cards-grid {grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));}
+    .stats-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .history-controls {width: 100%;}
+}
+
+@media (max-width: 480px) {
+    .qm-backdrop-img {height: 200px;}
+    .qm-gradient {height: 200px;}
+    .qm-gradient {height: 200px;}
+    .qm-backdrop-img {height: 200px;}
+    .cards-row {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 8px;
+    }
+    .cards-row-1 .card {min-width: 50px;}
+    .nav-right {gap: 4px;}
+    .nav-search-wrap {flex: 1;}
+    .nav-search {width: 100%;}
+    .hero-title {font-size: clamp(26px, 7vw, 40px);}
+    .hero-overview {
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .mylist-page, #collections-page {padding: 80px 12px 80px !important;}
+    .btn-play, .btn-outline {
+        padding: 10px 18px;
+        font-size: 13px;
+    }
+    .qm-actions {gap: 8px;}
+    .pd-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .pd-tabs::-webkit-scrollbar {display: none;}
+    #source-bar .src-btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+    .card-placeholder {
+        aspect-ratio: 2/3;
+        min-width: 130px;
     }
 }
