@@ -1,4 +1,4 @@
-const CACHE = 'streamvault-v17';
+const CACHE = 'streamvault-v18';
 const STATIC = [
     '/',
     '/index.html',
@@ -19,9 +19,7 @@ self.addEventListener('install', e => {
                     console.warn(`SW: Failed to precache ${url}`);
                     return new Response('', { status: 404 });
                 }).then(response => {
-                    if (!response || response.status !== 200 || response.status >= 400) {
-                        return null;
-                    }
+                    if (!response || response.status !== 200 || response.status >= 400) {return null;}
                     return cache.put(url, response.clone());
                 });
             })).then(results => {

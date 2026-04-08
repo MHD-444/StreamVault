@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=17" />
+    <link rel="stylesheet" href="style.css?v=18" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -113,7 +113,7 @@
                 </svg>
                 <input id="search-input" type="text" class="nav-search" placeholder="Search movies, shows…" oninput="onSearchInput(this.value)" onkeydown="if(event.key==='Enter'){doSearch(this.value);this.blur();}"
                     onfocus="showRecentSearches()" onblur="hideRecentSearches()" autocomplete="off" />
-                <button id="search-clear-btn" class="search-clear-btn" style="display:none" onmousedown="event.preventDefault()" onclick="document.getElementById('search-input').value='';onSearchInput('');document.getElementById('search-input').focus()">
+                <button id="search-clear-btn" class="search-clear-btn" style="display:none" onmousedown="event.preventDefault()" onclick="document.getElementById('search-input').value='';onSearchInput('');safeFocus('search-input')">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                         <line x1="18" y1="6" x2="6" y2="18" />
                         <line x1="6" y1="6" x2="18" y2="18" />
@@ -161,6 +161,7 @@
         <div id="home-page">
             <div id="hero">
                 <div id="hero-bg"></div>
+                <div id="hero-bg-prev"></div>
                 <div class="hero-content">
                     <div class="hero-badge">
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--gold)">
@@ -753,7 +754,8 @@
                 <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">Import Backup</div>
                 <button onclick="closeImportCard()" style="color:var(--text3);font-size:20px;line-height:1;">✕</button>
             </div>
-            <div id="import-dropzone" class="import-dropzone">
+<div id="import-dropzone" class="import-dropzone">
+                <input type="file" id="import-file" accept=".json" style="display:none;" onchange="handleImportFile(event)">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="color:var(--text3);margin-bottom:12px;">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                     <polyline points="17 8 12 3 7 8" />
@@ -761,7 +763,7 @@
                 </svg>
                 <div style="font-size:14px;color:var(--text2);margin-bottom:6px;">Drop your backup file here</div>
                 <div style="font-size:12px;color:var(--text3);margin-bottom:16px;">or</div>
-                <button class="btn-gold" style="width:auto;padding:10px 24px;" onclick="document.getElementById('import-file').click()">Select File</button>
+                <button class="btn-gold" style="width:auto;padding:10px 24px;" onclick="const el=document.getElementById('import-file');if(el){el.click();}">Select File</button>
             </div>
             <div class="import-toggle-row">
                 <div>
@@ -786,8 +788,6 @@
             <div style="display:flex;flex-direction:column;gap:10px;margin:20px 0;">
                 <label class="export-option-row"><input type="checkbox" id="exp-history" checked><span>Watch History <span style="color:var(--text3);font-size:11px">(Continue Watching data)</span></span></label>
                 <label class="export-option-row"><input type="checkbox" id="exp-mylist" checked><span>My List <span style="color:var(--text3);font-size:11px">(saved titles)</span></span></label>
-                <label class="export-option-row"><input type="checkbox" id="exp-recent"><span>Recent Searches <span style="color:var(--text3);font-size:11px">(search history)</span></span></label>
-                <label class="export-option-row"><input type="checkbox" id="exp-theme"><span>Preferences <span style="color:var(--text3);font-size:11px">(theme, source)</span></span></label>
             </div>
             <button class="btn-gold" style="width:100%;" onclick="runExport()">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -802,7 +802,7 @@
     </div>
 
     <!-- NOTIFICATION / TOAST -->
-    <div id="toast"></div>
+    <div id="toast"><span id="toast-msg"></span><button id="toast-undo-btn" style="display:none" onclick="triggerToastUndo()">Undo</button></div>
 
     <!-- FOOTER -->
     <footer>
@@ -810,6 +810,6 @@
         Powered by <span>PrimeSrc.me</span>&amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
     </footer>
 
-    <script src="main.js?v=17"></script>
+    <script src="main.js?v=18"></script>
 </body>
 </html>
