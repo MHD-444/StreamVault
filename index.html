@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=19" />
+    <link rel="stylesheet" href="style.css?v=20" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -113,7 +113,7 @@
                 </svg>
                 <input id="search-input" type="text" class="nav-search" placeholder="Search movies, shows…" oninput="onSearchInput(this.value)" onkeydown="if(event.key==='Enter'){doSearch(this.value);this.blur();}"
                     onfocus="showRecentSearches()" onblur="hideRecentSearches()" autocomplete="off" />
-                <button id="search-clear-btn" class="search-clear-btn" style="display:none" onmousedown="event.preventDefault()" onclick="document.getElementById('search-input').value='';onSearchInput('');safeFocus('search-input')">
+                <button id="search-clear-btn" class="search-clear-btn" style="display:none">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
                         <line x1="18" y1="6" x2="6" y2="18" />
                         <line x1="6" y1="6" x2="18" y2="18" />
@@ -728,7 +728,7 @@
     </button>
 
     <!-- KEYBOARD SHORTCUTS MODAL -->
-    <div id="shortcuts-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;">
+    <div id="shortcuts-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;">
         <div class="shortcuts-box">
             <div class="shortcuts-header">
                 <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;">Keyboard Shortcuts</div>
@@ -810,6 +810,6 @@
         Powered by <span>PrimeSrc.me</span>&amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
     </footer>
 
-    <script src="main.js?v=19"></script>
+    <script src="main.js?v=20"></script>
 </body>
 </html>
