@@ -1,1 +1,3167 @@
-const _0x94aeb3=_0xf103;(function(_0x5a28f9,_0x254b16){const _0x497127={_0x38e00c:0x2e1,_0x4f965b:0x3e4,_0x4334c9:0x50c},_0x36ef56=_0xf103,_0x1a9703=_0x5a28f9();while(!![]){try{const _0x1ea37e=-parseInt(_0x36ef56(0x4a5))/0x1*(-parseInt(_0x36ef56(0x4bf))/0x2)+parseInt(_0x36ef56(0x375))/0x3*(-parseInt(_0x36ef56(0x321))/0x4)+parseInt(_0x36ef56(_0x497127._0x38e00c))/0x5+-parseInt(_0x36ef56(_0x497127._0x4f965b))/0x6*(-parseInt(_0x36ef56(0x3c8))/0x7)+-parseInt(_0x36ef56(0x2d4))/0x8+-parseInt(_0x36ef56(0x38e))/0x9+parseInt(_0x36ef56(_0x497127._0x4334c9))/0xa;if(_0x1ea37e===_0x254b16)break;else _0x1a9703['push'](_0x1a9703['shift']());}catch(_0x3b5664){_0x1a9703['push'](_0x1a9703['shift']());}}}(_0x2349,0x66a06));const TMDB_BASE=_0x94aeb3(0x4e9),TMDB_IMG=_0x94aeb3(0x4c1),PRIME_BASE=_0x94aeb3(0x299);let API_KEY=localStorage[_0x94aeb3(0x290)](_0x94aeb3(0x4eb))||'',homeLoaded=![],heroItems=[],heroIndex=0x0,heroItem=null,heroInterval=null,currentShow=null,currentSeason=0x1,searchDebounce=null,_pendingEp=null,watchTimer=null,watchStart=null,_pendingTimestamp=0x0,savedScrollY=0x0,loadedIds=new Set(),currentSource=_0x94aeb3(0x21e),currentEmbed={'type':null,'imdb':null,'tmdbId':null,'season':null,'episode':null},currentPage=0x1,currentSection=null,isLoadingMore=![],hasMorePages=!![],isFullscreen=![],allResults=[],activeGenre=_0x94aeb3(0x3bf),autoplayTimer=null,suggestionCache={},importReplaceMode=![],_toastTimer=null,_toastUndoFn=null,_detailAbortController=null,pendingWatchTogetherStartAt=null;function safeClick(_0x2b6300){const _0x175598=_0x94aeb3,_0x5e5729=document[_0x175598(0x365)](_0x2b6300);if(_0x5e5729)_0x5e5729['click']();}function safeFocus(_0x120fe3){const _0x531e11=_0x94aeb3,_0x84a184=document[_0x531e11(0x365)](_0x120fe3);if(_0x84a184)_0x84a184[_0x531e11(0x503)]();}const SV={'_get'(_0x7184e0,_0x222cbe){const _0x809ff6={_0x56480c:0x452},_0x1f50f0=_0x94aeb3;try{return JSON[_0x1f50f0(_0x809ff6._0x56480c)](localStorage[_0x1f50f0(0x290)](_0x7184e0))??_0x222cbe;}catch{return _0x222cbe;}},'_set'(_0x3fb911,_0x1e6698){const _0x5adf83={_0x217426:0x246,_0xd5ed8f:0x26f,_0x46773b:0x2a7},_0x55445a=_0x94aeb3;try{const _0x253cd6=JSON[_0x55445a(_0x5adf83._0x217426)](_0x1e6698);if(_0x253cd6['length']>0x7a120)return console[_0x55445a(_0x5adf83._0xd5ed8f)](_0x55445a(0x22d)+_0x3fb911+'\x20too\x20large,\x20trimming'),![];return localStorage[_0x55445a(0x2f4)](_0x3fb911,_0x253cd6),!![];}catch(_0x49039b){return console[_0x55445a(0x26f)](_0x55445a(_0x5adf83._0x46773b),_0x49039b),![];}},'history':{'get'(){const _0x16f08f={_0x33d9ed:0x514},_0x46a95c=_0x94aeb3;return SV[_0x46a95c(_0x16f08f._0x33d9ed)](_0x46a95c(0x446),{});},'set'(_0x5d133d){const _0x59011e={_0x5cc067:0x446},_0x3d3257=_0x94aeb3;return SV[_0x3d3257(0x1d7)](_0x3d3257(_0x59011e._0x5cc067),_0x5d133d);},'values'(){const _0x496ad6={_0x2abee3:0x41a},_0x289f90=_0x94aeb3;return Object[_0x289f90(_0x496ad6._0x2abee3)](SV[_0x289f90(0x3f7)][_0x289f90(0x4c5)]())['sort']((_0x28b0bc,_0x30aa7c)=>_0x30aa7c[_0x289f90(0x3af)]-_0x28b0bc[_0x289f90(0x3af)]);},'add'(_0x53da8c){const _0x32d12e={_0xae6761:0x3f7,_0x11a50f:0x207,_0x4698bb:0x4fb,_0x490d01:0x380},_0x372747=_0x94aeb3,_0x2cc251=SV[_0x372747(_0x32d12e._0xae6761)]['get'](),_0x5ec861=_0x2cc251[_0x53da8c['id']]||{},_0x33196e=window[_0x372747(_0x32d12e._0x11a50f)]?.['id']===_0x53da8c['id']?window[_0x372747(0x207)][_0x372747(0x1cd)]:_0x5ec861[_0x372747(0x1cd)]||[];_0x2cc251[_0x53da8c['id']]={..._0x5ec861,..._0x53da8c,'genre_ids':_0x33196e,'savedAt':Date[_0x372747(_0x32d12e._0x4698bb)]()};const _0xb2f2eb=Object[_0x372747(_0x32d12e._0x490d01)](_0x2cc251)[_0x372747(0x459)]((_0xaba694,_0x5a513)=>_0x5a513[0x1][_0x372747(0x3af)]-_0xaba694[0x1][_0x372747(0x3af)]),_0x416951=Object['fromEntries'](_0xb2f2eb[_0x372747(0x276)](0x0,0xc8));SV[_0x372747(0x3f7)]['set'](_0x416951);},'remove'(_0x195fd9){const _0x42b62c={_0x47dd19:0x3f7,_0x28e0d4:0x4c5},_0x5185f9=_0x94aeb3,_0x36813e=SV[_0x5185f9(_0x42b62c._0x47dd19)][_0x5185f9(_0x42b62c._0x28e0d4)]();delete _0x36813e[_0x195fd9],SV[_0x5185f9(0x3f7)]['set'](_0x36813e);},'has'(_0x2712ba){const _0x194cb4={_0x10bf01:0x4c5},_0x349a5a=_0x94aeb3;return!!SV[_0x349a5a(0x3f7)][_0x349a5a(_0x194cb4._0x10bf01)]()[_0x2712ba];}},'list':{'get'(){const _0x22cfa8={_0x471c37:0x300},_0x3ed173=_0x94aeb3;return SV['_get'](_0x3ed173(_0x22cfa8._0x471c37),[]);},'set'(_0x865cdb){const _0xe21739=_0x94aeb3;return SV['_set'](_0xe21739(0x300),_0x865cdb);},'add'(_0x110107){const _0x410299={_0x454cc8:0x4c5,_0x757f04:0x2d1},_0x5c3a2c=_0x94aeb3,_0x2a63f0=SV[_0x5c3a2c(0x488)][_0x5c3a2c(_0x410299._0x454cc8)]();if(!_0x2a63f0[_0x5c3a2c(_0x410299._0x757f04)](_0x12b7c3=>_0x12b7c3['id']===_0x110107['id']))SV[_0x5c3a2c(0x488)][_0x5c3a2c(0x2de)]([_0x110107,..._0x2a63f0]);},'remove'(_0x1de2fe){const _0x18c8f6={_0x505cf4:0x488,_0x83044b:0x2de},_0x38d241=_0x94aeb3;SV[_0x38d241(_0x18c8f6._0x505cf4)][_0x38d241(_0x18c8f6._0x83044b)](SV['list'][_0x38d241(0x4c5)]()['filter'](_0x40828b=>_0x40828b['id']!==_0x1de2fe));},'has'(_0x443f73){const _0x4195ba={_0x4294cd:0x488,_0x1ea2e6:0x4c5,_0x226bd1:0x2d1},_0xda321a=_0x94aeb3;return SV[_0xda321a(_0x4195ba._0x4294cd)][_0xda321a(_0x4195ba._0x1ea2e6)]()[_0xda321a(_0x4195ba._0x226bd1)](_0x165f1c=>_0x165f1c['id']===_0x443f73);}},'searches':{'get'(){const _0x4b3ed4={_0x55f67a:0x514,_0x244896:0x48b},_0x542421=_0x94aeb3;return SV[_0x542421(_0x4b3ed4._0x55f67a)](_0x542421(_0x4b3ed4._0x244896),[]);},'add'(_0x4615a2){const _0x34af7f={_0x382703:0x276,_0x5c11fb:0x1d7},_0x468c56=_0x94aeb3,_0x50c849=[_0x4615a2,...SV[_0x468c56(0x514)](_0x468c56(0x48b),[])[_0x468c56(0x2e6)](_0x319ee2=>_0x319ee2[_0x468c56(0x1d2)]()!==_0x4615a2['toLowerCase']())][_0x468c56(_0x34af7f._0x382703)](0x0,0x5);SV[_0x468c56(_0x34af7f._0x5c11fb)]('sv_recent_searches',_0x50c849);},'clear'(){const _0xc73ca7=_0x94aeb3;localStorage[_0xc73ca7(0x29a)](_0xc73ca7(0x48b));}},'hidden':{'get'(){const _0x952d11={_0x332571:0x514},_0x4cd8ba=_0x94aeb3;return new Set(SV[_0x4cd8ba(_0x952d11._0x332571)](_0x4cd8ba(0x448),[]));},'add'(_0x3753b9){const _0x193400={_0x37d0a8:0x4c5,_0x58b7cc:0x4ae,_0x1c0f3e:0x448},_0x15fbd3=_0x94aeb3,_0x1c1aa4=SV[_0x15fbd3(0x4ab)][_0x15fbd3(_0x193400._0x37d0a8)]();_0x1c1aa4[_0x15fbd3(_0x193400._0x58b7cc)](_0x3753b9),SV[_0x15fbd3(0x1d7)](_0x15fbd3(_0x193400._0x1c0f3e),[..._0x1c1aa4]);},'clear'(){const _0x23bf18={_0x511f70:0x448},_0x1730c8=_0x94aeb3;localStorage['removeItem'](_0x1730c8(_0x23bf18._0x511f70));},'has'(_0x3d3955){const _0x2a7e04={_0x2576f2:0x4c5},_0x32b6e7=_0x94aeb3;return SV['hidden'][_0x32b6e7(_0x2a7e04._0x2576f2)]()[_0x32b6e7(0x2da)](_0x3d3955);}},'discovered':{'get'(){const _0x6ec7d9={_0x48f998:0x514},_0x3dece1=_0x94aeb3;return SV[_0x3dece1(_0x6ec7d9._0x48f998)](_0x3dece1(0x226),[]);},'add'(_0x3df764){const _0x2f77c6={_0x2acb8f:0x4c5,_0x1afddd:0x2d1,_0x3f99f8:0x1d7},_0x392319=_0x94aeb3;if(!_0x3df764?.['id'])return;const _0x46106c=SV['discovered'][_0x392319(_0x2f77c6._0x2acb8f)]();if(!_0x46106c[_0x392319(_0x2f77c6._0x1afddd)](_0x26e284=>_0x26e284['id']===_0x3df764['id']))SV[_0x392319(_0x2f77c6._0x3f99f8)](_0x392319(0x226),[{'id':_0x3df764['id'],'name':_0x3df764[_0x392319(0x451)]},..._0x46106c][_0x392319(0x276)](0x0,0x32));}}},ICONS={'play':_0x94aeb3(0x260),'star':_0x94aeb3(0x274),'check':_0x94aeb3(0x227),'plus':_0x94aeb3(0x491),'info':_0x94aeb3(0x383),'close':_0x94aeb3(0x26b),'next':'<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22><polygon\x20points=\x225\x203\x2019\x2012\x205\x2021\x205\x203\x22/><line\x20x1=\x2219\x22\x20y1=\x223\x22\x20x2=\x2219\x22\x20y2=\x2221\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22/></svg>','filter':_0x94aeb3(0x2bf),'globe':'<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><circle\x20cx=\x2212\x22\x20cy=\x2212\x22\x20r=\x2210\x22/><line\x20x1=\x222\x22\x20y1=\x2212\x22\x20x2=\x2222\x22\x20y2=\x2212\x22/><path\x20d=\x22M12\x202a15.3\x2015.3\x200\x200\x201\x204\x2010\x2015.3\x2015.3\x200\x200\x201-4\x2010\x2015.3\x2015.3\x200\x200\x201-4-10\x2015.3\x2015.3\x200\x200\x201\x204-10z\x22/></svg>','back':_0x94aeb3(0x510),'eye_off':_0x94aeb3(0x44e),'newtab':_0x94aeb3(0x1f4),'link':'<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><path\x20d=\x22M10\x2013a5\x205\x200\x200\x200\x207.54.54l3-3a5\x205\x200\x200\x200-7.07-7.07l-1.72\x201.71\x22/><path\x20d=\x22M14\x2011a5\x205\x200\x200\x200-7.54-.54l-3\x203a5\x205\x200\x200\x200\x207.07\x207.07l1.71-1.71\x22/></svg>','search':_0x94aeb3(0x4f9),'copy':'<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><rect\x20x=\x229\x22\x20y=\x229\x22\x20width=\x2213\x22\x20height=\x2213\x22\x20rx=\x222\x22/><path\x20d=\x22M5\x2015H4a2\x202\x200\x200\x201-2-2V4a2\x202\x200\x200\x201\x202-2h9a2\x202\x200\x200\x201\x202\x202v1\x22/></svg>','clock':'<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><circle\x20cx=\x2212\x22\x20cy=\x2212\x22\x20r=\x2210\x22/><polyline\x20points=\x2212\x206\x2012\x2012\x2016\x2014\x22/></svg>','calendar':'<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><rect\x20x=\x223\x22\x20y=\x224\x22\x20width=\x2218\x22\x20height=\x2218\x22\x20rx=\x222\x22/><line\x20x1=\x2216\x22\x20y1=\x222\x22\x20x2=\x2216\x22\x20y2=\x226\x22/><line\x20x1=\x228\x22\x20y1=\x222\x22\x20x2=\x228\x22\x20y2=\x226\x22/><line\x20x1=\x223\x22\x20y1=\x2210\x22\x20x2=\x2221\x22\x20y2=\x2210\x22/></svg>'};function icon(_0x45fd4f,_0x4ae45d=0xd){const _0x24be88={_0x444b32:0x421},_0xc84431=_0x94aeb3;return(ICONS[_0x45fd4f]||'')[_0xc84431(_0x24be88._0x444b32)]('VAR',_0x4ae45d);}_0x94aeb3(0x251)in history&&(history[_0x94aeb3(0x251)]='manual');window['addEventListener']('DOMContentLoaded',()=>{const _0x5a7d1c={_0x3616d6:0x4c5,_0x568bf9:0x3ea,_0x405934:0x290,_0x559591:0x2df,_0x1e5e36:0x222,_0x6704ea:0x365,_0xf7d21c:0x370,_0x21f4ca:0x450,_0x118c94:0x517,_0x29e3a5:0x4d6,_0x56dbba:0x4c9,_0x516cd4:0x389},_0x1bc8f4={_0x20bce8:0x263},_0x578bba=_0x94aeb3;window[_0x578bba(0x51e)](0x0,0x0);const _0x209426=new URLSearchParams(location[_0x578bba(0x239)]),_0x3d970b=_0x209426[_0x578bba(_0x5a7d1c._0x3616d6)](_0x578bba(_0x5a7d1c._0x568bf9));if(_0x3d970b){const _0x59adc5=_0x209426[_0x578bba(_0x5a7d1c._0x3616d6)]('id');_0x59adc5&&(pendingWatchTogetherStartAt=parseInt(_0x3d970b));}if(localStorage[_0x578bba(_0x5a7d1c._0x405934)](_0x578bba(_0x5a7d1c._0x559591))===_0x578bba(_0x5a7d1c._0x1e5e36))toggleTheme();API_KEY?(document[_0x578bba(0x365)](_0x578bba(0x370))['classList'][_0x578bba(0x4ae)](_0x578bba(0x4ab)),initApp()):document[_0x578bba(_0x5a7d1c._0x6704ea)](_0x578bba(_0x5a7d1c._0xf7d21c))[_0x578bba(_0x5a7d1c._0x21f4ca)]['remove'](_0x578bba(0x4ab));const _0x55bf79=document[_0x578bba(0x365)](_0x578bba(_0x5a7d1c._0x118c94)),_0x4b97c9=document[_0x578bba(0x365)](_0x578bba(_0x5a7d1c._0x29e3a5));if(_0x55bf79&&_0x4b97c9){const _0x3ffca9=_0x49082a=>{const _0x105e6b=_0x578bba;_0x49082a[_0x105e6b(_0x1bc8f4._0x20bce8)](),_0x49082a[_0x105e6b(0x1fb)](),_0x4b97c9[_0x105e6b(0x2e5)]='',onSearchInput(''),_0x4b97c9[_0x105e6b(0x503)]();};_0x55bf79[_0x578bba(0x389)](_0x578bba(_0x5a7d1c._0x56dbba),_0x3ffca9),_0x55bf79[_0x578bba(_0x5a7d1c._0x516cd4)](_0x578bba(0x31e),_0x3ffca9,{'passive':![]});}});function saveApiKey(){const _0x3806cb={_0x3e60ec:0x3e5,_0x61e1a4:0x2f4,_0x1ec6cd:0x450,_0x417530:0x4ae,_0x1b9edc:0x4ab},_0xf8432=_0x94aeb3,_0x1631fd=document[_0xf8432(0x365)](_0xf8432(_0x3806cb._0x3e60ec))['value'][_0xf8432(0x1f3)]();if(!_0x1631fd){showToast(_0xf8432(0x4bd));return;}API_KEY=_0x1631fd,localStorage[_0xf8432(_0x3806cb._0x61e1a4)](_0xf8432(0x4eb),_0x1631fd),suggestionCache={},document['getElementById'](_0xf8432(0x370))[_0xf8432(_0x3806cb._0x1ec6cd)][_0xf8432(_0x3806cb._0x417530)](_0xf8432(_0x3806cb._0x1b9edc)),initApp();}function showSetup(){const _0x577cf3={_0x1d8dce:0x2e5,_0x538f79:0x4ab},_0x5e2dee=_0x94aeb3;document[_0x5e2dee(0x365)]('api-key-input')[_0x5e2dee(_0x577cf3._0x1d8dce)]=API_KEY,document[_0x5e2dee(0x365)](_0x5e2dee(0x370))[_0x5e2dee(0x450)][_0x5e2dee(0x317)](_0x5e2dee(_0x577cf3._0x538f79));}function loadHomeContent(){if(homeLoaded)return;homeLoaded=!![],loadTrending(),loadNewThisWeek(),loadPopularMovies(),loadPopularTV(),loadTurkishSeries();}function initApp(){const _0x2f5199={_0x2190f2:0x239,_0x387938:0x4c5,_0x5a1a78:0x31d,_0x48c961:0x4ae,_0x459528:0x4ab,_0xc41a4:0x2e5},_0x4d1801=_0x94aeb3,_0x3b946f=new URLSearchParams(location[_0x4d1801(_0x2f5199._0x2190f2)]),_0x36e4ac=_0x3b946f[_0x4d1801(0x4c5)]('type')||_0x3b946f['get']('browse')||_0x3b946f[_0x4d1801(_0x2f5199._0x387938)]('search');_0x36e4ac?(document[_0x4d1801(0x365)](_0x4d1801(_0x2f5199._0x5a1a78))['classList'][_0x4d1801(_0x2f5199._0x48c961)](_0x4d1801(_0x2f5199._0x459528)),setTimeout(loadHomeContent,0x1f4)):loadHomeContent(),renderContinueWatching(),document[_0x4d1801(0x365)]('year-to')[_0x4d1801(_0x2f5199._0xc41a4)]=new Date()[_0x4d1801(0x2cc)](),document[_0x4d1801(0x365)](_0x4d1801(0x3ce))[_0x4d1801(0x23b)]=new Date()[_0x4d1801(0x2cc)]()+0x2,window[_0x4d1801(0x389)](_0x4d1801(0x3eb),handleRoute),handleRoute();}function slugify(_0x364321){const _0x67cea={_0x4c96cf:0x1d2},_0x228e11=_0x94aeb3;return(_0x364321||'')[_0x228e11(_0x67cea._0x4c96cf)]()['replace'](/[^a-z0-9]+/g,'-')[_0x228e11(0x211)](/^-|-$/g,'');}function pushState(_0x5de552){const _0x3f6af3={_0x1b7d78:0x380,_0x580d60:0x1cc,_0x248ae0:0x2c3},_0x42352f=_0x94aeb3,_0x2c0d9f=new URLSearchParams();for(const [_0x5a8985,_0x223837]of Object[_0x42352f(_0x3f6af3._0x1b7d78)](_0x5de552))if(_0x223837!==undefined&&_0x223837!==null)_0x2c0d9f[_0x42352f(0x2de)](_0x5a8985,_0x223837);history[_0x42352f(0x35f)](_0x5de552,'',location[_0x42352f(_0x3f6af3._0x580d60)]+'?'+_0x2c0d9f[_0x42352f(_0x3f6af3._0x248ae0)]()),document[_0x42352f(0x228)]=buildTitle(_0x5de552);}function buildTitle(_0x76e0c2){const _0x30c8ba={_0x48c310:0x451,_0x4e7c4a:0x445,_0x207be4:0x2c4,_0x2809e6:0x2cf,_0x16cd78:0x454,_0x3b26a1:0x37e,_0x51fb41:0x23c,_0x4e9855:0x445},_0x56feb2=_0x94aeb3,_0x2ccfa1=_0x76e0c2['name']?decodeURIComponent(_0x76e0c2[_0x56feb2(_0x30c8ba._0x48c310)]):'';if(_0x76e0c2['browse']===_0x56feb2(0x2e6))return _0x56feb2(0x2cf);if(_0x76e0c2[_0x56feb2(_0x30c8ba._0x4e7c4a)]===_0x56feb2(_0x30c8ba._0x207be4))return _0x56feb2(_0x30c8ba._0x2809e6);if(_0x76e0c2[_0x56feb2(0x454)]===_0x56feb2(0x419))return _0x2ccfa1+_0x56feb2(0x249);if(_0x76e0c2[_0x56feb2(_0x30c8ba._0x16cd78)]==='tv'&&_0x76e0c2[_0x56feb2(_0x30c8ba._0x3b26a1)]&&_0x76e0c2['episode'])return _0x2ccfa1+'\x20·\x20S'+String(_0x76e0c2[_0x56feb2(0x37e)])[_0x56feb2(_0x30c8ba._0x51fb41)](0x2,'0')+'E'+String(_0x76e0c2[_0x56feb2(0x304)])['padStart'](0x2,'0')+_0x56feb2(0x249);if(_0x76e0c2[_0x56feb2(0x454)]==='tv')return _0x2ccfa1+_0x56feb2(0x249);if(_0x76e0c2['search'])return _0x56feb2(_0x30c8ba._0x2809e6);if(_0x76e0c2[_0x56feb2(_0x30c8ba._0x4e9855)]===_0x56feb2(0x2c4))return _0x56feb2(_0x30c8ba._0x2809e6);if(_0x76e0c2['browse']===_0x56feb2(0x2e6))return _0x56feb2(_0x30c8ba._0x2809e6);if(_0x76e0c2[_0x56feb2(0x445)])return'StreamVault';return _0x56feb2(0x2cf);}function handleRoute(){const _0x16d30c={_0x21fd1d:0x4c5,_0x191ff8:0x239,_0x43749f:0x4c5,_0x349007:0x3ea,_0x192510:0x43e,_0x2192f0:0x1e8,_0x1b993b:0x4d6},_0x25ad55=_0x94aeb3,_0x4dd945=new URLSearchParams(location['search']),_0xe12ed0=_0x4dd945[_0x25ad55(0x4c5)](_0x25ad55(0x454)),_0x142d2e=_0x4dd945['get']('id'),_0x5078ce=_0x4dd945['get'](_0x25ad55(0x37e)),_0x3d7c70=_0x4dd945[_0x25ad55(_0x16d30c._0x21fd1d)](_0x25ad55(0x304)),_0x146d6f=_0x4dd945[_0x25ad55(0x4c5)](_0x25ad55(_0x16d30c._0x191ff8)),_0xa6b48f=_0x4dd945[_0x25ad55(_0x16d30c._0x43749f)](_0x25ad55(_0x16d30c._0x349007)),_0x20fa92=_0x4dd945['get'](_0x25ad55(0x445));if(_0xe12ed0&&_0x142d2e){if(_0xe12ed0==='tv'&&_0x5078ce&&_0x3d7c70)_pendingEp={'season':parseInt(_0x5078ce),'episode':parseInt(_0x3d7c70)};if(_0xa6b48f)pendingWatchTogetherStartAt=parseInt(_0xa6b48f);openDetail(parseInt(_0x142d2e),_0xe12ed0,![],!![]);}else{if(_0x20fa92){if(_0x20fa92===_0x25ad55(_0x16d30c._0x192510))showHome();else{if(_0x20fa92===_0x25ad55(0x2c4))showStats(!![]);else{if(_0x20fa92===_0x25ad55(0x2e6))restoreFilters(_0x4dd945);else{if(_0x20fa92===_0x25ad55(_0x16d30c._0x2192f0))showMyList();else{if(_0x20fa92===_0x25ad55(0x419)||_0x20fa92==='tv')fetchSection(_0x20fa92);else _0x20fa92===_0x25ad55(0x489)&&showCollections();}}}}}else _0x146d6f?(document['getElementById'](_0x25ad55(_0x16d30c._0x1b993b))[_0x25ad55(0x2e5)]=decodeURIComponent(_0x146d6f),doSearch(decodeURIComponent(_0x146d6f),!![])):showHome();}}const _escMap={'&':_0x94aeb3(0x411),'<':'&lt;','>':'&gt;','\x22':_0x94aeb3(0x2ba),'\x27':_0x94aeb3(0x403)};function esc(_0x4be848){const _0x5416ae=_0x94aeb3;if(_0x4be848==null)return'';return String(_0x4be848)[_0x5416ae(0x211)](/[&<>"']/g,_0x30a25e=>_escMap[_0x30a25e]);}function isBearerToken(_0x2bd73f){const _0x1f5e12=_0x94aeb3;return _0x2bd73f&&_0x2bd73f['startsWith'](_0x1f5e12(0x515));}async function tmdb(_0x19e256,_0x3a681e={},_0x316e34=null){const _0x865675={_0x450517:0x1ff,_0x117c15:0x2fc,_0x43f1db:0x24f,_0x589e3c:0x30e},_0x3c09a6=_0x94aeb3,_0x59e56e={};let _0x5e8290;isBearerToken(API_KEY)?(_0x5e8290=''+TMDB_BASE+_0x19e256+'?'+new URLSearchParams(_0x3a681e),_0x59e56e[_0x3c09a6(_0x865675._0x450517)]={'Authorization':_0x3c09a6(0x4f2)+API_KEY}):_0x5e8290=''+TMDB_BASE+_0x19e256+'?'+new URLSearchParams({'api_key':API_KEY,..._0x3a681e});if(_0x316e34)_0x59e56e[_0x3c09a6(_0x865675._0x117c15)]=_0x316e34;const _0x23021e=await fetch(_0x5e8290,_0x59e56e);if(!_0x23021e['ok']){_0x23021e[_0x3c09a6(_0x865675._0x43f1db)]===0x191&&(showToast(_0x3c09a6(_0x865675._0x589e3c)),showSetup());throw new Error(_0x3c09a6(0x420));}return _0x23021e[_0x3c09a6(0x4c8)]();}function posterUrl(_0x144898,_0x32c387='w342'){return _0x144898?''+TMDB_IMG+_0x32c387+_0x144898:null;}function backdropUrl(_0x342b0d){const _0x195a69={_0x380e96:0x486},_0x8fb40c=_0x94aeb3;return _0x342b0d?TMDB_IMG+_0x8fb40c(_0x195a69._0x380e96)+_0x342b0d:null;}function starIcon(){return icon('star',0xb);}function makeCard(_0xb00db0,_0x59d4c1=0x0){const _0x4ae196={_0x4c98cc:0x3a6,_0x3cd344:0x451,_0x6e41f1:0x2c2,_0xb778dc:0x1fc,_0x48aff6:0x3a4,_0x476d4e:0x21a,_0xaca821:0x419,_0x6c59c9:0x21d,_0x145947:0x41f,_0x4405e2:0x1e2,_0x10ca2e:0x308,_0x366fd5:0x345,_0x2fe64a:0x382,_0x2fecbb:0x24b,_0xd404ae:0x3b9,_0x4e9792:0x484,_0x474f81:0x2e8,_0x5df849:0x3dc,_0x5a9217:0x435,_0x5145e7:0x389,_0x24ba4c:0x31e,_0x5b56f2:0x22f,_0x9cb4ff:0x337,_0x3d399d:0x22f,_0x5c60db:0x519,_0x24c554:0x391,_0x6b7067:0x467,_0x4c0059:0x39b,_0x45e4b0:0x2b5,_0x193488:0x4d0,_0x29eb9e:0x48a,_0x5713e7:0x419,_0x1d64ca:0x4a4,_0x20d787:0x2e0},_0x507cc9={_0x5db7e3:0x263},_0x429e6a={_0x3e2da5:0x207},_0xbf9b64={_0x4e2c27:0x320,_0x33882a:0x427,_0x33a2b2:0x329,_0x553e7d:0x1dd,_0x5753d1:0x3dc,_0x496996:0x1e6,_0x1265c4:0x4a3},_0x536436={_0x2cd9b3:0x33e,_0x6a1a75:0x1cd},_0x5f01b9={_0x348108:0x3d7,_0x352eb8:0x36f,_0x5d008b:0x343,_0x1ad1e0:0x1d0,_0x4c841d:0x449},_0x4774ba={_0xa165d0:0x31c,_0x21fbb8:0x450,_0x305088:0x4ae},_0x4b5548=_0x94aeb3,_0x523423=_0xb00db0[_0x4b5548(_0x4ae196._0x4c98cc)]||(_0xb00db0[_0x4b5548(0x228)]?_0x4b5548(0x419):'tv'),_0x5dd064=_0xb00db0[_0x4b5548(0x228)]||_0xb00db0[_0x4b5548(_0x4ae196._0x3cd344)]||_0x4b5548(0x324),_0x5e7c1b=(_0xb00db0['release_date']||_0xb00db0['first_air_date']||'')[_0x4b5548(0x276)](0x0,0x4),_0x346eb2=_0xb00db0['vote_average']?_0xb00db0['vote_average'][_0x4b5548(0x341)](0x1):'—',_0x408c32=posterUrl(_0xb00db0[_0x4b5548(0x1dd)]),_0x359cb0=document['createElement'](_0x4b5548(_0x4ae196._0x6e41f1));_0x359cb0['className']='card',_0x359cb0[_0x4b5548(0x427)]['id']=_0xb00db0['id'],_0x359cb0['style'][_0x4b5548(0x398)]=_0x59d4c1*0.04+'s';const _0x45fe8d=_0xb00db0[_0x4b5548(_0x4ae196._0xb778dc)]||_0xb00db0['first_air_date']||'',_0x519464=Date['now'](),_0x5bc7f7=_0x45fe8d?new Date(_0x45fe8d)[_0x4b5548(0x1ce)]():0x0,_0x13709e=_0x5bc7f7>_0x519464?Math['ceil']((_0x5bc7f7-_0x519464)/(0x3e8*0x3c*0x3c*0x18)):0x0,_0x3ccfa0=_0x13709e>0x0?_0x4b5548(0x277)+(_0x13709e===0x1?_0x4b5548(_0x4ae196._0x48aff6):_0x4b5548(_0x4ae196._0x476d4e)+_0x13709e+_0x4b5548(0x40f))+'</div>':'',_0x2b15e1=_0x523423===_0x4b5548(_0x4ae196._0xaca821)&&!!(window[_0x4b5548(_0x4ae196._0x6c59c9)]||{})[_0xb00db0['id']],_0x2a1c90=_0x2b15e1?_0x4b5548(_0x4ae196._0x145947):'',_0x5638a6=esc(_0x5dd064),_0x108125=isInMyList(_0xb00db0['id']),_0x33d677=document[_0x4b5548(_0x4ae196._0x4405e2)](_0x4b5548(0x2c2));_0x33d677[_0x4b5548(_0x4ae196._0x10ca2e)]='cw-poster-wrap',_0x33d677['style'][_0x4b5548(_0x4ae196._0x366fd5)]=_0x4b5548(_0x4ae196._0x2fe64a);_0x408c32?_0x33d677['innerHTML']=_0x4b5548(0x4cd)+_0x408c32+_0x4b5548(_0x4ae196._0x2fecbb)+_0x5638a6+_0x4b5548(_0x4ae196._0xd404ae)+_0x5638a6+_0x4b5548(_0x4ae196._0x4e9792)+_0x3ccfa0+'\x20'+_0x2a1c90+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cw-hover-overlay\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cw-hover-left\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cw-hover-btn\x20cw-play-btn\x22\x20title=\x22Play\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22><polygon\x20points=\x225\x203\x2019\x2012\x205\x2021\x205\x203\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cw-hover-btn\x20cw-list-btn\x22\x20title=\x22My\x20List\x22\x20data-in-list=\x22'+_0x108125+'\x22>'+(_0x108125?'<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><polyline\x20points=\x2220\x206\x209\x2017\x204\x2012\x22/></svg>':_0x4b5548(0x320))+_0x4b5548(0x435):_0x33d677[_0x4b5548(_0x4ae196._0x474f81)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-poster-placeholder\x22>'+_0x5638a6+_0x4b5548(0x484)+_0x3ccfa0+'\x20'+_0x2a1c90+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cw-hover-overlay\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cw-hover-left\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cw-hover-btn\x20cw-play-btn\x22\x20title=\x22Play\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22><polygon\x20points=\x225\x203\x2019\x2012\x205\x2021\x205\x203\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cw-hover-btn\x20cw-list-btn\x22\x20title=\x22My\x20List\x22\x20data-in-list=\x22'+_0x108125+'\x22>'+(_0x108125?_0x4b5548(_0x4ae196._0x5df849):'<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><line\x20x1=\x2212\x22\x20y1=\x225\x22\x20x2=\x2212\x22\x20y2=\x2219\x22/><line\x20x1=\x225\x22\x20y1=\x2212\x22\x20x2=\x2219\x22\x20y2=\x2212\x22/></svg>')+_0x4b5548(_0x4ae196._0x5a9217);_0x33d677[_0x4b5548(_0x4ae196._0x5145e7)](_0x4b5548(_0x4ae196._0x24ba4c),()=>{const _0x475ab2=_0x4b5548;if(_0x33d677[_0x475ab2(0x450)][_0x475ab2(0x385)]('is-touching'))return;document[_0x475ab2(_0x4774ba._0xa165d0)](_0x475ab2(0x3a5))[_0x475ab2(0x338)](_0xbd7512=>_0xbd7512['classList'][_0x475ab2(0x317)]('is-touching')),_0x33d677[_0x475ab2(_0x4774ba._0x21fbb8)][_0x475ab2(_0x4774ba._0x305088)](_0x475ab2(0x33f));},{'passive':!![]}),_0x33d677[_0x4b5548(0x389)](_0x4b5548(_0x4ae196._0x5b56f2),_0x3e58c5=>{const _0x3e3890=_0x4b5548;if(_0x3e58c5[_0x3e3890(_0x5f01b9._0x348108)][_0x3e3890(_0x5f01b9._0x352eb8)](_0x3e3890(_0x5f01b9._0x5d008b)))return;if(_0x33d677[_0x3e3890(0x450)][_0x3e3890(0x385)]('is-touching')&&window[_0x3e3890(_0x5f01b9._0x1ad1e0)]('(hover:\x20none)')[_0x3e3890(_0x5f01b9._0x4c841d)]){openQuickDetail(_0xb00db0['id'],_0x523423,_0xb00db0);return;}openQuickDetail(_0xb00db0['id'],_0x523423,_0xb00db0);}),_0x33d677[_0x4b5548(0x519)](_0x4b5548(_0x4ae196._0x9cb4ff))[_0x4b5548(0x389)](_0x4b5548(_0x4ae196._0x3d399d),_0x1ab970=>{const _0x916d31=_0x4b5548;_0x1ab970['stopPropagation'](),savedScrollY=window[_0x916d31(_0x536436._0x2cd9b3)];if(_0xb00db0[_0x916d31(_0x536436._0x6a1a75)]?.[_0x916d31(0x3dd)])window[_0x916d31(0x207)]={'id':_0xb00db0['id'],'genre_ids':_0xb00db0[_0x916d31(0x1cd)]};openDetail(_0xb00db0['id'],_0x523423,!![]);});const _0x5a90b0=_0x33d677[_0x4b5548(_0x4ae196._0x5c60db)](_0x4b5548(_0x4ae196._0x24c554));_0x5a90b0[_0x4b5548(0x389)](_0x4b5548(0x22f),_0x4f1235=>{const _0x117741=_0x4b5548;_0x4f1235[_0x117741(0x1fb)]();let _0x3d7039=getMyList();if(isInMyList(_0xb00db0['id']))saveMyList(_0x3d7039['filter'](_0x4bdb7a=>_0x4bdb7a['id']!==_0xb00db0['id'])),_0x5a90b0[_0x117741(0x2e8)]=_0x117741(_0xbf9b64._0x4e2c27),_0x5a90b0[_0x117741(_0xbf9b64._0x33882a)]['inList']=_0x117741(0x369),showToast(_0x117741(_0xbf9b64._0x33a2b2));else{const _0xef736a=_0xb00db0[_0x117741(0x228)]||_0xb00db0['name']||'',_0x567995=(_0xb00db0[_0x117741(0x1fc)]||_0xb00db0['first_air_date']||'')['slice'](0x0,0x4);saveMyList([{'id':_0xb00db0['id'],'type':_0x523423,'title':_0xef736a,'year':_0x567995,'poster':_0xb00db0[_0x117741(_0xbf9b64._0x553e7d)]||null,'addedAt':_0x519464},..._0x3d7039]),_0x5a90b0[_0x117741(0x2e8)]=_0x117741(_0xbf9b64._0x5753d1),_0x5a90b0[_0x117741(_0xbf9b64._0x33882a)][_0x117741(_0xbf9b64._0x496996)]=_0x117741(_0xbf9b64._0x1265c4),showToast(_0x117741(0x48e));}}),_0x33d677['querySelector'](_0x4b5548(_0x4ae196._0x6b7067))[_0x4b5548(0x389)]('click',_0x18c270=>{const _0x20bf67=_0x4b5548;_0x18c270[_0x20bf67(0x1fb)](),openQuickDetail(_0xb00db0['id'],_0x523423,_0xb00db0);});const _0x3e1bdf=slugify(_0xb00db0['title']||_0xb00db0[_0x4b5548(0x451)]||'unknown'),_0x28188e=location['pathname']+_0x4b5548(_0x4ae196._0x4c0059)+_0x523423+_0x4b5548(_0x4ae196._0x45e4b0)+_0xb00db0['id']+_0x4b5548(_0x4ae196._0x193488)+_0x3e1bdf,_0x389a7e=document['createElement']('div');return _0x389a7e[_0x4b5548(_0x4ae196._0x10ca2e)]=_0x4b5548(0x325),_0x389a7e[_0x4b5548(0x291)]['cssText']='display:flex;align-items:flex-start;justify-content:space-between;gap:6px;cursor:pointer;',_0x389a7e[_0x4b5548(_0x4ae196._0x474f81)]=_0x4b5548(0x4db)+_0x5638a6+_0x4b5548(_0x4ae196._0x29eb9e)+esc(_0x5e7c1b)+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22card-rating\x22>'+starIcon()+'\x20'+_0x346eb2+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22margin-top:5px\x22><span\x20class=\x22card-type-badge\x22>'+(_0x523423===_0x4b5548(_0x4ae196._0x5713e7)?_0x4b5548(_0x4ae196._0x1d64ca):'TV')+_0x4b5548(_0x4ae196._0x20d787),_0x389a7e[_0x4b5548(0x389)]('click',()=>{const _0x1c961e=_0x4b5548;savedScrollY=window[_0x1c961e(0x33e)];if(_0xb00db0['genre_ids']?.[_0x1c961e(0x3dd)])window[_0x1c961e(_0x429e6a._0x3e2da5)]={'id':_0xb00db0['id'],'genre_ids':_0xb00db0[_0x1c961e(0x1cd)]};history['pushState']({},'',_0x28188e),openDetail(_0xb00db0['id'],_0x523423);}),_0x359cb0[_0x4b5548(0x389)](_0x4b5548(0x334),_0x1303f7=>{const _0x10d1c5=_0x4b5548;_0x1303f7[_0x10d1c5(_0x507cc9._0x5db7e3)](),showCardContextMenu(_0x1303f7,_0x28188e,_0x5dd064);}),_0x359cb0[_0x4b5548(0x26e)](_0x33d677),_0x359cb0[_0x4b5548(0x26e)](_0x389a7e),_0x359cb0;}function openQuickDetail(_0x826a6d,_0x19014b,_0x5e249b){const _0x37aa08={_0x225c6b:0x2be,_0x128076:0x2c2,_0x257984:0x451,_0x27595b:0x2c9,_0x472138:0x47e,_0x448520:0x47e,_0x4dbf7d:0x27e,_0x31f721:0x4ab,_0xd75086:0x22f,_0x32af0a:0x365,_0x1357b0:0x2fa,_0x98915f:0x389,_0x2ad6a1:0x519,_0x8a8852:0x342,_0x3b8cf7:0x2b3,_0x52b631:0x389,_0x46c754:0x365,_0x40134e:0x3b3,_0x133785:0x519,_0x5ddd66:0x399,_0x447156:0x519,_0x48ea40:0x3e9},_0x1d88f7={_0xcabc61:0x2f9,_0x960b95:0x365,_0x292d29:0x464,_0x54f07e:0x1fc,_0x271cbc:0x276,_0x5a547b:0x3c9,_0x30f68e:0x483,_0x1593e8:0x30d,_0x57c835:0x3c2,_0x21cb4c:0x1ec,_0x5615cc:0x400,_0x17af50:0x419,_0xf266e7:0x221,_0x4790ea:0x50e,_0x4067ee:0x50f,_0x1f08d4:0x2a1,_0x28c3c3:0x3dd},_0x275437={_0x5469d0:0x451,_0x11ae6a:0x1fc,_0x45c9b1:0x47a},_0x2734ae={_0x29cd50:0x291,_0x20c521:0x437,_0x1f9ceb:0x4e5,_0x3c7b1c:0x34a,_0x550b66:0x4b6,_0x424302:0x27a,_0x1cea16:0x4ee},_0x4d8791={_0x1b139e:0x33e},_0x4c6935={_0x23c2bd:0x1f8,_0x34bf36:0x37c},_0x598191={_0x542e36:0x4d9,_0x3ab187:0x37c,_0x2237e6:0x414},_0xadc49a={_0x3d14d6:0x3d7},_0x1d892d={_0x2a6efd:0x47e,_0x50738a:0x291,_0x20e549:0x27e},_0x41b730=_0x94aeb3;document[_0x41b730(0x365)](_0x41b730(_0x37aa08._0x225c6b))?.['remove']();const _0x423663=document['createElement'](_0x41b730(_0x37aa08._0x128076));_0x423663['id']=_0x41b730(_0x37aa08._0x225c6b),_0x423663[_0x41b730(0x308)]='qm-backdrop',_0x423663['innerHTML']=_0x41b730(0x3fd)+esc(_0x5e249b?.[_0x41b730(0x228)]||_0x5e249b?.[_0x41b730(_0x37aa08._0x257984)]||'')+_0x41b730(_0x37aa08._0x27595b),document[_0x41b730(_0x37aa08._0x472138)]['appendChild'](_0x423663),document[_0x41b730(_0x37aa08._0x448520)][_0x41b730(0x291)][_0x41b730(_0x37aa08._0x4dbf7d)]=_0x41b730(_0x37aa08._0x31f721);const _0x59f456=()=>{const _0x58252d=_0x41b730;_0x423663[_0x58252d(0x450)]['add'](_0x58252d(0x3a9)),document[_0x58252d(_0x1d892d._0x2a6efd)][_0x58252d(_0x1d892d._0x50738a)][_0x58252d(_0x1d892d._0x20e549)]='',setTimeout(()=>_0x423663[_0x58252d(0x317)](),0xfa);};_0x423663['addEventListener'](_0x41b730(_0x37aa08._0xd75086),_0x5b88b9=>{const _0x14f19d=_0x41b730;if(_0x5b88b9[_0x14f19d(_0xadc49a._0x3d14d6)]===_0x423663)_0x59f456();}),document[_0x41b730(_0x37aa08._0x32af0a)](_0x41b730(_0x37aa08._0x1357b0))[_0x41b730(_0x37aa08._0x98915f)](_0x41b730(_0x37aa08._0xd75086),_0x59f456);const _0x12d532=_0x423663[_0x41b730(_0x37aa08._0x2ad6a1)]('.qm-box');let _0x2ad634=0x0,_0x4c12eb=![];_0x12d532[_0x41b730(0x389)](_0x41b730(0x31e),_0x22ec37=>{const _0x5b3a3a=_0x41b730;_0x2ad634=_0x22ec37[_0x5b3a3a(0x313)][0x0]['clientY'],_0x4c12eb=!![];},{'passive':!![]}),_0x12d532[_0x41b730(0x389)](_0x41b730(0x204),_0x4e9880=>{const _0x1eb71e=_0x41b730;if(!_0x4c12eb)return;const _0x119a0b=_0x4e9880[_0x1eb71e(0x313)][0x0][_0x1eb71e(_0x598191._0x542e36)]-_0x2ad634;if(_0x119a0b>0x0)_0x12d532['style'][_0x1eb71e(_0x598191._0x3ab187)]='translateY('+Math[_0x1eb71e(_0x598191._0x2237e6)](_0x119a0b*0.4,0x50)+'px)';},{'passive':!![]}),_0x12d532[_0x41b730(0x389)](_0x41b730(_0x37aa08._0x8a8852),_0x3ee3e3=>{const _0x2b0beb=_0x41b730;if(!_0x4c12eb)return;_0x4c12eb=![];const _0x57bae5=_0x3ee3e3[_0x2b0beb(_0x4c6935._0x23c2bd)][0x0][_0x2b0beb(0x4d9)]-_0x2ad634;_0x57bae5>0x50?_0x59f456():_0x12d532[_0x2b0beb(0x291)][_0x2b0beb(_0x4c6935._0x34bf36)]='';}),document[_0x41b730(_0x37aa08._0x32af0a)](_0x41b730(_0x37aa08._0x3b8cf7))[_0x41b730(_0x37aa08._0x52b631)](_0x41b730(0x22f),()=>{const _0xc3aa9c=_0x41b730;_0x59f456(),savedScrollY=window[_0xc3aa9c(_0x4d8791._0x1b139e)],openDetail(_0x826a6d,_0x19014b,!![]);}),document[_0x41b730(_0x37aa08._0x46c754)]('qm-detail-btn')[_0x41b730(0x389)](_0x41b730(_0x37aa08._0xd75086),()=>{_0x59f456(),savedScrollY=window['scrollY'],openDetail(_0x826a6d,_0x19014b,![]);});const _0x266664=document[_0x41b730(0x365)](_0x41b730(_0x37aa08._0x40134e)),_0x377f8e=_0x266664['querySelector']('.qm-icon-add'),_0x3b3b71=_0x266664[_0x41b730(_0x37aa08._0x133785)](_0x41b730(_0x37aa08._0x5ddd66)),_0x49f590=_0x266664[_0x41b730(_0x37aa08._0x447156)](_0x41b730(0x431)),_0x4bb0da=()=>{const _0xc58ea2=_0x41b730,_0x49dc41=isInMyList(_0x826a6d);_0x377f8e[_0xc58ea2(_0x2734ae._0x29cd50)][_0xc58ea2(0x437)]=_0x49dc41?_0xc58ea2(0x34a):'block',_0x3b3b71[_0xc58ea2(0x291)][_0xc58ea2(_0x2734ae._0x20c521)]=_0x49dc41?_0xc58ea2(_0x2734ae._0x1f9ceb):_0xc58ea2(_0x2734ae._0x3c7b1c),_0x49f590['textContent']=_0x49dc41?_0xc58ea2(_0x2734ae._0x550b66):_0xc58ea2(_0x2734ae._0x424302),_0x266664[_0xc58ea2(_0x2734ae._0x29cd50)][_0xc58ea2(_0x2734ae._0x1cea16)]=_0x49dc41?'var(--gold)':'',_0x266664[_0xc58ea2(_0x2734ae._0x29cd50)][_0xc58ea2(0x1fa)]=_0x49dc41?'var(--gold)':'';};_0x4bb0da(),_0x266664[_0x41b730(0x389)]('click',()=>{const _0x5b8e31=_0x41b730;let _0x539edb=getMyList();const _0x5d3c76=_0x5e249b?.[_0x5b8e31(0x228)]||_0x5e249b?.[_0x5b8e31(_0x275437._0x5469d0)]||'',_0x5a6c5f=(_0x5e249b?.[_0x5b8e31(_0x275437._0x11ae6a)]||_0x5e249b?.[_0x5b8e31(_0x275437._0x45c9b1)]||'')[_0x5b8e31(0x276)](0x0,0x4);isInMyList(_0x826a6d)?(saveMyList(_0x539edb['filter'](_0x46427d=>_0x46427d['id']!==_0x826a6d)),showToast(_0x5b8e31(0x329))):(saveMyList([{'id':_0x826a6d,'type':_0x19014b,'title':_0x5d3c76,'year':_0x5a6c5f,'poster':_0x5e249b?.['poster_path']||null,'addedAt':Date[_0x5b8e31(0x4fb)]()},..._0x539edb]),showToast('Added\x20to\x20My\x20List')),_0x4bb0da();}),requestAnimationFrame(()=>_0x423663['classList'][_0x41b730(0x4ae)](_0x41b730(0x244))),tmdb('/'+_0x19014b+'/'+_0x826a6d,{'append_to_response':_0x41b730(_0x37aa08._0x48ea40)})['then'](_0x212880=>{const _0x5922c3=_0x41b730,_0x1e6496=_0x212880['backdrop_path']?TMDB_IMG+'w1280'+_0x212880[_0x5922c3(_0x1d88f7._0xcabc61)]:_0x212880[_0x5922c3(0x1dd)]?TMDB_IMG+_0x5922c3(0x35c)+_0x212880[_0x5922c3(0x1dd)]:null;if(_0x1e6496){const _0x54d465=document['getElementById']('qm-backdrop');_0x54d465&&(_0x54d465[_0x5922c3(0x291)]['backgroundImage']='url('+_0x1e6496+')');}const _0x15a661=document[_0x5922c3(_0x1d88f7._0x960b95)](_0x5922c3(_0x1d88f7._0x292d29));if(_0x15a661)_0x15a661[_0x5922c3(0x2d9)]=_0x212880['title']||_0x212880[_0x5922c3(0x451)]||'';const _0x3fef9e=(_0x212880[_0x5922c3(_0x1d88f7._0x54f07e)]||_0x212880['first_air_date']||'')[_0x5922c3(_0x1d88f7._0x271cbc)](0x0,0x4),_0x1bdff7=_0x212880[_0x5922c3(_0x1d88f7._0x5a547b)]?_0x212880[_0x5922c3(0x3c9)]['toFixed'](0x1):'—',_0x46dc7f=_0x212880[_0x5922c3(_0x1d88f7._0x30f68e)]?_0x212880[_0x5922c3(0x483)]+'m':_0x212880[_0x5922c3(_0x1d88f7._0x1593e8)]?.[0x0]?_0x212880[_0x5922c3(0x30d)][0x0]+_0x5922c3(_0x1d88f7._0x57c835):'',_0x5b8f7f=document[_0x5922c3(_0x1d88f7._0x960b95)](_0x5922c3(0x2a8));if(_0x5b8f7f)_0x5b8f7f[_0x5922c3(0x2e8)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22qm-year\x22>'+esc(_0x3fef9e)+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20'+(_0x46dc7f?_0x5922c3(_0x1d88f7._0x21cb4c)+esc(_0x46dc7f)+'</span>':'')+_0x5922c3(_0x1d88f7._0x5615cc)+starIcon()+'\x20'+_0x1bdff7+_0x5922c3(0x4fc)+(_0x19014b===_0x5922c3(_0x1d88f7._0x17af50)?_0x5922c3(0x4a4):_0x5922c3(_0x1d88f7._0xf266e7))+_0x5922c3(0x38f);const _0x2ad952=document[_0x5922c3(0x365)](_0x5922c3(_0x1d88f7._0x4790ea));if(_0x2ad952)_0x2ad952['textContent']=_0x212880['overview']||_0x5922c3(_0x1d88f7._0x4067ee);const _0xeb2e04=document['getElementById'](_0x5922c3(_0x1d88f7._0x1f08d4));_0xeb2e04&&_0x212880['genres']?.[_0x5922c3(_0x1d88f7._0x28c3c3)]&&(_0xeb2e04[_0x5922c3(0x2e8)]=_0x212880[_0x5922c3(0x36d)][_0x5922c3(_0x1d88f7._0x271cbc)](0x0,0x4)[_0x5922c3(0x213)](_0x4c42f5=>_0x5922c3(0x507)+esc(_0x4c42f5[_0x5922c3(0x451)])+_0x5922c3(0x38f))['join'](''));})[_0x41b730(0x45b)](()=>{});}const _HOME_ROWS=new Set(['trending-row',_0x94aeb3(0x46f),'tv-row',_0x94aeb3(0x203),_0x94aeb3(0x4ce),_0x94aeb3(0x2d8)]);function renderCards(_0xa1639b,_0x2f6638){const _0x2ca76f={_0x3e4ceb:0x452,_0xb09baa:0x290,_0x1511a3:0x365},_0x1649a0={_0x9162e8:0x346},_0x3df103={_0x1c15aa:0x1e2,_0x363841:0x308,_0x5a5eb8:0x36f,_0x3e20ea:0x468},_0x37d6b1=_0x94aeb3;window['_svHistoryCache']=JSON['parse'](localStorage['getItem'](_0x37d6b1(0x446))||'{}'),window['_svMyListCache']=JSON[_0x37d6b1(_0x2ca76f._0x3e4ceb)](localStorage[_0x37d6b1(_0x2ca76f._0xb09baa)](_0x37d6b1(0x300))||'[]');const _0x476c10=SV['hidden'][_0x37d6b1(0x4c5)](),_0x245394=_0x476c10[_0x37d6b1(0x38d)]?_0x2f6638['filter'](_0x5d21fe=>!_0x476c10[_0x37d6b1(0x2da)](_0x5d21fe['id'])):_0x2f6638,_0x8bef86=document[_0x37d6b1(_0x2ca76f._0x1511a3)](_0xa1639b);_0x8bef86[_0x37d6b1(0x2e8)]='';if(_HOME_ROWS[_0x37d6b1(0x2da)](_0xa1639b)){const _0x21b75e=0x6;_0x245394[_0x37d6b1(0x338)]((_0x4bb7d1,_0x12ded8)=>{const _0x8a34d4=_0x37d6b1;if(_0x12ded8<_0x21b75e){_0x8bef86[_0x8a34d4(0x26e)](makeCard(_0x4bb7d1,_0x12ded8));return;}const _0x4e5851=document[_0x8a34d4(_0x3df103._0x1c15aa)]('div');_0x4e5851[_0x8a34d4(_0x3df103._0x363841)]='card\x20card-placeholder',_0x4e5851[_0x8a34d4(0x291)]['cssText']='min-width:160px;flex-shrink:0;',_0x8bef86['appendChild'](_0x4e5851);const _0xc9eaec=new IntersectionObserver(_0x582c60=>{const _0xe52290=_0x8a34d4;if(!_0x582c60[0x0]['isIntersecting'])return;_0xc9eaec['disconnect']();const _0x1ddd44=makeCard(_0x4bb7d1,_0x12ded8);_0x4e5851[_0xe52290(0x49b)](_0x1ddd44);},{'rootMargin':_0x8a34d4(0x201),'root':_0x8bef86[_0x8a34d4(_0x3df103._0x5a5eb8)](_0x8a34d4(_0x3df103._0x3e20ea))||null});_0xc9eaec[_0x8a34d4(0x358)](_0x4e5851);});}else _0x245394['forEach']((_0x30054b,_0x260f7f)=>_0x8bef86[_0x37d6b1(0x26e)](makeCard(_0x30054b,_0x260f7f)));_0xa1639b===_0x37d6b1(0x2d8)&&setTimeout(()=>{const _0xb4ed09=_0x37d6b1;updateScrollButtons(_0xa1639b),_0x8bef86[_0xb4ed09(_0x1649a0._0x9162e8)]+=0x1,_0x8bef86[_0xb4ed09(0x346)]-=0x1;},0x64);}function scrollRow(_0x2066d8,_0x1ebf52){const _0x548fd2={_0x4d837f:0x509},_0x40dd9f=_0x94aeb3,_0x34eae9=document[_0x40dd9f(0x365)](_0x2066d8),_0x16980b=_0x34eae9[_0x40dd9f(0x2e7)]*0.8;_0x34eae9[_0x40dd9f(_0x548fd2._0x4d837f)]({'left':_0x1ebf52*_0x16980b,'behavior':'smooth'}),setTimeout(()=>updateScrollButtons(_0x2066d8),0x190);}function enableDragScroll(_0x5ffb8e){const _0x5ce394={_0x35d6a1:0x389,_0x1fea6b:0x22f,_0x317b4e:0x31e},_0x2c97b0={_0x346c98:0x2ad},_0x2d2934=_0x94aeb3;let _0x463f7c,_0x3ac132,_0x2f1631=![];_0x5ffb8e[_0x2d2934(_0x5ce394._0x35d6a1)](_0x2d2934(_0x5ce394._0x1fea6b),_0x35f780=>{const _0x29788d=_0x2d2934;_0x2f1631&&(_0x35f780['preventDefault'](),_0x35f780[_0x29788d(0x1fb)]());}),_0x5ffb8e['addEventListener'](_0x2d2934(_0x5ce394._0x317b4e),_0x24abc4=>{const _0x1b6fd5=_0x2d2934;if(_0x24abc4[_0x1b6fd5(0x3d7)]['closest'](_0x1b6fd5(0x480)))return;_0x463f7c=_0x24abc4[_0x1b6fd5(0x313)][0x0][_0x1b6fd5(_0x2c97b0._0x346c98)],_0x3ac132=_0x5ffb8e[_0x1b6fd5(0x346)];}),_0x5ffb8e['addEventListener'](_0x2d2934(0x204),_0x125494=>{const _0x4b773f=_0x2d2934,_0x5ec3dc=_0x125494[_0x4b773f(0x313)][0x0]['pageX'],_0x501ceb=_0x5ec3dc-_0x463f7c;_0x5ffb8e[_0x4b773f(0x346)]=_0x3ac132-_0x501ceb*1.5;});}function updateScrollButtons(_0x22b510){const _0x764f82={_0x2cd779:0x365,_0x3554fd:0x390,_0x2c1108:0x2d7,_0x445e06:0x2e7,_0x29fe31:0x4ae},_0x5bd6e5=_0x94aeb3,_0xe944a3=document[_0x5bd6e5(_0x764f82._0x2cd779)](_0x22b510),_0x4e2470=_0xe944a3[_0x5bd6e5(_0x764f82._0x3554fd)],_0x70d640=_0x4e2470['querySelector'](_0x5bd6e5(0x33a)),_0x247336=_0x4e2470[_0x5bd6e5(0x519)](_0x5bd6e5(0x3d5)),_0x35d518=_0xe944a3[_0x5bd6e5(0x346)],_0x30b30d=_0xe944a3[_0x5bd6e5(_0x764f82._0x2c1108)]-_0xe944a3[_0x5bd6e5(_0x764f82._0x445e06)];if(_0x35d518>0x5)_0x70d640[_0x5bd6e5(0x450)][_0x5bd6e5(_0x764f82._0x29fe31)](_0x5bd6e5(0x1e9));else _0x70d640[_0x5bd6e5(0x450)][_0x5bd6e5(0x317)](_0x5bd6e5(0x1e9));if(_0x35d518+_0xe944a3['clientWidth']<_0xe944a3['scrollWidth']-0x5)_0x247336['classList'][_0x5bd6e5(_0x764f82._0x29fe31)](_0x5bd6e5(0x1e9));else _0x247336[_0x5bd6e5(0x450)]['remove']('show');}function initScrollButtons(_0x2cebf0){const _0x25266f=_0x94aeb3,_0x225234=document[_0x25266f(0x365)](_0x2cebf0);_0x225234[_0x25266f(0x389)]('scroll',()=>updateScrollButtons(_0x2cebf0)),updateScrollButtons(_0x2cebf0);}function initRowFeatures(_0x43d69b){const _0x1243ea={_0x107bf2:0x346},_0x59a710=_0x94aeb3,_0x14d266=document[_0x59a710(0x365)](_0x43d69b);if(!_0x14d266)return;enableDragScroll(_0x14d266),initScrollButtons(_0x43d69b),setTimeout(()=>{const _0x154486=_0x59a710;_0x14d266[_0x154486(_0x1243ea._0x107bf2)]+=0x1,_0x14d266['scrollLeft']-=0x1,updateScrollButtons(_0x43d69b);},0x96);}setTimeout(()=>initRowFeatures(_0x94aeb3(0x2d8)),0x0);function showSkeletons(_0x11e63a,_0x2d7ab1=0x7){const _0x273b67={_0x29ce3f:0x508},_0x4dff65=_0x94aeb3;document[_0x4dff65(0x365)](_0x11e63a)['innerHTML']=Array(_0x2d7ab1)[_0x4dff65(_0x273b67._0x29ce3f)](_0x4dff65(0x381))['join']('');}function setHero(_0x30f71c){const _0x1aeca2={_0x410c20:0x365,_0x162485:0x3c3,_0x6727c3:0x2e8,_0x2c2ad8:0x213,_0x31a99d:0x22c},_0x563f98=_0x94aeb3;heroItems=_0x30f71c[_0x563f98(0x2e6)](_0x4766fd=>_0x4766fd[_0x563f98(0x2f9)]);if(!heroItems['length'])return;heroIndex=0x0,updateHero();const _0x311b30=document[_0x563f98(_0x1aeca2._0x410c20)](_0x563f98(_0x1aeca2._0x162485));_0x311b30[_0x563f98(_0x1aeca2._0x6727c3)]=heroItems['slice'](0x0,0x5)[_0x563f98(_0x1aeca2._0x2c2ad8)]((_0x3a49c9,_0x22829c)=>_0x563f98(0x230)+(_0x22829c===0x0?_0x563f98(0x4f3):'')+_0x563f98(0x490)+_0x22829c+')\x22></div>')[_0x563f98(_0x1aeca2._0x31a99d)](''),clearInterval(heroInterval),heroInterval=setInterval(()=>setHeroIndex((heroIndex+0x1)%Math[_0x563f98(0x414)](heroItems[_0x563f98(0x3dd)],0x5)),0x1b58);}document[_0x94aeb3(0x389)]('visibilitychange',()=>{const _0x36499b={_0x152cff:0x4ab,_0x2c0458:0x3dd},_0x37208b=_0x94aeb3;if(document[_0x37208b(_0x36499b._0x152cff)])clearInterval(heroInterval);else heroItems[_0x37208b(_0x36499b._0x2c0458)]&&(clearInterval(heroInterval),heroInterval=setInterval(()=>setHeroIndex((heroIndex+0x1)%Math[_0x37208b(0x414)](heroItems[_0x37208b(0x3dd)],0x5)),0x1b58));}),(function(){const _0xd0c9b2={_0x5987fd:0x4c9,_0x43f9ca:0x2e3,_0x3b792b:0x389,_0x47cc7e:0x204},_0x14c14a={_0x1b91e1:0x414},_0x3506e2={_0x41c1aa:0x313},_0x3b3ff6={_0x148f19:0x291,_0x2d1579:0x345,_0x5e74f9:0x3dd},_0x441ab8={_0x584bf9:0x3d7,_0x2d9982:0x210,_0x4a25a8:0x25c},_0x1ca7d1=_0x94aeb3;let _0x2de625=0x0,_0x7c192e=![],_0x139e2d=![];const _0x4c5054=document['getElementById'](_0x1ca7d1(0x492));_0x4c5054['addEventListener'](_0x1ca7d1(_0xd0c9b2._0x5987fd),_0x20ccea=>{const _0x1a1785=_0x1ca7d1;if(_0x20ccea[_0x1a1785(_0x441ab8._0x584bf9)]['closest'](_0x1a1785(_0x441ab8._0x2d9982)))return;_0x7c192e=!![],_0x139e2d=![],_0x2de625=_0x20ccea['clientX'],_0x4c5054[_0x1a1785(0x291)][_0x1a1785(0x345)]=_0x1a1785(_0x441ab8._0x4a25a8);}),document[_0x1ca7d1(0x389)]('mousemove',_0x4a5ecf=>{const _0x58f968=_0x1ca7d1;if(!_0x7c192e)return;if(Math['abs'](_0x4a5ecf[_0x58f968(0x444)]-_0x2de625)>0x5)_0x139e2d=!![];}),document['addEventListener'](_0x1ca7d1(_0xd0c9b2._0x43f9ca),_0x47da39=>{const _0x464637=_0x1ca7d1;if(!_0x7c192e)return;_0x7c192e=![],_0x4c5054[_0x464637(_0x3b3ff6._0x148f19)][_0x464637(_0x3b3ff6._0x2d1579)]='';if(!_0x139e2d)return;const _0x53ada0=_0x47da39['clientX']-_0x2de625,_0x49fcee=Math[_0x464637(0x414)](heroItems[_0x464637(_0x3b3ff6._0x5e74f9)],0x5);if(_0x53ada0<-0x32)setHeroIndex((heroIndex+0x1)%_0x49fcee);else{if(_0x53ada0>0x32)setHeroIndex((heroIndex-0x1+_0x49fcee)%_0x49fcee);}}),_0x4c5054[_0x1ca7d1(0x389)](_0x1ca7d1(0x31e),_0x3b3063=>{const _0x2e681c=_0x1ca7d1;_0x2de625=_0x3b3063['touches'][0x0][_0x2e681c(0x444)],_0x139e2d=![];},{'passive':!![]}),_0x4c5054[_0x1ca7d1(_0xd0c9b2._0x3b792b)](_0x1ca7d1(_0xd0c9b2._0x47cc7e),_0x50c3e9=>{const _0x4d2537=_0x1ca7d1;if(Math[_0x4d2537(0x368)](_0x50c3e9[_0x4d2537(_0x3506e2._0x41c1aa)][0x0][_0x4d2537(0x444)]-_0x2de625)>0x5)_0x139e2d=!![];},{'passive':!![]}),_0x4c5054[_0x1ca7d1(_0xd0c9b2._0x3b792b)]('touchend',_0xe43b2e=>{const _0x193c9e=_0x1ca7d1;if(!_0x139e2d)return;const _0x955f98=_0xe43b2e['changedTouches'][0x0]['clientX']-_0x2de625,_0x2a1898=Math[_0x193c9e(_0x14c14a._0x1b91e1)](heroItems[_0x193c9e(0x3dd)],0x5);if(_0x955f98<-0x32)setHeroIndex((heroIndex+0x1)%_0x2a1898);else{if(_0x955f98>0x32)setHeroIndex((heroIndex-0x1+_0x2a1898)%_0x2a1898);}});}());function setHeroIndex(_0x22f898){const _0x1c6e3d={_0x652657:0x31c,_0x33f89a:0x24c},_0x300a81=_0x94aeb3;heroIndex=_0x22f898,updateHero(),document[_0x300a81(_0x1c6e3d._0x652657)](_0x300a81(_0x1c6e3d._0x33f89a))[_0x300a81(0x338)]((_0x2eb4c6,_0x949604)=>_0x2eb4c6[_0x300a81(0x450)][_0x300a81(0x410)]('active',_0x949604===_0x22f898));}function updateHero(){const _0x5ec1ad={_0x9e4fd3:0x265,_0x24228a:0x365,_0xbafeef:0x2dd,_0x129b72:0x3a6,_0x2e44fc:0x228,_0x503c0c:0x3c9,_0x15fac0:0x3c9,_0x51b838:0x291,_0x3bccd1:0x273,_0xbdcbbd:0x291,_0x473460:0x273,_0x3104e8:0x45f,_0x499615:0x473,_0x21eee7:0x365,_0x5952bd:0x365,_0x2f9d7d:0x2d9,_0x1162f7:0x4a4,_0x4bda06:0x2d9},_0x36556a={_0x259206:0x291},_0x1c7ebb=_0x94aeb3,_0x398c34=document['getElementById'](_0x1c7ebb(_0x5ec1ad._0x9e4fd3)),_0x23c4f6=document[_0x1c7ebb(_0x5ec1ad._0x24228a)](_0x1c7ebb(_0x5ec1ad._0xbafeef));if(!_0x398c34)return;const _0x46dec2=heroItems[heroIndex];if(!_0x46dec2)return;heroItem=_0x46dec2;const _0x3ba5e1=_0x46dec2[_0x1c7ebb(_0x5ec1ad._0x129b72)]||(_0x46dec2[_0x1c7ebb(_0x5ec1ad._0x2e44fc)]?_0x1c7ebb(0x419):'tv'),_0x53c55e=_0x46dec2['title']||_0x46dec2['name'],_0x2ca811=(_0x46dec2[_0x1c7ebb(0x1fc)]||_0x46dec2[_0x1c7ebb(0x47a)]||'')[_0x1c7ebb(0x276)](0x0,0x4),_0x13a161=_0x46dec2[_0x1c7ebb(_0x5ec1ad._0x503c0c)]?starIcon()+'\x20'+_0x46dec2[_0x1c7ebb(_0x5ec1ad._0x15fac0)][_0x1c7ebb(0x341)](0x1):'';_0x23c4f6&&_0x398c34['style']['backgroundImage']&&(_0x23c4f6[_0x1c7ebb(_0x5ec1ad._0x51b838)][_0x1c7ebb(_0x5ec1ad._0x3bccd1)]=_0x398c34[_0x1c7ebb(_0x5ec1ad._0xbdcbbd)][_0x1c7ebb(_0x5ec1ad._0x473460)],_0x23c4f6['style'][_0x1c7ebb(_0x5ec1ad._0x3104e8)]='1');_0x398c34[_0x1c7ebb(0x291)][_0x1c7ebb(0x45f)]='0',_0x398c34[_0x1c7ebb(_0x5ec1ad._0x51b838)][_0x1c7ebb(0x273)]=_0x1c7ebb(_0x5ec1ad._0x499615)+backdropUrl(_0x46dec2[_0x1c7ebb(0x2f9)])+')',requestAnimationFrame(()=>requestAnimationFrame(()=>{const _0x41e1c2=_0x1c7ebb;_0x398c34[_0x41e1c2(0x291)][_0x41e1c2(0x45f)]='1';if(_0x23c4f6)_0x23c4f6[_0x41e1c2(_0x36556a._0x259206)][_0x41e1c2(0x45f)]='0';}));const _0x3eabe6=document[_0x1c7ebb(_0x5ec1ad._0x21eee7)](_0x1c7ebb(0x1d9)),_0x22e6f0=document[_0x1c7ebb(0x365)]('hero-year'),_0x5c0023=document[_0x1c7ebb(0x365)](_0x1c7ebb(0x34c)),_0x23ca62=document[_0x1c7ebb(_0x5ec1ad._0x5952bd)]('hero-rating'),_0x4b18e9=document[_0x1c7ebb(_0x5ec1ad._0x24228a)]('hero-overview');if(_0x3eabe6)_0x3eabe6[_0x1c7ebb(_0x5ec1ad._0x2f9d7d)]=_0x53c55e;if(_0x22e6f0)_0x22e6f0['textContent']=_0x2ca811;if(_0x5c0023)_0x5c0023[_0x1c7ebb(0x2d9)]=_0x3ba5e1==='movie'?_0x1c7ebb(_0x5ec1ad._0x1162f7):_0x1c7ebb(0x221);if(_0x23ca62)_0x23ca62['innerHTML']=_0x13a161;if(_0x4b18e9)_0x4b18e9[_0x1c7ebb(_0x5ec1ad._0x4bda06)]=_0x46dec2['overview']||'';}function watchHero(){const _0x5ef82f={_0x4accc4:0x3a6,_0x19daef:0x419},_0x387694=_0x94aeb3;if(!heroItem)return;openDetail(heroItem['id'],heroItem[_0x387694(_0x5ef82f._0x4accc4)]||(heroItem[_0x387694(0x228)]?_0x387694(_0x5ef82f._0x19daef):'tv'),!![]);}function detailHero(){const _0x302a4f={_0x4acf00:0x3a6,_0x274f17:0x419},_0x58de49=_0x94aeb3;if(!heroItem)return;openDetail(heroItem['id'],heroItem[_0x58de49(_0x302a4f._0x4acf00)]||(heroItem['title']?_0x58de49(_0x302a4f._0x274f17):'tv'),![]);}async function loadTrending(){const _0x1e191c={_0x209ec2:0x423,_0x317a90:0x365,_0x4055d0:0x2e8,_0x3c6831:0x2b4},_0x5552f8=_0x94aeb3;showSkeletons(_0x5552f8(0x2af),0x7);try{const _0x227159=await tmdb(_0x5552f8(0x466));setHero(_0x227159['results']),renderCards(_0x5552f8(0x2af),_0x227159[_0x5552f8(_0x1e191c._0x209ec2)][_0x5552f8(0x276)](0x0,0xe));}catch(_0x21a69f){document[_0x5552f8(_0x1e191c._0x317a90)]('trending-row')[_0x5552f8(_0x1e191c._0x4055d0)]=_0x5552f8(_0x1e191c._0x3c6831);}}async function loadPopularMovies(){const _0x562914={_0x25ad15:0x423},_0x39c9e3=_0x94aeb3;showSkeletons('movies-row',0x7);try{renderCards('movies-row',(await tmdb('/movie/popular'))[_0x39c9e3(_0x562914._0x25ad15)]['slice'](0x0,0xe));}catch(_0x5f3ab4){}}async function loadPopularTV(){const _0x591f50={_0x4073b2:0x2ec,_0x365cf9:0x276},_0x6e7194=_0x94aeb3;showSkeletons(_0x6e7194(0x326),0x7);try{renderCards(_0x6e7194(0x326),(await tmdb(_0x6e7194(_0x591f50._0x4073b2)))['results'][_0x6e7194(_0x591f50._0x365cf9)](0x0,0xe));}catch(_0x2a1ad4){}}async function loadTurkishSeries(){const _0x508959={_0xea7c58:0x203,_0x5eb7a8:0x4b5,_0x293489:0x203,_0x4db046:0x423,_0x4b056e:0x276,_0x4b75f4:0x213},_0x5c85c1=_0x94aeb3;showSkeletons(_0x5c85c1(_0x508959._0xea7c58),0x7);try{const _0x3b476a=await tmdb(_0x5c85c1(0x501),{'with_original_language':'tr','sort_by':_0x5c85c1(_0x508959._0x5eb7a8),'first_air_date.gte':'2022-01-01','vote_count.gte':0xa});renderCards(_0x5c85c1(_0x508959._0x293489),_0x3b476a[_0x5c85c1(_0x508959._0x4db046)][_0x5c85c1(_0x508959._0x4b056e)](0x0,0xe)[_0x5c85c1(_0x508959._0x4b75f4)](_0x55bd81=>({..._0x55bd81,'media_type':'tv'})));}catch(_0x2fb12d){}}function showPage(_0x40f575){const _0x4dab88={_0x42d299:0x365,_0x3e145e:0x47b,_0x2a7f5f:0x34a,_0x2f7594:0x291,_0x20d1b0:0x437,_0x3df992:0x365,_0x4233a3:0x348,_0x476958:0x317,_0x16c877:0x21f},_0x1dba58={_0x41a89e:0x3e8,_0x1282ae:0x4e5,_0x5e21b7:0x410,_0x4a5a5c:0x21f,_0x24dd3b:0x291,_0xefc110:0x437,_0x1d0af1:0x291,_0x1e926f:0x34a},_0x430991=_0x94aeb3;document[_0x430991(_0x4dab88._0x42d299)](_0x430991(_0x4dab88._0x3e145e))[_0x430991(0x291)][_0x430991(0x437)]=_0x430991(0x34a),document['getElementById'](_0x430991(0x3f6))['style'][_0x430991(0x437)]=_0x430991(_0x4dab88._0x2a7f5f),document[_0x430991(0x365)](_0x430991(0x402))[_0x430991(_0x4dab88._0x2f7594)][_0x430991(_0x4dab88._0x20d1b0)]=_0x430991(_0x4dab88._0x2a7f5f),document[_0x430991(_0x4dab88._0x3df992)](_0x430991(_0x4dab88._0x4233a3))?.[_0x430991(_0x4dab88._0x476958)](),window[_0x430991(0x51e)](0x0,0x0),['home-page',_0x430991(_0x4dab88._0x16c877),_0x430991(0x4da),_0x430991(0x208),_0x430991(0x3e8),_0x430991(0x2f7)][_0x430991(0x338)](_0x430fa2=>{const _0x4f4389=_0x430991,_0x5ee192=document['getElementById'](_0x430fa2);if(_0x430fa2===_0x4f4389(_0x1dba58._0x41a89e)||_0x430fa2==='collections-page'){const _0x140c0a=_0x430fa2===_0x40f575;_0x5ee192[_0x4f4389(0x291)]['display']=_0x140c0a?_0x4f4389(_0x1dba58._0x1282ae):_0x4f4389(0x34a);if(_0x140c0a)triggerPageEnter(_0x5ee192);return;}if(_0x430fa2==='home-page'){const _0x3e99ed=_0x430fa2===_0x40f575;_0x5ee192[_0x4f4389(0x450)][_0x4f4389(_0x1dba58._0x5e21b7)]('hidden',!_0x3e99ed);if(_0x3e99ed)triggerPageEnter(_0x5ee192);}else{if(_0x430fa2==='player-page'||_0x430fa2===_0x4f4389(_0x1dba58._0x4a5a5c)){const _0x2a7d6c=_0x430fa2===_0x40f575;_0x5ee192['classList'][_0x4f4389(0x410)](_0x4f4389(0x4f3),_0x2a7d6c),_0x5ee192[_0x4f4389(_0x1dba58._0x24dd3b)][_0x4f4389(_0x1dba58._0xefc110)]='';if(_0x2a7d6c)triggerPageEnter(_0x5ee192);}else{const _0x4c99e6=_0x430fa2===_0x40f575;_0x5ee192[_0x4f4389(_0x1dba58._0x1d0af1)][_0x4f4389(_0x1dba58._0xefc110)]=_0x4c99e6?'block':_0x4f4389(_0x1dba58._0x1e926f);if(_0x4c99e6)triggerPageEnter(_0x5ee192);}}});}function triggerPageEnter(_0x1f8a85){const _0x528108={_0x56c855:0x450,_0x2a6915:0x291,_0x5ba79e:0x34a},_0x5c9a49={_0x448990:0x1f2},_0x5a6b40=_0x94aeb3;_0x1f8a85[_0x5a6b40(_0x528108._0x56c855)][_0x5a6b40(0x317)](_0x5a6b40(0x1e0)),_0x1f8a85[_0x5a6b40(_0x528108._0x2a6915)][_0x5a6b40(0x1f2)]=_0x5a6b40(_0x528108._0x5ba79e),requestAnimationFrame(()=>{const _0x3163f8=_0x5a6b40;_0x1f8a85['style'][_0x3163f8(_0x5c9a49._0x448990)]='',_0x1f8a85['classList']['add'](_0x3163f8(0x1e0));});}function showHome(){const _0x1a91a0={_0x2342cb:0x365,_0x1360c0:0x43f,_0x2670cf:0x4ab,_0x31c19a:0x229,_0x83bafb:0x4d4,_0x2b3596:0x291,_0x517636:0x4d6,_0x17a334:0x384,_0x5b2846:0x4f8,_0x5ed1a8:0x43e,_0x5b9795:0x1cc,_0x151b40:0x2cf},_0x53ce55=_0x94aeb3,_0x3583c8=document[_0x53ce55(_0x1a91a0._0x2342cb)](_0x53ce55(0x31d)),_0x41c11d=document[_0x53ce55(0x365)](_0x53ce55(_0x1a91a0._0x1360c0));if(_0x3583c8&&!_0x3583c8[_0x53ce55(0x450)][_0x53ce55(0x385)](_0x53ce55(_0x1a91a0._0x2670cf))){window[_0x53ce55(0x51e)]({'top':0x0,'behavior':_0x53ce55(0x49a)});return;}_0x41c11d&&(_0x41c11d[_0x53ce55(_0x1a91a0._0x31c19a)]=_0x53ce55(0x1fd));stopWatchTimer();const _0x26c69d=document[_0x53ce55(_0x1a91a0._0x2342cb)](_0x53ce55(_0x1a91a0._0x83bafb));if(_0x26c69d)_0x26c69d[_0x53ce55(_0x1a91a0._0x2b3596)][_0x53ce55(0x437)]='none';showPage('home-page'),loadHomeContent();const _0x166368=document[_0x53ce55(_0x1a91a0._0x2342cb)](_0x53ce55(_0x1a91a0._0x517636));_0x166368&&(_0x166368['value']='',_0x166368[_0x53ce55(_0x1a91a0._0x17a334)]=_0x53ce55(0x3b6)),setActiveTab(_0x53ce55(_0x1a91a0._0x5b2846)),setMobileTab('mtab-home'),history[_0x53ce55(0x35f)]({'page':_0x53ce55(0x43e),'browse':_0x53ce55(_0x1a91a0._0x5ed1a8)},'',location[_0x53ce55(_0x1a91a0._0x5b9795)]),document[_0x53ce55(0x228)]=_0x53ce55(_0x1a91a0._0x151b40),window['scrollTo'](0x0,0x0);}function setActiveTab(_0xe28811){const _0x172eea={_0xe7e537:0x31c,_0x53a7ef:0x338,_0x25f05a:0x450,_0x5ef013:0x4f3,_0x210050:0x27c,_0x3945ff:0x291,_0x3f3b06:0x34a},_0x37dd7c={_0x1931fa:0x1f2},_0x4c17db={_0x46cbcb:0x385,_0x52b67a:0x3be,_0x21ca5c:0x450,_0x5e74f8:0x4f3},_0x1a8f92=_0x94aeb3;document[_0x1a8f92(_0x172eea._0xe7e537)](_0x1a8f92(0x2f1))[_0x1a8f92(_0x172eea._0x53a7ef)](_0x5f31c2=>{const _0xb0a00f=_0x1a8f92;_0x5f31c2['classList'][_0xb0a00f(_0x4c17db._0x46cbcb)](_0xb0a00f(0x4f3))&&(_0x5f31c2[_0xb0a00f(0x450)][_0xb0a00f(0x4ae)](_0xb0a00f(_0x4c17db._0x52b67a)),setTimeout(()=>_0x5f31c2[_0xb0a00f(0x450)][_0xb0a00f(0x317)](_0xb0a00f(0x3be)),0xfa)),_0x5f31c2[_0xb0a00f(_0x4c17db._0x21ca5c)][_0xb0a00f(0x317)](_0xb0a00f(_0x4c17db._0x5e74f8));});const _0x3fa85f=document['getElementById'](_0xe28811);if(!_0x3fa85f)return;_0x3fa85f[_0x1a8f92(_0x172eea._0x25f05a)]['add'](_0x1a8f92(_0x172eea._0x5ef013)),_0x3fa85f[_0x1a8f92(0x450)][_0x1a8f92(0x317)](_0x1a8f92(_0x172eea._0x210050)),_0x3fa85f[_0x1a8f92(_0x172eea._0x3945ff)][_0x1a8f92(0x1f2)]=_0x1a8f92(_0x172eea._0x3f3b06),requestAnimationFrame(()=>{const _0x56a601=_0x1a8f92;_0x3fa85f['style'][_0x56a601(_0x37dd7c._0x1931fa)]='',_0x3fa85f[_0x56a601(0x450)][_0x56a601(0x4ae)]('nav-entering');}),setTimeout(()=>_0x3fa85f['classList']['remove'](_0x1a8f92(0x27c)),0x15e);}function goBack(){const _0x52372a={_0x166952:0x365,_0x22559f:0x43f,_0x325a92:0x229,_0x594a47:0x291,_0x4eab25:0x43e,_0x1dd3af:0x445,_0x52dd81:0x3dd},_0x312de3={_0x113e70:0x4e3},_0xc50fdc=_0x94aeb3;stopWatchTimer(),document[_0xc50fdc(_0x52372a._0x166952)](_0xc50fdc(_0x52372a._0x22559f))[_0xc50fdc(_0x52372a._0x325a92)]='',document[_0xc50fdc(_0x52372a._0x166952)]('source-bar')[_0xc50fdc(_0x52372a._0x594a47)][_0xc50fdc(0x437)]='none';const _0xc4f11=history[_0xc50fdc(0x32e)],_0x1058f8=_0xc4f11&&(_0xc4f11['page']===_0xc50fdc(_0x52372a._0x4eab25)||_0xc4f11['type']||_0xc4f11[_0xc50fdc(_0x52372a._0x1dd3af)]||_0xc4f11[_0xc50fdc(0x239)]);_0x1058f8&&history[_0xc50fdc(_0x52372a._0x52dd81)]>0x1?(history[_0xc50fdc(0x2f5)](),setTimeout(()=>{const _0x301358=_0xc50fdc;try{window[_0x301358(0x51e)]({'top':savedScrollY,'behavior':_0x301358(_0x312de3._0x113e70)});}catch{window['scrollTo'](0x0,savedScrollY);}},0x96)):showHome();}function onSearchInput(_0x57062b){const _0x415b23={_0x2fee50:0x291,_0x494559:0x3e2},_0x2fec75=_0x94aeb3;clearTimeout(searchDebounce);const _0x13ea72=document['getElementById']('search-clear-btn');if(_0x13ea72)_0x13ea72[_0x2fec75(_0x415b23._0x2fee50)]['display']=_0x57062b['length']?_0x2fec75(_0x415b23._0x494559):'none';if(!_0x57062b['trim']()){showRecentSearches();return;}showSearchSuggestions(_0x57062b),_0x57062b[_0x2fec75(0x1f3)]()[_0x2fec75(0x3dd)]>=0x2&&(searchDebounce=setTimeout(()=>fetchSearchSuggestions(_0x57062b),0x118));}function scoreResult(_0x55b62e,_0x4024bc){const _0x35a745={_0x3da51f:0x228,_0x2c2598:0x451,_0x4e0a2a:0x2aa,_0x1db37c:0x20d,_0x38d0e3:0x3dd,_0x4db646:0x3c9,_0x160e5b:0x1fc},_0xc6b91d=_0x94aeb3,_0x636df3=_0x4024bc['toLowerCase'](),_0x5b3e64=(_0x55b62e[_0xc6b91d(_0x35a745._0x3da51f)]||_0x55b62e[_0xc6b91d(_0x35a745._0x2c2598)]||'')[_0xc6b91d(0x1d2)]();let _0x2df8ff=_0x55b62e[_0xc6b91d(0x1e3)]||0x0;if(_0x5b3e64===_0x636df3)_0x2df8ff+=0x1388;else{if(_0x5b3e64[_0xc6b91d(_0x35a745._0x4e0a2a)](_0x636df3))_0x2df8ff+=0x7d0;else{if(_0x5b3e64[_0xc6b91d(0x271)](_0x636df3))_0x2df8ff+=0x320;}}const _0x487a8a=_0x636df3[_0xc6b91d(_0x35a745._0x1db37c)](/\s+/),_0x395107=_0x487a8a[_0xc6b91d(0x2e6)](_0x377008=>_0x5b3e64[_0xc6b91d(0x271)](_0x377008))[_0xc6b91d(_0x35a745._0x38d0e3)];_0x2df8ff+=_0x395107/_0x487a8a[_0xc6b91d(0x3dd)]*0x190;if(_0x55b62e[_0xc6b91d(0x252)]>0x3e8)_0x2df8ff+=0xc8;if(_0x55b62e[_0xc6b91d(_0x35a745._0x4db646)]>0x7)_0x2df8ff+=0x64;const _0x276195=parseInt((_0x55b62e[_0xc6b91d(_0x35a745._0x160e5b)]||_0x55b62e[_0xc6b91d(0x47a)]||'')[_0xc6b91d(0x276)](0x0,0x4));if(_0x276195>=0x7df)_0x2df8ff+=0x32;return _0x2df8ff;}function _renderHiddenCount(){const _0xa64299={_0x293a83:0x317,_0xa5cf71:0x1e2,_0x3e5138:0x291,_0x2782f1:0x4c4,_0x5eb4c3:0x3ec,_0x1c861f:0x4cf,_0x269a1d:0x3fe},_0x1d0d99=_0x94aeb3,_0x43848c=SV[_0x1d0d99(0x4ab)][_0x1d0d99(0x4c5)]()[_0x1d0d99(0x38d)];if(!_0x43848c)return;const _0x401839=document[_0x1d0d99(0x365)]('hidden-count-note');if(_0x401839)_0x401839[_0x1d0d99(_0xa64299._0x293a83)]();const _0x418735=document[_0x1d0d99(_0xa64299._0xa5cf71)]('p');_0x418735['id']='hidden-count-note',_0x418735[_0x1d0d99(_0xa64299._0x3e5138)][_0x1d0d99(_0xa64299._0x2782f1)]=_0x1d0d99(0x279),_0x418735['innerHTML']=_0x43848c+_0x1d0d99(_0xa64299._0x5eb4c3)+(_0x43848c!==0x1?'s':'')+_0x1d0d99(0x2f6);const _0x1c7896=document['getElementById']('scroll-sentinel');if(_0x1c7896)_0x1c7896[_0x1d0d99(_0xa64299._0x1c861f)](_0x418735);else document[_0x1d0d99(0x365)](_0x1d0d99(_0xa64299._0x269a1d))?.['after'](_0x418735);}function _resetSectionState(){loadedIds=new Set(),currentPage=0x1,hasMorePages=![],isLoadingMore=![],currentSection=null,allResults=[];}async function doSearch(_0x458ddd,_0x4f4e72=![]){const _0x29c65b={_0x2d1fdf:0x336,_0x17232c:0x4ae,_0x38d27f:0x365,_0x4916aa:0x3f6,_0xd69c94:0x4c4,_0x38a610:0x32c,_0x3c312d:0x3bf,_0x381888:0x45b,_0x2c0190:0x423,_0x33c0b4:0x423,_0x10a863:0x365,_0x374af7:0x3bf,_0x4b29f4:0x338,_0x3c68ac:0x365,_0x368415:0x3e2,_0x2f65a6:0x3fe,_0x17089b:0x3fe,_0x34af79:0x469,_0x5a93e7:0x417,_0x398de8:0x40a},_0x3ebee7={_0x2125f8:0x3a6,_0x48bb1b:0x2da},_0x59b453=_0x94aeb3;if(!_0x458ddd[_0x59b453(0x1f3)]())return;SV[_0x59b453(_0x29c65b._0x2d1fdf)][_0x59b453(_0x29c65b._0x17232c)](_0x458ddd),showPage('search-page'),renderSkeletons('search-results',0xc),_resetSectionState(),document[_0x59b453(_0x29c65b._0x38d27f)](_0x59b453(_0x29c65b._0x4916aa))['style'][_0x59b453(_0x29c65b._0xd69c94)]='display:flex;margin-bottom:16px;';if(!_0x4f4e72)pushState({'search':_0x458ddd});document[_0x59b453(_0x29c65b._0x38d27f)]('search-query-display')['textContent']='\x22'+_0x458ddd+'\x22',document['getElementById'](_0x59b453(0x27d))[_0x59b453(0x2d9)]=_0x59b453(_0x29c65b._0x38a610);try{const [_0x22ceae,_0x17ffff,_0x2c3183,_0x4e5103]=await Promise[_0x59b453(_0x29c65b._0x3c312d)]([tmdb('/search/movie',{'query':_0x458ddd,'page':0x1}),tmdb(_0x59b453(0x29b),{'query':_0x458ddd,'page':0x1}),tmdb(_0x59b453(0x376),{'query':_0x458ddd,'page':0x2})[_0x59b453(0x45b)](()=>({'results':[]})),tmdb(_0x59b453(0x29b),{'query':_0x458ddd,'page':0x2})[_0x59b453(_0x29c65b._0x381888)](()=>({'results':[]}))]),_0x34acc2=[..._0x22ceae[_0x59b453(_0x29c65b._0x2c0190)],..._0x2c3183[_0x59b453(0x423)]]['map'](_0x195426=>({..._0x195426,'media_type':_0x59b453(0x419)})),_0x51beed=[..._0x17ffff[_0x59b453(_0x29c65b._0x33c0b4)],..._0x4e5103['results']][_0x59b453(0x213)](_0x33b63a=>({..._0x33b63a,'media_type':'tv'})),_0x329b5c=new Set(),_0x27e3cc=[..._0x34acc2,..._0x51beed][_0x59b453(0x2e6)](_0x4e14a9=>{const _0x7ed90e=_0x59b453,_0x7d9ba1=_0x4e14a9[_0x7ed90e(_0x3ebee7._0x2125f8)]+'-'+_0x4e14a9['id'];if(_0x329b5c[_0x7ed90e(_0x3ebee7._0x48bb1b)](_0x7d9ba1))return![];return _0x329b5c[_0x7ed90e(0x4ae)](_0x7d9ba1),!![];})[_0x59b453(0x2e6)](_0x279ab5=>_0x279ab5[_0x59b453(0x1dd)]||_0x279ab5['vote_count']>0x0)[_0x59b453(0x459)]((_0x7f2600,_0x155c37)=>scoreResult(_0x155c37,_0x458ddd)-scoreResult(_0x7f2600,_0x458ddd));document[_0x59b453(_0x29c65b._0x10a863)]('search-count')['textContent']=_0x27e3cc[_0x59b453(0x3dd)]+'\x20results';if(!_0x27e3cc[_0x59b453(0x3dd)])showDidYouMean(_0x458ddd);else{allResults=_0x27e3cc,activeGenre=_0x59b453(_0x29c65b._0x374af7),document['querySelectorAll'](_0x59b453(0x45a))[_0x59b453(_0x29c65b._0x4b29f4)](_0x105ebd=>_0x105ebd[_0x59b453(0x450)][_0x59b453(0x410)](_0x59b453(0x4f3),_0x105ebd[_0x59b453(0x427)][_0x59b453(0x2d3)]===_0x59b453(0x3bf))),document[_0x59b453(_0x29c65b._0x3c68ac)]('genre-bar')[_0x59b453(0x291)][_0x59b453(0x437)]=_0x59b453(_0x29c65b._0x368415),_0x27e3cc[_0x59b453(0x338)](_0x2e1e68=>loadedIds['add'](_0x2e1e68['media_type']+'-'+_0x2e1e68['id'])),renderCards(_0x59b453(_0x29c65b._0x2f65a6),_0x27e3cc);const _0x44767e=document[_0x59b453(_0x29c65b._0x10a863)](_0x59b453(_0x29c65b._0x17089b));_0x44767e['insertAdjacentHTML'](_0x59b453(_0x29c65b._0x34af79),_0x59b453(_0x29c65b._0x5a93e7)),attachScrollObserver();}}catch(_0x5c6f57){document[_0x59b453(0x365)]('search-results')['innerHTML']=_0x59b453(_0x29c65b._0x398de8);}}async function showDidYouMean(_0x2a24e3){const _0x1ffe08={_0x2b32f4:0x365,_0x34b85f:0x3fe,_0x40a3ba:0x285,_0x2e5960:0x2e8,_0x36d2d2:0x41a,_0x5f158f:0x276},_0x4398be={_0x4a7268:0x2e5},_0x420cf2={_0x157eea:0x3dd,_0x56f756:0x3bf,_0x15c251:0x45b},_0xf93164=_0x94aeb3;document[_0xf93164(_0x1ffe08._0x2b32f4)](_0xf93164(_0x1ffe08._0x34b85f))['innerHTML']=_0xf93164(0x40c);try{const _0xd27064=_0x2a24e3[_0xf93164(0x1f3)]()[_0xf93164(0x20d)](/\s+/),_0x4cb42a=new Map();await Promise[_0xf93164(0x3bf)](_0xd27064['map'](async _0x3b743f=>{const _0x21837d={_0x95d2cf:0x2da,_0xade361:0x2de},_0x5a1563=_0xf93164;if(_0x3b743f[_0x5a1563(_0x420cf2._0x157eea)]<0x3)return;const [_0x4f8e53,_0x5bdf8f]=await Promise[_0x5a1563(_0x420cf2._0x56f756)]([tmdb(_0x5a1563(0x376),{'query':_0x3b743f,'page':0x1})[_0x5a1563(_0x420cf2._0x15c251)](()=>({'results':[]})),tmdb(_0x5a1563(0x29b),{'query':_0x3b743f,'page':0x1})['catch'](()=>({'results':[]}))]);[..._0x4f8e53[_0x5a1563(0x423)],..._0x5bdf8f['results']][_0x5a1563(0x276)](0x0,0x3)['forEach'](_0x1c603f=>{const _0x5068b7=_0x5a1563,_0x2ac63e=_0x1c603f['title']||_0x1c603f['name']||'';if(_0x2ac63e&&!_0x4cb42a[_0x5068b7(_0x21837d._0x95d2cf)](_0x1c603f['id']))_0x4cb42a[_0x5068b7(_0x21837d._0xade361)](_0x1c603f['id'],_0x2ac63e);});}));const _0x113438=document[_0xf93164(0x365)](_0xf93164(_0x1ffe08._0x40a3ba));if(!_0x113438||!_0x4cb42a['size'])return;_0x113438[_0xf93164(_0x1ffe08._0x2e5960)]=_0xf93164(0x29d),[..._0x4cb42a[_0xf93164(_0x1ffe08._0x36d2d2)]()][_0xf93164(_0x1ffe08._0x5f158f)](0x0,0x5)[_0xf93164(0x338)](_0x3402d5=>{const _0x47018e=_0xf93164,_0x904afe=document['createElement'](_0x47018e(0x210));_0x904afe[_0x47018e(0x308)]=_0x47018e(0x363),_0x904afe[_0x47018e(0x2d9)]=_0x3402d5,_0x904afe[_0x47018e(0x389)]('click',()=>{const _0xce9093=_0x47018e;document['getElementById']('search-input')[_0xce9093(_0x4398be._0x4a7268)]=_0x3402d5,doSearch(_0x3402d5);}),_0x113438[_0x47018e(0x26e)](_0x904afe);});}catch(_0x1a1a1c){}}async function fetchSearchSuggestions(_0x4bd545){const _0x3ab535={_0x368992:0x2e6,_0xa99c69:0x310},_0x576faa=_0x94aeb3;if(!_0x4bd545[_0x576faa(0x1f3)]())return;try{if(!suggestionCache[_0x4bd545]){const _0x28baf9=await tmdb('/search/multi',{'query':_0x4bd545,'page':0x1}),_0x1396db=_0x28baf9[_0x576faa(0x423)][_0x576faa(_0x3ab535._0x368992)](_0x1a6cf4=>_0x1a6cf4[_0x576faa(0x3a6)]===_0x576faa(0x419)||_0x1a6cf4[_0x576faa(0x3a6)]==='tv')[_0x576faa(0x459)]((_0x5f2bfb,_0x2c95b7)=>scoreResult(_0x2c95b7,_0x4bd545)-scoreResult(_0x5f2bfb,_0x4bd545))[_0x576faa(0x276)](0x0,0x7);suggestionCache[_0x4bd545]=_0x1396db;const _0x58de31=Object[_0x576faa(_0x3ab535._0xa99c69)](suggestionCache);if(_0x58de31[_0x576faa(0x3dd)]>0x1e)delete suggestionCache[_0x58de31[0x0]];}const _0x2caadb=document['getElementById'](_0x576faa(0x4d6))[_0x576faa(0x2e5)]['trim']();if(_0x2caadb===_0x4bd545)showSearchSuggestions(_0x4bd545);}catch(_0x448bf1){}}function showSearchSuggestions(_0x4646e4){const _0x31afa2={_0x43e6f5:0x367,_0x42868e:0x389,_0x41347e:0x516,_0x3bc779:0x213,_0x1a60e9:0x493,_0x217869:0x32f,_0x29c4b6:0x291},_0x2b4574={_0x46e224:0x3a6,_0x296ca7:0x1dd,_0x219cd0:0x3c9,_0x7074a0:0x341,_0x17c3b4:0x211,_0x16a109:0x23d,_0x4bc410:0x22e,_0x101e76:0x36b},_0x4264ca={_0xbda1dc:0x210,_0x3672b7:0x263},_0xd45715=_0x94aeb3,_0x159610=document[_0xd45715(0x365)](_0xd45715(_0x31afa2._0x43e6f5)),_0x446373=suggestionCache[_0x4646e4],_0x1589f3=getRecentSearches();_0x159610[_0xd45715(_0x31afa2._0x42868e)]('mousedown',_0x3f7303=>_0x3f7303[_0xd45715(0x263)]()),_0x159610[_0xd45715(0x389)](_0xd45715(0x31e),_0x5da642=>{const _0x8404f3=_0xd45715;if(!_0x5da642[_0x8404f3(0x3d7)][_0x8404f3(0x36f)](_0x8404f3(_0x4264ca._0xbda1dc)))_0x5da642[_0x8404f3(_0x4264ca._0x3672b7)]();},{'passive':![]});const _0x1aa2a2=_0x1589f3['filter'](_0x2e05c7=>_0x2e05c7[_0xd45715(0x1d2)]()[_0xd45715(0x271)](_0x4646e4['toLowerCase']()))[_0xd45715(0x276)](0x0,0x2),_0x103d8d=_0x1aa2a2[_0xd45715(0x3dd)]?_0xd45715(_0x31afa2._0x41347e)+_0x1aa2a2[_0xd45715(_0x31afa2._0x3bc779)](_0x4eb3d9=>_0xd45715(0x4b9)+_0x4eb3d9[_0xd45715(0x211)](/'/g,'\x5c\x27')+_0xd45715(0x46c)+esc(_0x4eb3d9)+_0xd45715(0x31a))[_0xd45715(0x22c)](''):'',_0xd08b04=_0x446373?.[_0xd45715(0x3dd)]?'<div\x20class=\x22recent-header\x22\x20style=\x22margin-top:'+(_0x1aa2a2[_0xd45715(0x3dd)]?_0xd45715(_0x31afa2._0x1a60e9):'0')+_0xd45715(_0x31afa2._0x217869)+_0x446373[_0xd45715(_0x31afa2._0x3bc779)](_0x5542b1=>{const _0x23d07b=_0xd45715,_0x2dead3=_0x5542b1[_0x23d07b(0x228)]||_0x5542b1[_0x23d07b(0x451)]||'',_0x56f8b5=(_0x5542b1[_0x23d07b(0x1fc)]||_0x5542b1[_0x23d07b(0x47a)]||'')['slice'](0x0,0x4),_0x20bc9c=_0x5542b1[_0x23d07b(_0x2b4574._0x46e224)]===_0x23d07b(0x419)?_0x23d07b(0x4a4):'TV',_0x535594=_0x5542b1[_0x23d07b(0x1dd)]?TMDB_IMG+'w92'+_0x5542b1[_0x23d07b(_0x2b4574._0x296ca7)]:null,_0x1ad4fa=_0x5542b1[_0x23d07b(0x3c9)]?_0x5542b1[_0x23d07b(_0x2b4574._0x219cd0)][_0x23d07b(_0x2b4574._0x7074a0)](0x1):null;return _0x23d07b(0x340)+_0x5542b1['id']+',\x27'+_0x5542b1[_0x23d07b(0x3a6)]+_0x23d07b(0x496)+_0x2dead3[_0x23d07b(_0x2b4574._0x17c3b4)](/'/g,'\x5c\x27')+_0x23d07b(0x393)+(_0x535594?_0x23d07b(_0x2b4574._0x16a109)+_0x535594+'\x22\x20alt=\x22'+esc(_0x2dead3)+_0x23d07b(0x238):_0x23d07b(_0x2b4574._0x4bc410))+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22suggestion-info\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22suggestion-title\x22>'+esc(_0x2dead3)+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22suggestion-meta\x22>'+esc(_0x56f8b5)+(_0x56f8b5?_0x23d07b(0x3f3):'')+_0x20bc9c+(_0x1ad4fa?_0x23d07b(_0x2b4574._0x101e76)+_0x1ad4fa:'')+_0x23d07b(0x4e8);})[_0xd45715(0x22c)](''):_0x446373?'<div\x20class=\x22recent-empty\x22>No\x20results\x20found</div>':_0xd45715(0x405);_0x159610[_0xd45715(0x2e8)]=_0x103d8d+_0xd08b04,_0x159610[_0xd45715(_0x31afa2._0x29c4b6)]['display']=_0xd45715(0x4e5);}function pickSuggestion(_0xd67c62,_0x2b8d69,_0x2b38da){const _0xd03f8c={_0x395cfa:0x4d6,_0x23a886:0x365,_0x90bdfd:0x437},_0xa61d00=_0x94aeb3;document[_0xa61d00(0x365)](_0xa61d00(_0xd03f8c._0x395cfa))[_0xa61d00(0x2e5)]=_0x2b38da,document[_0xa61d00(_0xd03f8c._0x23a886)](_0xa61d00(0x367))['style'][_0xa61d00(_0xd03f8c._0x90bdfd)]=_0xa61d00(0x34a),saveRecentSearch(_0x2b38da),openDetail(_0xd67c62,_0x2b8d69);}function setSearchTitle(_0x27875d){const _0x873b83={_0x20ff23:0x2d9,_0x5d9c7e:0x450,_0x3b67fc:0x317,_0x2ac963:0x34b},_0x28d61a=_0x94aeb3,_0x41d62d=document['getElementById'](_0x28d61a(0x3a2));if(!_0x41d62d)return;_0x41d62d[_0x28d61a(0x450)]['add'](_0x28d61a(0x34b)),setTimeout(()=>{const _0x3bb753=_0x28d61a;_0x41d62d[_0x3bb753(_0x873b83._0x20ff23)]=_0x27875d,_0x41d62d[_0x3bb753(_0x873b83._0x5d9c7e)][_0x3bb753(_0x873b83._0x3b67fc)](_0x3bb753(_0x873b83._0x2ac963));},0xb4);}function saveRecentSearch(_0x16377b){const _0x2380d4={_0xdecffe:0x336},_0x30b015=_0x94aeb3;SV[_0x30b015(_0x2380d4._0xdecffe)]['add'](_0x16377b);}function getRecentSearches(){const _0x2f70c6=_0x94aeb3;return SV['searches'][_0x2f70c6(0x4c5)]();}function clearRecentSearches(){const _0x39a315={_0x740169:0x365,_0x3d0136:0x367,_0xb37602:0x291},_0x520197=_0x94aeb3;SV[_0x520197(0x336)]['clear'](),document[_0x520197(_0x39a315._0x740169)](_0x520197(_0x39a315._0x3d0136))[_0x520197(_0x39a315._0xb37602)][_0x520197(0x437)]='none';}function showRecentSearches(){const _0x4217a6={_0x47ed87:0x367,_0x358eea:0x2e8,_0x5d7592:0x213,_0x2d9f17:0x2ff,_0x537edf:0x291,_0x544609:0x437},_0x16e971=_0x94aeb3,_0x124f12=getRecentSearches(),_0x204438=document[_0x16e971(0x365)](_0x16e971(_0x4217a6._0x47ed87)),_0x4073ef=document[_0x16e971(0x365)]('search-input')['value'][_0x16e971(0x1f3)]();if(_0x4073ef)return;_0x204438[_0x16e971(_0x4217a6._0x358eea)]=_0x124f12[_0x16e971(0x3dd)]?_0x16e971(0x223)+_0x124f12[_0x16e971(_0x4217a6._0x5d7592)](_0x5cfdd7=>_0x16e971(0x4b9)+_0x5cfdd7[_0x16e971(0x211)](/'/g,'\x5c\x27')+_0x16e971(0x46c)+esc(_0x5cfdd7)+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20class=\x22recent-item-arrow\x22\x20width=\x2212\x22\x20height=\x2212\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><polyline\x20points=\x229\x2018\x2015\x2012\x209\x206\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>')['join'](''):_0x16e971(_0x4217a6._0x2d9f17),_0x204438[_0x16e971(_0x4217a6._0x537edf)][_0x16e971(_0x4217a6._0x544609)]=_0x16e971(0x4e5);}function hideRecentSearches(){const _0x4877d9={_0x4b4605:0x365};setTimeout(()=>{const _0x2999c4=_0xf103;document[_0x2999c4(_0x4877d9._0x4b4605)](_0x2999c4(0x367))['style']['display']=_0x2999c4(0x34a);},0xc8);}function pickRecentSearch(_0x3eeb32){const _0x1afd50={_0x83ebbc:0x4d6,_0x323812:0x367,_0x2a327b:0x291},_0x319b92=_0x94aeb3;document[_0x319b92(0x365)](_0x319b92(_0x1afd50._0x83ebbc))[_0x319b92(0x2e5)]=_0x3eeb32,document['getElementById'](_0x319b92(_0x1afd50._0x323812))[_0x319b92(_0x1afd50._0x2a327b)]['display']=_0x319b92(0x34a),doSearch(_0x3eeb32);}function filterGenre(_0x38dd20){const _0x38fa24={_0x1ff627:0x2e6,_0x5ecce:0x365,_0x6fd22b:0x3fe,_0x20ebb6:0x2e8,_0x513ad5:0x2cd,_0x60a5b3:0x2d9},_0x5c4452=_0x94aeb3;activeGenre=_0x38dd20,document['querySelectorAll'](_0x5c4452(0x45a))[_0x5c4452(0x338)](_0x5405b6=>_0x5405b6[_0x5c4452(0x450)][_0x5c4452(0x410)](_0x5c4452(0x4f3),_0x5405b6[_0x5c4452(0x427)]['genre']===_0x38dd20));const _0x2b9d35=_0x38dd20==='all'?allResults:allResults[_0x5c4452(_0x38fa24._0x1ff627)](_0x284737=>{const _0x293bad=_0x5c4452,_0x2a0288=_0x38dd20[_0x293bad(0x20d)](',')[_0x293bad(0x213)](Number);return(_0x284737['genre_ids']||[])[_0x293bad(0x2d1)](_0x59a131=>_0x2a0288[_0x293bad(0x271)](_0x59a131));}),_0x29228b=document[_0x5c4452(_0x38fa24._0x5ecce)](_0x5c4452(_0x38fa24._0x6fd22b));_0x29228b[_0x5c4452(0x2e8)]='',!_0x2b9d35[_0x5c4452(0x3dd)]?_0x29228b[_0x5c4452(_0x38fa24._0x20ebb6)]=_0x5c4452(_0x38fa24._0x513ad5):_0x2b9d35[_0x5c4452(0x338)]((_0x3294e6,_0x22ccfe)=>_0x29228b[_0x5c4452(0x26e)](makeCard(_0x3294e6,_0x22ccfe))),document[_0x5c4452(_0x38fa24._0x5ecce)]('search-count')[_0x5c4452(_0x38fa24._0x60a5b3)]=_0x2b9d35[_0x5c4452(0x3dd)]+'\x20results';}function showPlayerSkeleton(){const _0x1950a4={_0x1b83d3:0x2e8,_0x332697:0x356,_0x3d8b2e:0x31b,_0x3ab768:0x365,_0x181614:0x2c1,_0x2a162a:0x365,_0x567a1d:0x291,_0x3a3efd:0x25b,_0x1500e5:0x2ce},_0x30f989=_0x94aeb3;document[_0x30f989(0x365)](_0x30f989(0x360))[_0x30f989(_0x1950a4._0x1b83d3)]=_0x30f989(_0x1950a4._0x332697),document[_0x30f989(0x365)](_0x30f989(_0x1950a4._0x3d8b2e))[_0x30f989(0x2e8)]=Array(0x4)['fill']('<div\x20class=\x22skeleton\x22\x20style=\x22height:20px;width:80px;border-radius:4px;\x22></div>')['join'](''),document[_0x30f989(_0x1950a4._0x3ab768)](_0x30f989(_0x1950a4._0x181614))[_0x30f989(0x2e8)]=_0x30f989(0x502),document[_0x30f989(_0x1950a4._0x2a162a)](_0x30f989(0x297))[_0x30f989(_0x1950a4._0x567a1d)][_0x30f989(0x437)]='none',document[_0x30f989(0x365)](_0x30f989(_0x1950a4._0x3a3efd))['style'][_0x30f989(0x437)]=_0x30f989(0x34a),document[_0x30f989(0x365)](_0x30f989(_0x1950a4._0x1500e5))[_0x30f989(0x291)][_0x30f989(0x437)]=_0x30f989(0x34a);}function renderSkeletons(_0x49e7dd,_0x25b50a=0xa){const _0x2b7689=_0x94aeb3,_0x216a8e=document['getElementById'](_0x49e7dd);if(!_0x216a8e)return;const _0x3d2888=Array(_0x25b50a)[_0x2b7689(0x508)](0x0)[_0x2b7689(0x213)](()=>_0x2b7689(0x381))[_0x2b7689(0x22c)]('');_0x216a8e['innerHTML']=_0x3d2888;}async function openDetail(_0x29ebe7,_0x1e0365,_0x3b55f8=![],_0x9fc1c0=![]){const _0x4bad5b={_0x354869:0x455,_0x584918:0x2fc,_0x167031:0x31b,_0x3f2ef9:0x2d9,_0x59f72c:0x34a,_0x4b1389:0x3bd,_0x2f3417:0x2e8,_0x5b04f2:0x437,_0x402057:0x365,_0x5c561a:0x25b,_0x5d483a:0x291,_0xa13617:0x3ae,_0x35f6b1:0x3c1,_0x40d621:0x2bc,_0x4134f0:0x451,_0x301590:0x3c9,_0x5632c8:0x483,_0x1c2a4b:0x471,_0x2d0875:0x36d,_0x484e4d:0x452,_0x20109a:0x290,_0x5eab2d:0x2f4,_0x50bed6:0x246,_0x33367b:0x1de,_0x2c8202:0x38f,_0x3db451:0x47f,_0x2861d1:0x276,_0x2fed92:0x2c1,_0x448508:0x3e9,_0x124ad4:0x4a6,_0x4ea024:0x4d1,_0x1ef160:0x409,_0x29ce7a:0x473,_0x34ba89:0x3cb,_0x530eb9:0x21e,_0x510612:0x419,_0x3267d5:0x4ec,_0x445d3a:0x338,_0x3e2b30:0x4d4,_0x1408cd:0x437,_0x306aad:0x4e5,_0x2ee945:0x423,_0x43ea70:0x213},_0x4fa36d={_0x3c1b4a:0x308,_0x5b1efc:0x2e8,_0x91e91e:0x2e6,_0x1b1b00:0x334,_0x12e3f7:0x26e},_0x17446e=_0x94aeb3;if(_detailAbortController)_detailAbortController[_0x17446e(_0x4bad5b._0x354869)]();_detailAbortController=new AbortController();const _0x422143=_detailAbortController[_0x17446e(_0x4bad5b._0x584918)];showPage('player-page'),window[_0x17446e(0x51e)](0x0,0x0),showPlayerSkeleton(),document['getElementById'](_0x17446e(_0x4bad5b._0x167031))[_0x17446e(0x2e8)]='',document['getElementById']('player-overview')[_0x17446e(_0x4bad5b._0x3f2ef9)]='',document[_0x17446e(0x365)]('episodes-section')['style']['display']=_0x17446e(_0x4bad5b._0x59f72c),document['getElementById'](_0x17446e(_0x4bad5b._0x4b1389))[_0x17446e(_0x4bad5b._0x2f3417)]='',document[_0x17446e(0x365)](_0x17446e(0x4c0))[_0x17446e(0x291)][_0x17446e(_0x4bad5b._0x5b04f2)]=_0x17446e(0x34a),document[_0x17446e(_0x4bad5b._0x402057)](_0x17446e(_0x4bad5b._0x5c561a))[_0x17446e(_0x4bad5b._0x5d483a)][_0x17446e(0x437)]=_0x17446e(0x34a),switchDetailTab(_0x17446e(0x4a6),document[_0x17446e(0x519)](_0x17446e(_0x4bad5b._0xa13617))),document[_0x17446e(0x365)](_0x17446e(_0x4bad5b._0x35f6b1))[_0x17446e(0x291)]['display']=_0x17446e(_0x4bad5b._0x59f72c);try{const _0x111117=await tmdb('/'+_0x1e0365+'/'+_0x29ebe7,{'append_to_response':'external_ids,similar,credits'},_0x422143);if(_0x422143[_0x17446e(_0x4bad5b._0x40d621)])return;const _0x57b480=_0x111117[_0x17446e(0x287)]?.['imdb_id']||null,_0x5b7447=_0x111117[_0x17446e(0x228)]||_0x111117[_0x17446e(_0x4bad5b._0x4134f0)],_0x3b1d42=slugify(_0x5b7447),_0x2e79f0=(_0x111117[_0x17446e(0x1fc)]||_0x111117[_0x17446e(0x47a)]||'')['slice'](0x0,0x4),_0x22a78c=_0x111117[_0x17446e(_0x4bad5b._0x301590)]?_0x111117[_0x17446e(0x3c9)][_0x17446e(0x341)](0x1):'—',_0xf6b626=_pendingTimestamp||0x0;_pendingTimestamp=0x0;const _0x280b55=_0x111117[_0x17446e(0x483)]?_0x111117[_0x17446e(_0x4bad5b._0x5632c8)]+_0x17446e(0x414):_0x111117['episode_run_time']?.[0x0]?_0x111117[_0x17446e(0x30d)][0x0]+_0x17446e(0x3ef):'';document['getElementById'](_0x17446e(0x360))['textContent']=_0x5b7447,window[_0x17446e(_0x4bad5b._0x1c2a4b)]=_0x111117[_0x17446e(0x1dd)]||null,updateMyListBtn(_0x29ebe7);if(_0x111117[_0x17446e(_0x4bad5b._0x2d0875)]?.[_0x17446e(0x3dd)]){const _0x421936=JSON[_0x17446e(_0x4bad5b._0x484e4d)](localStorage[_0x17446e(_0x4bad5b._0x20109a)](_0x17446e(0x446))||'{}');_0x421936[_0x29ebe7]&&(_0x421936[_0x29ebe7][_0x17446e(0x1cd)]=_0x111117['genres']['map'](_0x55d6bf=>_0x55d6bf['id']),localStorage[_0x17446e(_0x4bad5b._0x5eab2d)](_0x17446e(0x446),JSON[_0x17446e(_0x4bad5b._0x50bed6)](_0x421936))),window['_pendingGenreIds']={'id':_0x29ebe7,'genre_ids':_0x111117[_0x17446e(0x36d)]['map'](_0x327d83=>_0x327d83['id'])};}const _0x4c7e76=document[_0x17446e(0x365)](_0x17446e(_0x4bad5b._0x167031));_0x4c7e76['innerHTML']=_0x17446e(_0x4bad5b._0x33367b)+_0x2e79f0+'</span>'+(_0x280b55?'<span>'+_0x280b55+_0x17446e(_0x4bad5b._0x2c8202):'')+_0x17446e(_0x4bad5b._0x3db451)+starIcon()+'\x20'+_0x22a78c+_0x17446e(0x38f),(_0x111117[_0x17446e(0x36d)]||[])[_0x17446e(_0x4bad5b._0x2861d1)](0x0,0x3)['forEach'](_0x17b165=>{const _0x2e6f21={_0x369137:0x263},_0x2ffc27=_0x17446e,_0x589363=document['createElement'](_0x2ffc27(0x210));_0x589363[_0x2ffc27(_0x4fa36d._0x3c1b4a)]='tag-link',_0x589363[_0x2ffc27(_0x4fa36d._0x5b1efc)]=icon(_0x2ffc27(_0x4fa36d._0x91e91e),0xa)+'\x20'+esc(_0x17b165[_0x2ffc27(0x451)]),_0x589363['addEventListener']('click',()=>browseGenre(_0x17b165['id'],_0x17b165[_0x2ffc27(0x451)])),_0x589363[_0x2ffc27(0x389)](_0x2ffc27(_0x4fa36d._0x1b1b00),_0x80938d=>{const _0x2d944b=_0x2ffc27;_0x80938d[_0x2d944b(_0x2e6f21._0x369137)](),showCardContextMenu(_0x80938d,'/?browse=filter&type=all&genre='+_0x17b165['id'],_0x17b165['name']);}),_0x4c7e76[_0x2ffc27(_0x4fa36d._0x12e3f7)](_0x589363);}),document['getElementById'](_0x17446e(_0x4bad5b._0x2fed92))[_0x17446e(0x2d9)]=_0x111117[_0x17446e(0x392)]||'',renderCast(_0x111117[_0x17446e(_0x4bad5b._0x448508)]?.[_0x17446e(_0x4bad5b._0x124ad4)]||[]);const _0xe4af0a=_0x1e0365==='movie'?_0x111117[_0x17446e(_0x4bad5b._0x4ea024)]:null;if(_0xe4af0a)saveDiscoveredCollection(_0xe4af0a);renderCollection(_0xe4af0a,_0x29ebe7),renderNetworks(_0x111117['networks']||[],_0x111117[_0x17446e(_0x4bad5b._0x1ef160)]||[],_0x1e0365);if(_0x111117['backdrop_path'])document[_0x17446e(_0x4bad5b._0x402057)]('player-container')['style']['background']=_0x17446e(_0x4bad5b._0x29ce7a)+backdropUrl(_0x111117['backdrop_path'])+_0x17446e(_0x4bad5b._0x34ba89);if(_0x1e0365==='movie'){if(!_0x9fc1c0)pushState({'type':_0x17446e(0x419),'id':_0x29ebe7,'name':_0x3b1d42});currentSource=_0x17446e(_0x4bad5b._0x530eb9),currentEmbed={'type':_0x17446e(_0x4bad5b._0x510612),'imdb':_0x57b480,'tmdbId':_0x29ebe7,'season':null,'episode':null},document['querySelectorAll'](_0x17446e(_0x4bad5b._0x3267d5))[_0x17446e(_0x4bad5b._0x445d3a)](_0x5963a3=>_0x5963a3[_0x17446e(0x450)]['toggle']('active',_0x5963a3[_0x17446e(0x427)][_0x17446e(0x229)]===_0x17446e(0x21e))),document[_0x17446e(0x365)](_0x17446e(_0x4bad5b._0x3e2b30))[_0x17446e(0x291)][_0x17446e(_0x4bad5b._0x1408cd)]='flex';const _0x3f6f00=document[_0x17446e(_0x4bad5b._0x402057)](_0x17446e(0x43f));_0x3f6f00&&!pendingWatchTogetherStartAt&&(_0x3f6f00[_0x17446e(0x229)]=buildEmbedUrl(_0x17446e(0x21e),_0x17446e(_0x4bad5b._0x510612),_0x57b480,_0x29ebe7,null,null,_0xf6b626),addIframeBlocker()),startWatchTimer(_0x29ebe7,_0x17446e(_0x4bad5b._0x510612),{'id':_0x29ebe7,'type':'movie','title':_0x5b7447,'poster':_0x111117[_0x17446e(0x1dd)],'year':_0x2e79f0,'runtime':_0x111117['runtime']||0x5a});}else{const _0x370f9=!currentShow||currentShow['id']!==_0x29ebe7;_0x370f9&&(currentSource=_0x17446e(_0x4bad5b._0x530eb9),document[_0x17446e(0x31c)](_0x17446e(_0x4bad5b._0x3267d5))['forEach'](_0x9a0284=>_0x9a0284[_0x17446e(0x450)][_0x17446e(0x410)](_0x17446e(0x4f3),_0x9a0284[_0x17446e(0x427)][_0x17446e(0x229)]===_0x17446e(0x21e))));currentShow={'id':_0x29ebe7,'detail':_0x111117,'imdb':_0x57b480,'slug':_0x3b1d42};const _0x3a960a=_pendingEp?.['season']||0x1,_0x30ac82=_pendingEp?.[_0x17446e(0x304)]||0x1;_pendingEp=null,currentSeason=_0x3a960a,document[_0x17446e(_0x4bad5b._0x402057)](_0x17446e(0x465))[_0x17446e(0x291)]['display']=_0x17446e(_0x4bad5b._0x306aad),renderSeasons(_0x111117,_0x57b480,_0x29ebe7,_0x3a960a);if(!_0x9fc1c0)pushState({'type':'tv','id':_0x29ebe7,'name':_0x3b1d42,'season':_0x3a960a,'episode':_0x30ac82});loadEpisode(_0x3a960a,_0x30ac82,_0x57b480,_0x29ebe7,!![],_0xf6b626);}const _0x898711=(_0x111117[_0x17446e(0x28c)]?.[_0x17446e(_0x4bad5b._0x2ee945)]||[])[_0x17446e(0x276)](0x0,0x12);if(_0x898711[_0x17446e(0x3dd)]){const _0xefb8cf=document['getElementById'](_0x17446e(_0x4bad5b._0x4b1389));_0xefb8cf[_0x17446e(0x2e8)]='',_0x898711[_0x17446e(_0x4bad5b._0x43ea70)](_0x4a2225=>({..._0x4a2225,'media_type':_0x1e0365}))[_0x17446e(0x338)]((_0x3c54c8,_0xe45600)=>_0xefb8cf[_0x17446e(0x26e)](makeCard(_0x3c54c8,_0xe45600)));}if(pendingWatchTogetherStartAt){const _0x4ccfae=pendingWatchTogetherStartAt;pendingWatchTogetherStartAt=null,startWatchTogetherCountdown(_0x4ccfae);}}catch(_0x3046e3){if(_0x3046e3['name']===_0x17446e(0x3cd))return;document[_0x17446e(0x365)](_0x17446e(0x360))['textContent']=_0x17446e(0x2ae);}}function showAutoplayOverlay(_0x3fe846){const _0x45a927={_0xf063e:0x365,_0x14d592:0x3b4,_0x1af6e2:0x317},_0x921f2d={_0x40c6eb:0x2d9,_0xfbbf9e:0x4e4},_0x5a5519=_0x94aeb3,_0x44c194=document['getElementById']('next-ep-autoplay'),_0x15b58b=document[_0x5a5519(_0x45a927._0xf063e)](_0x5a5519(0x315)),_0x539f04=document[_0x5a5519(0x365)](_0x5a5519(_0x45a927._0x14d592)),_0x44f196=document[_0x5a5519(0x365)](_0x5a5519(0x218));_0x15b58b['textContent']=_0x3fe846,_0x44c194['classList'][_0x5a5519(_0x45a927._0x1af6e2)]('hidden');let _0x5d03a=0xa;const _0x59f697=0x71;autoplayTimer=setInterval(()=>{const _0x51c63f=_0x5a5519;_0x5d03a--,_0x44f196[_0x51c63f(_0x921f2d._0x40c6eb)]=_0x5d03a,_0x539f04[_0x51c63f(0x291)][_0x51c63f(_0x921f2d._0xfbbf9e)]=_0x59f697-_0x59f697*(0xa-_0x5d03a)/0xa,_0x5d03a<=0x0&&triggerNextEpisode();},0x3e8);}function renderSeasons(_0x35d7b2,_0x19a26a,_0x4868db,_0x1d4c56=0x1){const _0x54cb00={_0x5c7083:0x2e8,_0x5b5861:0x2c8},_0x30d298={_0x3da2a2:0x308,_0x50d953:0x396,_0x5f1415:0x3f9,_0x1c9ba4:0x4f7,_0x27d2c9:0x396,_0x13cc44:0x22f,_0x291061:0x334,_0x11e862:0x26e},_0x4a0008={_0x4894ac:0x263,_0x11b098:0x4d0,_0xcf09a9:0x27f},_0x2ccfb8=_0x94aeb3,_0x4f4c35=(_0x35d7b2[_0x2ccfb8(0x460)]||[])['filter'](_0x42c42b=>_0x42c42b[_0x2ccfb8(0x396)]>0x0),_0xcb9bf3=document[_0x2ccfb8(0x365)](_0x2ccfb8(0x476));_0xcb9bf3[_0x2ccfb8(_0x54cb00._0x5c7083)]='',_0x4f4c35[_0x2ccfb8(0x338)](_0x279235=>{const _0x48b756=_0x2ccfb8,_0x4cdb47=document['createElement']('button');_0x4cdb47[_0x48b756(_0x30d298._0x3da2a2)]=_0x48b756(0x506)+(_0x279235[_0x48b756(_0x30d298._0x50d953)]===_0x1d4c56?_0x48b756(0x46b):''),_0x4cdb47['id']=_0x48b756(_0x30d298._0x5f1415)+_0x279235[_0x48b756(_0x30d298._0x50d953)],_0x4cdb47[_0x48b756(0x2d9)]=_0x48b756(_0x30d298._0x1c9ba4)+_0x279235[_0x48b756(_0x30d298._0x27d2c9)],_0x4cdb47[_0x48b756(0x389)](_0x48b756(_0x30d298._0x13cc44),()=>selectSeason(_0x279235[_0x48b756(0x396)],_0x279235[_0x48b756(0x472)],_0x19a26a,_0x4868db)),_0x4cdb47[_0x48b756(0x389)](_0x48b756(_0x30d298._0x291061),_0x7fc7c8=>{const _0x43cb0f=_0x48b756;_0x7fc7c8[_0x43cb0f(_0x4a0008._0x4894ac)](),showCardContextMenu(_0x7fc7c8,'/?type=tv&id='+_0x4868db+_0x43cb0f(_0x4a0008._0x11b098)+(currentShow?.[_0x43cb0f(0x1ca)]||'')+_0x43cb0f(_0x4a0008._0xcf09a9)+_0x279235['season_number']+_0x43cb0f(0x20b),_0x43cb0f(0x4f7)+_0x279235[_0x43cb0f(0x396)]);}),_0xcb9bf3[_0x48b756(_0x30d298._0x11e862)](_0x4cdb47);});const _0x136d86=_0x4f4c35[_0x2ccfb8(_0x54cb00._0x5b5861)](_0x3bc9ab=>_0x3bc9ab[_0x2ccfb8(0x396)]===_0x1d4c56)||_0x4f4c35[0x0];if(_0x136d86)renderEpisodes(_0x136d86[_0x2ccfb8(0x472)],_0x1d4c56,_0x19a26a,_0x4868db);setTimeout(()=>{const _0x118ad4=_0x2ccfb8;document[_0x118ad4(0x365)]('s-btn-'+_0x1d4c56)?.['scrollIntoView']({'inline':'nearest','block':'nearest','behavior':'smooth'});},0x32);}function selectSeason(_0x5994b8,_0x3bcb76,_0x19d607,_0x3836fc){const _0xda951d={_0x5807d8:0x31c,_0x1a7a17:0x338,_0x4e3c24:0x3f9,_0x481212:0x450},_0x1e2912=_0x94aeb3;currentSeason=_0x5994b8,document[_0x1e2912(_0xda951d._0x5807d8)]('.season-btn')[_0x1e2912(_0xda951d._0x1a7a17)](_0x46555a=>_0x46555a[_0x1e2912(0x450)][_0x1e2912(0x317)](_0x1e2912(0x4f3))),document['getElementById'](_0x1e2912(_0xda951d._0x4e3c24)+_0x5994b8)?.[_0x1e2912(_0xda951d._0x481212)][_0x1e2912(0x4ae)](_0x1e2912(0x4f3)),renderEpisodes(_0x3bcb76,_0x5994b8,_0x19d607,_0x3836fc),loadEpisode(_0x5994b8,0x1,_0x19d607,_0x3836fc);}async function renderEpisodes(_0x9df3e6,_0x30669b,_0xa2adfa,_0x3f3b73,_0x19a8cb=0x1){const _0x40812d={_0x2ab5a7:0x3f7,_0x3b27c1:0x4c5,_0x3b2240:0x4ae,_0x13cd55:0x51d,_0x1a05cc:0x2a4,_0x121679:0x276,_0x217061:0x338},_0x587d99={_0x433728:0x2da,_0x57d2be:0x1e2,_0x239e45:0x308,_0x3e350c:0x46b,_0x236fc3:0x216,_0x38d44e:0x272,_0x5a465a:0x272,_0x1f2569:0x4e0,_0x36ea1e:0x2e8,_0x277438:0x25a,_0x713c11:0x34f,_0x3a8306:0x38f,_0x58a2d7:0x228,_0x51167e:0x37a,_0x40b9e5:0x272,_0x522dd3:0x2e8,_0x54e02c:0x25a,_0x41e027:0x4c3,_0x2f2a87:0x389,_0x2b5784:0x334},_0x20edd0={_0x529b54:0x263,_0x33013e:0x4d0,_0x5a87c6:0x1ca},_0x4d8ed2={_0x215d7a:0x481},_0xe4db59=_0x94aeb3,_0x21bddc=SV[_0xe4db59(_0x40812d._0x2ab5a7)][_0xe4db59(_0x40812d._0x3b27c1)](),_0x1e052b=currentShow?.['id'],_0x199a5a=new Set();if(_0x1e052b&&_0x21bddc[_0x1e052b]){const _0xeb31b6=_0x21bddc[_0x1e052b];if(_0xeb31b6[_0xe4db59(0x37e)]===_0x30669b){for(let _0x4f4ea1=0x1;_0x4f4ea1<=_0xeb31b6['episode'];_0x4f4ea1++)_0x199a5a['add'](_0x4f4ea1);}else{if(_0xeb31b6[_0xe4db59(0x37e)]>_0x30669b){for(let _0x2e2da1=0x1;_0x2e2da1<=_0x9df3e6;_0x2e2da1++)_0x199a5a[_0xe4db59(_0x40812d._0x3b2240)](_0x2e2da1);}}}let _0x3d072f={};try{const _0x3556e7=await tmdb(_0xe4db59(_0x40812d._0x13cd55)+_0x3f3b73+_0xe4db59(_0x40812d._0x1a05cc)+_0x30669b),_0x2c5f2e=new Date()[_0xe4db59(0x35e)]()[_0xe4db59(_0x40812d._0x121679)](0x0,0xa);(_0x3556e7[_0xe4db59(0x28a)]||[])[_0xe4db59(_0x40812d._0x217061)](_0x5148a1=>{const _0x3882b5=_0xe4db59;_0x5148a1[_0x3882b5(_0x4d8ed2._0x215d7a)]&&(_0x3d072f[_0x5148a1['episode_number']]={'date':_0x5148a1[_0x3882b5(_0x4d8ed2._0x215d7a)],'future':_0x5148a1['air_date']>_0x2c5f2e});});}catch{}const _0x28a929=document[_0xe4db59(0x365)](_0xe4db59(0x262));_0x28a929['innerHTML']='',Array['from']({'length':_0x9df3e6},(_0x372b57,_0x4db9f8)=>_0x4db9f8+0x1)[_0xe4db59(0x338)](_0xd4ee4=>{const _0x1e94e3=_0xe4db59,_0x4bbbeb=_0x199a5a[_0x1e94e3(_0x587d99._0x433728)](_0xd4ee4),_0x12f29b=_0x3d072f[_0xd4ee4],_0x59cfb1=_0x12f29b?.[_0x1e94e3(0x278)]===!![],_0x984aae=document[_0x1e94e3(_0x587d99._0x57d2be)](_0x1e94e3(0x210));_0x984aae[_0x1e94e3(_0x587d99._0x239e45)]='ep-btn'+(_0xd4ee4===_0x19a8cb?_0x1e94e3(_0x587d99._0x3e350c):'')+(_0x4bbbeb?'\x20ep-watched':'')+(_0x59cfb1?'\x20ep-unreleased':''),_0x984aae['id']=_0x1e94e3(_0x587d99._0x236fc3)+_0x30669b+'-'+_0xd4ee4,_0x984aae[_0x1e94e3(0x1d4)]=_0x59cfb1;if(_0x59cfb1){const _0x2891f0=_0x12f29b[_0x1e94e3(_0x587d99._0x38d44e)]?new Date(_0x12f29b[_0x1e94e3(_0x587d99._0x5a465a)])[_0x1e94e3(0x2a5)](undefined,{'month':_0x1e94e3(0x1d8),'day':_0x1e94e3(_0x587d99._0x1f2569)}):'';_0x984aae[_0x1e94e3(_0x587d99._0x36ea1e)]=_0x1e94e3(_0x587d99._0x277438)+_0xd4ee4+_0x1e94e3(_0x587d99._0x713c11)+(_0x2891f0?_0x2891f0:_0x1e94e3(0x1e4))+_0x1e94e3(_0x587d99._0x3a8306),_0x984aae[_0x1e94e3(_0x587d99._0x58a2d7)]=_0x1e94e3(_0x587d99._0x51167e)+(_0x12f29b[_0x1e94e3(0x272)]?'\x20—\x20'+_0x12f29b[_0x1e94e3(_0x587d99._0x40b9e5)]:'');}else _0x984aae[_0x1e94e3(_0x587d99._0x522dd3)]=_0x1e94e3(_0x587d99._0x54e02c)+_0xd4ee4+(_0x4bbbeb?_0x1e94e3(_0x587d99._0x41e027):''),_0x984aae['addEventListener'](_0x1e94e3(0x22f),()=>loadEpisode(_0x30669b,_0xd4ee4,_0xa2adfa,_0x3f3b73)),_0x984aae[_0x1e94e3(_0x587d99._0x2f2a87)](_0x1e94e3(_0x587d99._0x2b5784),_0x3b93d2=>{const _0x376ae3=_0x1e94e3;_0x3b93d2[_0x376ae3(_0x20edd0._0x529b54)](),showCardContextMenu(_0x3b93d2,_0x376ae3(0x51f)+_0x3f3b73+_0x376ae3(_0x20edd0._0x33013e)+(currentShow?.[_0x376ae3(_0x20edd0._0x5a87c6)]||'')+_0x376ae3(0x27f)+_0x30669b+_0x376ae3(0x349)+_0xd4ee4,'S'+_0x30669b+'\x20E'+_0xd4ee4);});_0x28a929['appendChild'](_0x984aae);});}function loadEpisode(_0x16cd50,_0x5e4730,_0x51d126,_0x4e9173,_0xae927c=![],_0x9db3db=0x0){const _0x17db68={_0x1675ec:0x30b,_0x4d8692:0x338,_0xcca529:0x365,_0x5db56a:0x4f3,_0x560f7a:0x4ec,_0xd8ceaf:0x4d4,_0x3ee974:0x365,_0x28ff66:0x49a,_0x52603e:0x4f5,_0x1e1b64:0x1ca,_0x2aedd3:0x3b7,_0x37f051:0x30d,_0x240704:0x460,_0x11f5bf:0x472,_0x2189ad:0x2c8,_0x442393:0x427,_0x328619:0x2e8,_0x1a5d7a:0x2cb,_0x5932af:0x4e5},_0x38ae4a={_0x56563b:0x4d0,_0x3629df:0x27f,_0x5d8808:0x349},_0x33d0f9=_0x94aeb3;document['querySelectorAll'](_0x33d0f9(_0x17db68._0x1675ec))[_0x33d0f9(_0x17db68._0x4d8692)](_0x1cf1fb=>_0x1cf1fb[_0x33d0f9(0x450)][_0x33d0f9(0x317)]('active')),document[_0x33d0f9(_0x17db68._0xcca529)]('ep-btn-'+_0x16cd50+'-'+_0x5e4730)?.['classList'][_0x33d0f9(0x4ae)](_0x33d0f9(_0x17db68._0x5db56a)),currentEmbed={'type':'tv','imdb':_0x51d126,'tmdbId':_0x4e9173,'season':_0x16cd50,'episode':_0x5e4730},document[_0x33d0f9(0x31c)](_0x33d0f9(_0x17db68._0x560f7a))[_0x33d0f9(_0x17db68._0x4d8692)](_0x33b599=>_0x33b599[_0x33d0f9(0x450)][_0x33d0f9(0x410)](_0x33d0f9(0x4f3),_0x33b599[_0x33d0f9(0x427)]['src']===currentSource)),document['getElementById'](_0x33d0f9(_0x17db68._0xd8ceaf))[_0x33d0f9(0x291)]['display']='flex';const _0x3a7f2b=document[_0x33d0f9(0x365)](_0x33d0f9(0x43f));_0x3a7f2b&&!pendingWatchTogetherStartAt&&(_0x3a7f2b[_0x33d0f9(0x229)]=buildEmbedUrl(currentSource,'tv',_0x51d126,_0x4e9173,_0x16cd50,_0x5e4730,_0x9db3db),addIframeBlocker());document[_0x33d0f9(_0x17db68._0x3ee974)](_0x33d0f9(0x236))[_0x33d0f9(0x254)]({'behavior':_0x33d0f9(_0x17db68._0x28ff66),'block':_0x33d0f9(_0x17db68._0x52603e)});if(!_0xae927c&&currentShow){const _0x4af369=currentShow[_0x33d0f9(_0x17db68._0x1e1b64)]||slugify(currentShow[_0x33d0f9(_0x17db68._0x2aedd3)]?.['name']||'');pushState({'type':'tv','id':_0x4e9173,'name':_0x4af369,'season':_0x16cd50,'episode':_0x5e4730});}currentShow&&startWatchTimer(currentShow['id'],'tv',{'id':currentShow['id'],'type':'tv','title':currentShow[_0x33d0f9(0x3b7)][_0x33d0f9(0x451)],'poster':currentShow[_0x33d0f9(0x3b7)]['poster_path'],'year':(currentShow['detail']['first_air_date']||'')[_0x33d0f9(0x276)](0x0,0x4),'season':_0x16cd50,'episode':_0x5e4730,'epRuntime':currentShow[_0x33d0f9(_0x17db68._0x2aedd3)][_0x33d0f9(_0x17db68._0x37f051)]?.[0x0]||0x28});const _0x58a6d2=currentShow?.[_0x33d0f9(_0x17db68._0x2aedd3)]?.[_0x33d0f9(_0x17db68._0x240704)]?.[_0x33d0f9(0x2e6)](_0x3a3e92=>_0x3a3e92[_0x33d0f9(0x396)]>0x0)||[],_0x262914=_0x58a6d2['find'](_0xf8e470=>_0xf8e470[_0x33d0f9(0x396)]===_0x16cd50),_0x5c6e6d=_0x262914?.[_0x33d0f9(_0x17db68._0x11f5bf)]||0x0,_0x28a5eb=_0x58a6d2[_0x33d0f9(_0x17db68._0x2189ad)](_0x6131b7=>_0x6131b7[_0x33d0f9(0x396)]===_0x16cd50+0x1),_0x50a853=document['getElementById']('next-ep-bar'),_0x1f8928=document[_0x33d0f9(0x365)](_0x33d0f9(0x220)),_0x2b3a59=_0x33d0f9(0x3e3);if(_0x5e4730<_0x5c6e6d)_0x1f8928[_0x33d0f9(0x427)][_0x33d0f9(0x37e)]=_0x16cd50,_0x1f8928[_0x33d0f9(_0x17db68._0x442393)][_0x33d0f9(0x304)]=_0x5e4730+0x1,_0x1f8928[_0x33d0f9(0x2e8)]=_0x2b3a59+'\x20S'+_0x16cd50+'\x20E'+(_0x5e4730+0x1),_0x1f8928['oncontextmenu']=_0x5be108=>{const _0x52eb06=_0x33d0f9;_0x5be108[_0x52eb06(0x263)](),showCardContextMenu(_0x5be108,_0x52eb06(0x51f)+_0x4e9173+_0x52eb06(_0x38ae4a._0x56563b)+(currentShow?.[_0x52eb06(0x1ca)]||'')+_0x52eb06(_0x38ae4a._0x3629df)+_0x16cd50+_0x52eb06(_0x38ae4a._0x5d8808)+(_0x5e4730+0x1),'S'+_0x16cd50+'\x20E'+(_0x5e4730+0x1));},_0x50a853['style']['display']='block';else _0x28a5eb?(_0x1f8928['dataset'][_0x33d0f9(0x37e)]=_0x16cd50+0x1,_0x1f8928[_0x33d0f9(0x427)][_0x33d0f9(0x304)]=0x1,_0x1f8928[_0x33d0f9(_0x17db68._0x328619)]=_0x2b3a59+_0x33d0f9(_0x17db68._0x1a5d7a)+(_0x16cd50+0x1)+_0x33d0f9(0x2bb),_0x1f8928[_0x33d0f9(0x36c)]=_0x2ef6e6=>{const _0x57d16f=_0x33d0f9;_0x2ef6e6[_0x57d16f(0x263)](),showCardContextMenu(_0x2ef6e6,_0x57d16f(0x51f)+_0x4e9173+_0x57d16f(0x4d0)+(currentShow?.[_0x57d16f(0x1ca)]||'')+_0x57d16f(0x27f)+(_0x16cd50+0x1)+'&episode=1',_0x57d16f(0x4f7)+(_0x16cd50+0x1)+_0x57d16f(0x2bb));},_0x50a853['style'][_0x33d0f9(0x437)]=_0x33d0f9(_0x17db68._0x5932af)):_0x50a853[_0x33d0f9(0x291)][_0x33d0f9(0x437)]='none';}function playNextEpisode(){const _0x506584={_0x1553f:0x427,_0x2b280a:0x427,_0x1adc9e:0x397,_0x282f6c:0x236,_0x272c5b:0x254},_0x296ed1=_0x94aeb3;if(!currentShow)return;const _0x40c864=document[_0x296ed1(0x365)](_0x296ed1(0x220)),_0x29ce49=parseInt(_0x40c864[_0x296ed1(_0x506584._0x1553f)][_0x296ed1(0x37e)]),_0x202ecc=parseInt(_0x40c864[_0x296ed1(_0x506584._0x2b280a)][_0x296ed1(0x304)]);loadEpisode(_0x29ce49,_0x202ecc,currentShow[_0x296ed1(_0x506584._0x1adc9e)],currentShow['id']),document[_0x296ed1(0x365)](_0x296ed1(_0x506584._0x282f6c))[_0x296ed1(_0x506584._0x272c5b)]({'behavior':_0x296ed1(0x49a),'block':_0x296ed1(0x4f5)});}function _0x2349(){const _0xd5644d=['Thor','.qm-list-label','download','Paramount+','sv_source','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cw-hover-right\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cw-hover-btn\x20cw-detail-btn\x22\x20title=\x22More\x20Details\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><circle\x20cx=\x2212\x22\x20cy=\x2212\x22\x20r=\x2210\x22/><line\x20x1=\x2212\x22\x20y1=\x228\x22\x20x2=\x2212\x22\x20y2=\x2212\x22/><line\x20x1=\x2212\x22\x20y1=\x2216\x22\x20x2=\x2212.01\x22\x20y2=\x2216\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>','<div\x20style=\x22position:relative\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<img\x20class=\x22card-poster\x22\x20src=\x22','display','\x20watched</span>','metaKey','floor','Captain\x20Marvel','_svMyListCache','dataTransfer','home','player-iframe','❌\x20Invalid\x20file\x20format','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22collection-overlay\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22collection-name\x22>','overlay-closing','<div\x20style=\x22width:36px;height:54px;background:var(--surface2);border-radius:4px;flex-shrink:0\x22></div>','clientX','browse','sv_history','Warner\x20Bros.','sv_hidden','matches','The\x20Lego\x20Movie','my-list-label','Exit\x20Fullscreen\x20(Esc)','[onclick=\x22nextEpisode()\x22]','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><path\x20d=\x22M17.94\x2017.94A10.07\x2010.07\x200\x200\x201\x2012\x2020c-7\x200-11-8-11-8a18.45\x2018.45\x200\x200\x201\x205.06-5.94\x22/><path\x20d=\x22M9.9\x204.24A9.12\x209.12\x200\x200\x201\x2012\x204c7\x200\x2011\x208\x2011\x208a18.5\x2018.5\x200\x200\x201-2.16\x203.19\x22/><line\x20x1=\x221\x22\x20y1=\x221\x22\x20x2=\x2223\x22\x20y2=\x2223\x22/></svg>','Total\x20Watch\x20Time','classList','name','parse','round','type','abort','label','theme-icon-sun','has-watch','sort','.genre-btn','catch','scope','<div\x20class=\x22card-poster-placeholder\x22>','keydown','opacity','seasons','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22card-type-badge\x22>','Crime','error','qm-title','episodes-section','/trending/all/week','.cw-detail-btn','.row-wrap','afterend','Filtered\x20Results','\x20active','\x27)\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2212\x22\x20height=\x2212\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><circle\x20cx=\x2212\x22\x20cy=\x2212\x22\x20r=\x2210\x22/><polyline\x20points=\x2212\x206\x2012\x2012\x2016\x2014\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>','.genre-bar-fill[data-width]','popularity.desc','movies-row','ctrlKey','_currentDetailPoster','episode_count','url(','Your\x20list\x20is\x20empty','Hide\x20Filters','season-selector','key','across\x20all\x20titles','card','first_air_date','genre-bar','Spider-Man\x20(Sony)','SW\x20registered:','body','<span\x20class=\x22rating\x22>','.scroll-btn','air_date','grid-column:1/-1;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin-bottom:4px;','runtime','</div>','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22sv-ctx-item\x20sv-ctx-btn\x22\x20id=\x22sv-ctx-src-newtab\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><path\x20d=\x22M18\x2013v6a2\x202\x200\x200\x201-2\x202H5a2\x202\x200\x200\x201-2-2V8a2\x202\x200\x200\x201\x202-2h6\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<polyline\x20points=\x2215\x203\x2021\x203\x2021\x209\x22/><line\x20x1=\x2210\x22\x20y1=\x2214\x22\x20x2=\x2221\x22\x20y2=\x223\x22/></svg>\x20Open\x20in\x20new\x20tab\x0a\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22sv-ctx-item\x20sv-ctx-btn\x22\x20id=\x22sv-ctx-src-copy\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><rect\x20x=\x229\x22\x20y=\x229\x22\x20width=\x2213\x22\x20height=\x2213\x22\x20rx=\x222\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22M5\x2015H4a2\x202\x200\x200\x201-2-2V4a2\x202\x200\x200\x201\x202-2h9a2\x202\x200\x200\x201\x202\x202v1\x22/></svg>Copy\x20embed\x20URL\x0a\x20\x20\x20\x20\x20\x20\x20\x20</button>','w1280','next-ep-autoplay','list','collections','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-meta\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>','sv_recent_searches','sv-ctx-src-copy','embed2','Added\x20to\x20My\x20List','open','\x22\x20onclick=\x22setHeroIndex(','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><line\x20x1=\x2212\x22\x20y1=\x225\x22\x20x2=\x2212\x22\x20y2=\x2219\x22/><line\x20x1=\x225\x22\x20y1=\x2212\x22\x20x2=\x2219\x22\x20y2=\x2212\x22/></svg>','hero','4px','Link\x20copied!','Rush\x20Hour','\x27,\x27','epRuntime','Venom\x20Collection','rating','smooth','replaceWith','profile_path','options','fullscreenchange','eye_off','sv-ctx-copyname','\x20of\x20','Discovered\x20from\x20your\x20history','true','Movie','1EOSuBs','cast','watch-together-btn','copy','register','relative','hidden','\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22genre-bar-count\x22>','Die\x20Hard','add','sv-ctx-mobile','.mobile-tab','fulfilled','https://moviesapi.club/tv/','TV\x20shows','localeCompare','first_air_date.desc','Saved','lang','mylist-empty','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22recent-item\x22\x20onmousedown=\x22event.preventDefault();pickRecentSearch(\x27','first_air_date.lte','\x0a\x20\x20\x20\x20','❌\x20Failed\x20to\x20read\x20—\x20make\x20sure\x20it\x27s\x20a\x20valid\x20export','Please\x20enter\x20your\x20TMDB\x20API\x20key','Collections\x20—\x20StreamVault','371972pczpdm','next-ep-bar','https://image.tmdb.org/t/p/','Blumhouse','<span\x20class=\x22ep-check\x22>✓</span>','cssText','get','different\x20days','div[style*=\x22font-size:16px\x22]','json','mousedown','\x20titles','import-dropzone','Loading…','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<img\x20class=\x22card-poster\x22\x20src=\x22','new-this-week-row','after','&name=','belongs_to_collection','The\x20Expendables','<div\x20class=\x22mylist-watched-badge\x22\x20title=\x22In\x20your\x20watch\x20history\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2210\x22\x20height=\x2210\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x223\x22\x20stroke-linecap=\x22round\x22><polyline\x20points=\x2220\x206\x209\x2017\x204\x2012\x22/></svg>Watched</div>','source-bar','streamvault-backup-','search-input','Exported\x20successfully','Men\x20in\x20Black','clientY','player-page','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22flex:1;min-width:0;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-title\x22>','sv-ctx-hide','createObjectURL','.import-card','Hulu','numeric','SELECT','result','instant','strokeDashoffset','block','sub','has-watch\x20more','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20class=\x22suggestion-arrow\x22\x20width=\x2212\x22\x20height=\x2212\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><polyline\x20points=\x229\x2018\x2015\x2012\x209\x206\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>','https://api.themoviedb.org/3','<div\x20class=\x22spinner\x22></div>','tmdb_api_key','.src-btn','sv-ctx-copylink','borderColor','Drama','fixed','query','Bearer\x20','active','TEXTAREA','start','<div\x20class=\x22activity-dot\x20','Season\x20','tab-home','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><circle\x20cx=\x2211\x22\x20cy=\x2211\x22\x20r=\x228\x22/><path\x20d=\x22m21\x2021-4.35-4.35\x22/></svg>','company','now','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22qm-type-badge\x22>','Fast\x20&\x20Furious','primary_release_date.gte','Star\x20Wars','https://www.2embed.cc/embedtv/','/discover/tv','<div\x20class=\x22skeleton\x22\x20style=\x22height:16px;width:100%;border-radius:4px;margin-bottom:8px;\x22></div><div\x20class=\x22skeleton\x22\x20style=\x22height:16px;width:90%;border-radius:4px;margin-bottom:8px;\x22></div><div\x20class=\x22skeleton\x22\x20style=\x22height:16px;width:75%;border-radius:4px;\x22></div>','focus','DC\x20Films','Fullscreen\x20failed:','season-btn','<span\x20class=\x22qm-genre-tag\x22>','fill','scrollBy','Resident\x20Evil','webkitRequestFullscreen','15545860PIoHLT','files','qm-overview','No\x20overview\x20available.','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><polyline\x20points=\x2215\x2018\x209\x2012\x2015\x206\x22/></svg>','unshift','with_companies','filter-rating','_get','eyJ','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22recent-header\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>Recent</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22recent-clear\x22\x20onmousedown=\x22event.preventDefault();clearRecentSearches()\x22>Clear</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','search-clear-btn','NBC','querySelector','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22genre-bar-track\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22genre-bar-fill\x22\x20data-width=\x22','delete','<svg\x20width=\x2214\x22\x20height=\x2214\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22\x20stroke-linejoin=\x22round\x22><circle\x20cx=\x2218\x22\x20cy=\x225\x22\x20r=\x223\x22/><circle\x20cx=\x226\x22\x20cy=\x2212\x22\x20r=\x223\x22/><circle\x20cx=\x2218\x22\x20cy=\x2219\x22\x20r=\x223\x22/><line\x20x1=\x228.59\x22\x20y1=\x2213.51\x22\x20x2=\x2215.42\x22\x20y2=\x2217.49\x22/><line\x20x1=\x2215.41\x22\x20y1=\x226.51\x22\x20x2=\x228.59\x22\x20y2=\x2210.49\x22/></svg>\x20Share','/tv/','scrollTo','/?type=tv&id=','slug','dragover','pathname','genre_ids','getTime','Jurassic\x20World','matchMedia','Terminator','toLowerCase','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22collection-meta\x22>','disabled','&e=','Amazon\x20Studios','_set','short','hero-title','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>','<div\x20class=\x22empty-state\x22><div\x20class=\x22icon\x22>🎬</div><p>No\x20results.\x20Try\x20adjusting\x20the\x20filters.</p></div>','TV\x20Shows','poster_path','<span>','position','page-enter','reduce','createElement','popularity','Unreleased','exitFullscreen','inList','tabindex','mylist','show','<img\x20class=\x22cast-avatar\x22\x20src=\x22','Select\x20at\x20least\x20one\x20option\x20to\x20export','<span\x20class=\x22qm-runtime\x22>','object','https://primesrc.me/embed/movie?tmdb=','reload','<div\x20class=\x22sv-ctx-item\x20sv-ctx-header\x22>','Romance','animation','trim','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><path\x20d=\x22M18\x2013v6a2\x202\x200\x200\x201-2\x202H5a2\x202\x200\x200\x201-2-2V8a2\x202\x200\x200\x201\x202-2h6\x22/><polyline\x20points=\x2215\x203\x2021\x203\x2021\x209\x22/><line\x20x1=\x2210\x22\x20y1=\x2214\x22\x20x2=\x2221\x22\x20y2=\x223\x22/></svg>','setDate','Apple\x20TV+','The\x20Avengers','changedTouches','setAttribute','color','stopPropagation','release_date','about:blank','mylist-grid','headers','pd-tab-','0px\x20200px\x200px\x200px','Thriller','turkish-row','touchmove','\x20·\x20<span\x20style=\x22color:var(--gold)\x22>','primary_release_date.desc','_pendingGenreIds','stats-page','Action\x20&\x20Adventure','Mission:\x20Impossible','&episode=1','HBO','split','/discover/movie','mode','button','replace','&t=','map','Adventure','collection-card','ep-btn-','sv-ctx-src-newtab','autoplay-num','with_genres','In\x20','total_results','&s=','_svHistoryCache','primesrc','search-page','next-ep-btn','TV\x20Series','light','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22recent-header\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>Recent\x20Searches</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22recent-clear\x22\x20onmousedown=\x22event.preventDefault();clearRecentSearches()\x22>Clear\x20all</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','statechange','The\x20Dark\x20Knight','sv_discovered_collections','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><polyline\x20points=\x2220\x206\x209\x2017\x204\x2012\x22/></svg>','title','src','parts','shiftKey','join','SV:\x20','<div\x20class=\x22suggestion-poster-placeholder\x22></div>','click','<div\x20class=\x22hero-dot\x20','d\x20ago','Iron\x20Man','Lethal\x20Weapon','https://primesrc.me/embed/tv?tmdb=','original_language','player-container','/?type=','\x22\x20loading=\x22lazy\x22\x20onerror=\x22this.style.display=\x27none\x27\x22>','search','\x20history\x20+\x20','max','padStart','<img\x20src=\x22','toast-msg','https://primesrc.me/embed/movie?imdb=','<div\x20class=\x22empty-state\x22><p>Failed\x20to\x20load.\x20Try\x20again.</p></div>','clipboard','filter-sort','Try\x20a\x20different\x20filter.','qm-visible','Transformers','stringify','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22margin-top:6px\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cw-remove-btn\x20mylist-remove-btn\x22\x20onclick=\x22event.stopPropagation();removeFromMyList(','\x20—\x20StreamVault','import-overlay','\x22\x20alt=\x22','.hero-dot','networkType','\x22\x20title=\x22','status','The\x20Lord\x20of\x20the\x20Rings','scrollRestoration','vote_count','A24','scrollIntoView','filter-genre','var(--text2)','fullscreenElement','Search','match','Ep\x20','collection-section','grabbing','\x20<div\x20class=\x22cast-name\x22>','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sv-ctx-divider\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22sv-ctx-item\x20sv-ctx-btn\x22\x20id=\x22sv-ctx-src-switch\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><polygon\x20points=\x225\x203\x2019\x2012\x205\x2021\x205\x203\x22/></svg>Switch\x20to\x20','outline','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22><polygon\x20points=\x225\x203\x2019\x2012\x205\x2021\x205\x203\x22/></svg>','allSettled','episodes-grid','preventDefault','mtab-collections','hero-bg','resolve','webkitfullscreenchange','toast','globe','[data-id=\x22','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><line\x20x1=\x2218\x22\x20y1=\x226\x22\x20x2=\x226\x22\x20y2=\x2218\x22/><line\x20x1=\x226\x22\x20y1=\x226\x22\x20x2=\x2218\x22\x20y2=\x2218\x22/></svg>','fullscreen-btn','Sherlock\x20Holmes','appendChild','warn','w342','includes','date','backgroundImage','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22var(--gold)\x22><polygon\x20points=\x2212\x202\x2015.09\x208.26\x2022\x209.27\x2017\x2014.14\x2018.18\x2021.02\x2012\x2017.77\x205.82\x2021.02\x207\x2014.14\x202\x209.27\x208.91\x208.26\x2012\x202\x22/></svg>','The\x20Equalizer','slice','<div\x20class=\x22coming-soon-badge\x22>','future','text-align:center;font-size:12px;color:var(--text3);padding:16px\x200\x208px;','My\x20List','serviceWorker','nav-entering','search-count','overflow','&season=','/?browse=filter&network=','/combined_credits','StreamVault\x20Sync','tab-stats','</div>\x20<div\x20class=\x22cast-character\x22>','dym-suggestions','has-watch\x20most','external_ids','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cw-hover-overlay\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cw-hover-left\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cw-hover-btn\x20cw-play-btn\x22\x20title=\x22Play\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22><polygon\x20points=\x225\x203\x2019\x2012\x205\x2021\x205\x203\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cw-hover-btn\x20cw-list-btn\x22\x20title=\x22My\x20List\x22\x20data-in-list=\x22','position:absolute;inset:0;z-index:1;opacity:0;','episodes','tab-mylist','similar','/search/','Days\x20Watched','moviesapi','getItem','style','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-meta\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20style=\x22color:var(--gold);font-size:11px\x22>','The\x20Hitman’s\x20Bodyguard','background-image:url(','Kingsman','removeChild','cast-section','Netflix','https://primesrc.me/embed','removeItem','/search/tv','✅\x20Replaced\x20with\x20','<div\x20style=\x22font-size:13px;color:var(--text3);width:100%;margin-bottom:4px;\x22>Did\x20you\x20mean…</div>','Indiana\x20Jones','fullscreen-icon-exit','left:0;right:0;bottom:0;top:auto;width:100%;border-radius:16px\x2016px\x200\x200;position:fixed;','qm-genres','mylist-count','https://primesrc.me/embed/tv?imdb=','/season/','toLocaleDateString','\x22>\x20','SV\x20storage\x20error:','qm-meta','https://www.2embed.cc/embed/','startsWith','m\x20ago','\x20saved','pageX','Failed\x20to\x20load','trending-row','isContentEditable','left','watch-together-countdown','qm-play-btn','<div\x20class=\x22empty-state\x22><p>Failed\x20to\x20load.\x20Check\x20your\x20API\x20key.</p></div>','&id=','</span></div>','Spider-Verse','Movies','stats-genres','&quot;','\x20E1','aborted','updatefound','quick-modal','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22><polygon\x20points=\x2222\x203\x202\x203\x2010\x2012.46\x2010\x2019\x2014\x2021\x2014\x2012.46\x2022\x203\x22/></svg>','Cartoon\x20Network','player-overview','div','toString','stats','dark','exp-mylist','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22rsub\x22>','find','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qm-actions\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22qm-play-btn\x22\x20id=\x22qm-play-btn\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2216\x22\x20height=\x2216\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22><polygon\x20points=\x225\x203\x2019\x2012\x205\x2021\x205\x203\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Play\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22qm-list-btn\x22\x20id=\x22qm-list-btn\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20class=\x22qm-icon-add\x22\x20width=\x2215\x22\x20height=\x2215\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><line\x20x1=\x2212\x22\x20y1=\x225\x22\x20x2=\x2212\x22\x20y2=\x2219\x22/><line\x20x1=\x225\x22\x20y1=\x2212\x22\x20x2=\x2219\x22\x20y2=\x2212\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20class=\x22qm-icon-check\x22\x20width=\x2215\x22\x20height=\x2215\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22\x20style=\x22display:none\x22><polyline\x20points=\x2220\x206\x209\x2017\x204\x2012\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22qm-list-label\x22>My\x20List</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22qm-detail-btn\x22\x20id=\x22qm-detail-btn\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2215\x22\x20height=\x2215\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><circle\x20cx=\x2212\x22\x20cy=\x2212\x22\x20r=\x2210\x22/><line\x20x1=\x2212\x22\x20y1=\x228\x22\x20x2=\x2212\x22\x20y2=\x2212\x22/><line\x20x1=\x2212\x22\x20y1=\x2216\x22\x20x2=\x2212.01\x22\x20y2=\x2216\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20More\x20Details\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qm-meta\x22\x20id=\x22qm-meta\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22skeleton\x22\x20style=\x22height:14px;width:60%;border-radius:4px;\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qm-overview\x22\x20id=\x22qm-overview\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22skeleton\x22\x20style=\x22height:12px;width:100%;border-radius:4px;margin-bottom:6px;\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22skeleton\x22\x20style=\x22height:12px;width:85%;border-radius:4px;margin-bottom:6px;\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22skeleton\x22\x20style=\x22height:12px;width:70%;border-radius:4px;\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qm-genres\x22\x20id=\x22qm-genres\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>','<div\x20style=\x22color:var(--text3);font-size:13px\x22>Nothing\x20watched\x20yet</div>','\x20Season\x20','getFullYear','<div\x20class=\x22empty-state\x22><div\x20class=\x22icon\x22>🎬</div><p>No\x20results\x20in\x20this\x20genre.</p></div>','player-networks','StreamVault','/collection/','some','Knives\x20Out\x20Collection','genre','794920sDBvGw','cast-card','innerWidth','scrollWidth','continue-watching-row','textContent','has','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22stat-card\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22stat-value\x22>','Documentary','hero-bg-prev','set','sv_theme','</span></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>','286225myLLdx','<span>✅\x20Link\x20Copied!</span>','mouseup','msfullscreenchange','value','filter','clientWidth','innerHTML','timestamp','-12-31','w185','/tv/popular','The\x20Bourne\x20Series','msRequestFullscreen','mtab-mylist','var(--gold)','.nav-tab','push','watch-together-overlay','setItem','back','\x20hidden\x20·\x20<button\x20onclick=\x22SV.hidden.clear();_renderHiddenCount();showToast(\x27Hidden\x20list\x20cleared\x27)\x22\x20style=\x22color:var(--gold);font-size:12px;text-decoration:underline;background:none;border:none;cursor:pointer;font-family:inherit;\x22>Show\x20all</button>','collections-page','Walt\x20Disney','backdrop_path','qm-close-btn','<div\x20class=\x22empty-state\x22><p>Nothing\x20new\x20this\x20week\x20yet.</p></div>','signal','primary_release_date.lte','removeEventListener','<div\x20class=\x22recent-empty\x22>Start\x20typing\x20to\x20search\x20movies\x20&\x20shows</div>','sv_mylist','Hidden\x20—\x20won\x27t\x20show\x20again','select','share-btn','episode','Embed\x20URL\x20copied!','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cw-poster-wrap\x22\x20style=\x22position:relative;cursor:pointer;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','<div\x20class=\x22spinner\x22\x20style=\x22margin:20px\x20auto;width:28px;height:28px;\x22></div>','className','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>','msExitFullscreen','.ep-btn','sv-context-menu','episode_run_time','Invalid\x20API\x20key\x20—\x20please\x20update\x20it','first_air_date.gte','keys','drag-over','mylist-filter-','touches','w92','next-ep-title','\x20films','remove','log','Amazon','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>','player-meta','querySelectorAll','home-page','touchstart','Action','<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><line\x20x1=\x2212\x22\x20y1=\x225\x22\x20x2=\x2212\x22\x20y2=\x2219\x22/><line\x20x1=\x225\x22\x20y1=\x2212\x22\x20x2=\x2219\x22\x20y2=\x2212\x22/></svg>','7032xahcfm','/search/person','requestFullscreen','Unknown','card-info','tv-row','The\x20Hunger\x20Games','Sci-Fi','Removed\x20from\x20My\x20List','mediaType','Doctor\x20Strange','Searching…','<div\x20style=\x22color:var(--text3);font-size:13px\x22>Watch\x20more\x20to\x20see\x20your\x20top\x20genres</div>','state','\x22><span>Suggestions</span></div>','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22info\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22rtitle\x22>','import-replace-toggle','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22stat-sub\x22>','Frozen\x20Collection','contextmenu','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','searches','.cw-play-btn','forEach','yearTo','.scroll-btn.left','Horror','link','scroll-top','scrollY','is-touching','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22suggestion-item\x22\x20onmousedown=\x22event.preventDefault();pickSuggestion(','toFixed','touchend','.cw-hover-btn','.cw-poster-wrap','cursor','scrollLeft','Sony\x20Pictures','scroll-sentinel','&episode=','none','title-changing','hero-type','onload','✅\x20Imported\x20','<span\x20class=\x22ep-unreleased-label\x22>','/discover/','<div\x20class=\x22empty-state\x22><p>Failed\x20to\x20load.</p></div>','-01-01','application/json','Disney+','just\x20now','<div\x20class=\x22skeleton\x22\x20style=\x22height:40px;width:60%;border-radius:6px;\x22></div>','collections-count','observe','my-list-icon-add','href','&networkType=','w780','yearFrom','toISOString','pushState','player-title','\x22\x20onerror=\x22this.style.opacity=\x270\x27\x22>','Crunchyroll','genre-btn','movies','getElementById','Fantastic\x20Beasts','recent-searches','abs','false','The\x20Mummy','\x20·\x20★\x20','oncontextmenu','genres','<div\x20style=\x22position:relative\x22><div\x20class=\x22card-poster-placeholder\x22>','closest','setup-overlay','toDateString','300\x20Series','\x20title(s)\x22></div>','collections-grid','1164JPsTpD','/search/movie','filter-toggle-label','Part\x20of\x20a\x20Collection','width','Not\x20released\x20yet','Name\x20copied!','transform','toast-undo-btn','season','🎬\x20Watch\x20with\x20me\x20—\x20starts\x20in\x2030\x20seconds!','entries','<div\x20class=\x22skeleton\x20skel-card\x22></div>','pointer','<svg\x20width=\x22VAR\x22\x20height=\x22VAR\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><circle\x20cx=\x2212\x22\x20cy=\x2212\x22\x20r=\x2210\x22/><line\x20x1=\x2212\x22\x20y1=\x228\x22\x20x2=\x2212\x22\x20y2=\x2212\x22/><line\x20x1=\x2212\x22\x20y1=\x2216\x22\x20x2=\x2212.01\x22\x20y2=\x2216\x22/></svg>','placeholder','contains','.json','Captain\x20America','writeText','addEventListener','Harry\x20Potter','.pd-tab-panel','Pirates\x20of\x20the\x20Caribbean','size','6157080jYzhnz','</span>','parentElement','.cw-list-btn','overview','\x27)\x22>','/?browse=collections&id=','Alien','season_number','imdb','animationDelay','.qm-icon-check','Mad\x20Max','?type=','Fantasy','\x20resolved','year','display:flex;margin-bottom:16px;','Sci-Fi\x20&\x20Fantasy','checked','search-query-display','\x20results','Tomorrow','.cw-poster-wrap.is-touching','media_type','%\x22></div></div>','copied','qm-closing','null','with_networks','tab-movies','sv-ctx-visible','.pd-tab[data-tab=\x22cast\x22]','savedAt','Episodes\x20Watched','\x20list\x20titles','selectedIndex','qm-list-btn','autoplay-progress','noopener','Search\x20movies,\x20shows…','detail','Escape','\x22\x20loading=\x22lazy\x22\x20onerror=\x22this.style.display=\x27none\x27;this.nextElementSibling.style.display=\x27flex\x27\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-poster-placeholder\x22\x20style=\x22display:none\x22>','controllerchange','poster','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>','similar-row','nav-leaving','all','fullscreen-icon-enter','tab-collection','m/ep','hero-dots','tab-tv','rating-label','top','controller','17626mWcvMU','vote_average','FOX',')\x20center/cover','val','AbortError','year-to','/person/','innerHeight','Removed\x20from\x20Continue\x20Watching','installed','then','scroll','.scroll-btn.right','<div\x20class=\x22card-info\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-title\x22>','target','isArray','James\x20Bond','share','import-status','<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><polyline\x20points=\x2220\x206\x209\x2017\x204\x2012\x22/></svg>','length','total_pages','dragleave','update','_blank','flex','<svg\x20width=\x2214\x22\x20height=\x2214\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22currentColor\x22><polygon\x20points=\x225\x203\x2019\x2012\x205\x2021\x205\x203\x22/><line\x20x1=\x2219\x22\x20y1=\x223\x22\x20x2=\x2219\x22\x20y2=\x2221\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22/></svg>','210RWBZae','api-key-input','iframe-blocker','filter-network','mylist-page','credits','startAt','popstate','\x20title','\x20list\x20·\x20','Comedy','min/ep','with_original_language','sv-ctx-newtab','tab-collections','\x20·\x20','Animation','origin','filter-toggle','history','filter-type','s-btn-','sv-ctx-src-switch','<svg\x20width=\x2214\x22\x20height=\x2214\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><polyline\x20points=\x2220\x206\x209\x2017\x204\x2012\x22/></svg>\x20Copied!','AMC','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qm-box\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22qm-close\x22\x20id=\x22qm-close-btn\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2216\x22\x20height=\x2216\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><line\x20x1=\x2218\x22\x20y1=\x226\x22\x20x2=\x226\x22\x20y2=\x2218\x22/><line\x20x1=\x226\x22\x20y1=\x226\x22\x20x2=\x2218\x22\x20y2=\x2218\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qm-backdrop-img\x22\x20id=\x22qm-backdrop\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qm-gradient\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qm-content\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22qm-title\x22\x20id=\x22qm-title\x22>','search-results','continue-watching-section','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22qm-rating\x22>','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22collection-backdrop\x22\x20style=\x22','filter-panel','&#39;',')\x22\x20style=\x22position:relative;z-index:2;\x22\x20title=\x22Remove\x20from\x20My\x20List\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2211\x22\x20height=\x2211\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><line\x20x1=\x2218\x22\x20y1=\x226\x22\x20x2=\x226\x22\x20y2=\x2218\x22/><line\x20x1=\x226\x22\x20y1=\x226\x22\x20x2=\x2218\x22\x20y2=\x2218\x22/></svg>Remove\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>','<div\x20class=\x22recent-empty\x22\x20id=\x22suggestions-loading\x22><span\x20class=\x22suggestions-spinner\x22></span>\x20Searching…</div>','cast-row','\x22\x20loading=\x22lazy\x22\x20onerror=\x22this.style.display=\x27none\x27;this.nextElementSibling.style.display=\x27flex\x27\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cast-avatar-placeholder\x22\x20style=\x22display:none\x22>👤</div>','webkitExitFullscreen','production_companies','<div\x20class=\x22empty-state\x22><p>Search\x20failed.\x20Check\x20your\x20API\x20key.</p></div>','\x20Open\x20in\x20new\x20tab</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22sv-ctx-item\x20sv-ctx-btn\x22\x20id=\x22sv-ctx-copylink\x22>','<div\x20class=\x22empty-state\x22><div\x20class=\x22icon\x22>🎬</div><p>No\x20results\x20found.</p><div\x20id=\x22dym-suggestions\x22\x20style=\x22margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;\x22></div></div>','aria-hidden','execCommand','\x20days','toggle','&amp;','<p\x20style=\x22text-align:center;color:var(--text3);font-size:13px;padding:24px\x22>No\x20more\x20results</p>','Filters','min','card-closing','9999','<div\x20id=\x22scroll-sentinel\x22></div>','sv-ctx-searchactor','movie','values','across\x20all\x20shows','\x20Not\x20interested</button>','shortcuts-modal','filter-lang','<div\x20class=\x22card-watched-badge\x22><svg\x20width=\x229\x22\x20height=\x229\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x223\x22\x20stroke-linecap=\x22round\x22><polyline\x20points=\x2220\x206\x209\x2017\x204\x2012\x22/></svg>\x20Watched</div>','TMDB\x20fetch\x20failed','replaceAll','export-overlay','results','INPUT','insertAdjacentHTML','card-opening','dataset','primary_release_date','year-from','position:\x20absolute;\x20inset:\x200;\x20z-index:\x2010;\x20cursor:\x20pointer;\x20background:\x20transparent;','Jurassic\x20Park','network','<img\x20class=\x22card-poster\x22\x20src=\x22','tag-link','installing'];_0x2349=function(){return _0xd5644d;};return _0x2349();}function triggerNextEpisode(){const _0x4ec21c={_0x511601:0x22f},_0x276b4a=_0x94aeb3;cancelAutoplay();const _0x51237a=document[_0x276b4a(0x519)](_0x276b4a(0x44d));if(_0x51237a)_0x51237a[_0x276b4a(_0x4ec21c._0x511601)]();}function cancelAutoplay(){const _0x4f7d8d={_0x312f24:0x365,_0x4503c9:0x4ae,_0x59f194:0x3b4,_0x3973d5:0x4e4},_0x24b479=_0x94aeb3;clearInterval(autoplayTimer),document[_0x24b479(_0x4f7d8d._0x312f24)](_0x24b479(0x487))[_0x24b479(0x450)][_0x24b479(_0x4f7d8d._0x4503c9)](_0x24b479(0x4ab)),document['getElementById'](_0x24b479(_0x4f7d8d._0x59f194))['style'][_0x24b479(_0x4f7d8d._0x3973d5)]=0x71;}function setMobileTab(_0x41a197){const _0x1859b9={_0x5219c5:0x31c,_0x3f02fe:0x338,_0x33f3b3:0x4ae,_0x2de343:0x4f3},_0x44e186=_0x94aeb3;document[_0x44e186(_0x1859b9._0x5219c5)](_0x44e186(0x4b0))[_0x44e186(_0x1859b9._0x3f02fe)](_0x1f6270=>_0x1f6270['classList'][_0x44e186(0x317)](_0x44e186(0x4f3))),document[_0x44e186(0x365)](_0x41a197)?.[_0x44e186(0x450)][_0x44e186(_0x1859b9._0x33f3b3)](_0x44e186(_0x1859b9._0x2de343));}function focusMobileSearch(){const _0x4c79d5={_0x490316:0x2d9,_0x14ae73:0x258,_0x100818:0x365,_0x124b48:0x2e8,_0x1058a5:0x51e,_0x2cad0f:0x49a},_0x3eec9f=_0x94aeb3;showPage(_0x3eec9f(0x21f)),document[_0x3eec9f(0x365)]('search-query-display')[_0x3eec9f(_0x4c79d5._0x490316)]=_0x3eec9f(_0x4c79d5._0x14ae73),document[_0x3eec9f(_0x4c79d5._0x100818)]('search-count')[_0x3eec9f(_0x4c79d5._0x490316)]='',document[_0x3eec9f(0x365)](_0x3eec9f(0x3fe))[_0x3eec9f(_0x4c79d5._0x124b48)]='',window[_0x3eec9f(_0x4c79d5._0x1058a5)]({'top':0x0,'behavior':_0x3eec9f(_0x4c79d5._0x2cad0f)}),setTimeout(()=>document[_0x3eec9f(0x365)](_0x3eec9f(0x4d6))[_0x3eec9f(0x503)](),0x12c);}function renderCast(_0x43eb04){const _0x1a58b6={_0x125346:0x365,_0x323b64:0x406,_0x153466:0x437,_0x14caf6:0x291,_0x394757:0x2e8},_0x5ee8ee={_0x242686:0x2c2,_0x482c7c:0x49c,_0x3ada42:0x2eb,_0x299da4:0x25d,_0x1f4f7f:0x26e},_0x36eb7b=_0x94aeb3,_0xd57fab=document[_0x36eb7b(_0x1a58b6._0x125346)](_0x36eb7b(0x297)),_0xb52988=document['getElementById'](_0x36eb7b(_0x1a58b6._0x323b64)),_0x1dfe1b=_0x43eb04[_0x36eb7b(0x276)](0x0,0x14);if(!_0x1dfe1b['length']){_0xd57fab['style'][_0x36eb7b(_0x1a58b6._0x153466)]='none';return;}_0xd57fab[_0x36eb7b(_0x1a58b6._0x14caf6)][_0x36eb7b(_0x1a58b6._0x153466)]='block',_0xb52988[_0x36eb7b(_0x1a58b6._0x394757)]='',_0x1dfe1b['forEach'](_0x17782d=>{const _0x53687e={_0x21267f:0x263,_0x122447:0x451},_0x36f89e=_0x36eb7b,_0x4c5374=document['createElement'](_0x36f89e(_0x5ee8ee._0x242686));_0x4c5374[_0x36f89e(0x308)]=_0x36f89e(0x2d5);const _0x551240=_0x17782d[_0x36f89e(_0x5ee8ee._0x482c7c)]?TMDB_IMG+_0x36f89e(_0x5ee8ee._0x3ada42)+_0x17782d['profile_path']:null;_0x4c5374['innerHTML']=_0x551240?_0x36f89e(0x1ea)+_0x551240+'\x22\x20alt=\x22'+esc(_0x17782d['name'])+_0x36f89e(0x407):'<div\x20class=\x22cast-avatar-placeholder\x22>👤</div>',_0x4c5374[_0x36f89e(0x2e8)]+=_0x36f89e(_0x5ee8ee._0x299da4)+esc(_0x17782d[_0x36f89e(0x451)])+_0x36f89e(0x284)+esc(_0x17782d['character'])+'</div>',_0x4c5374[_0x36f89e(0x389)]('contextmenu',_0x3429db=>{const _0x58d423=_0x36f89e;_0x3429db[_0x58d423(_0x53687e._0x21267f)](),showCastContextMenu(_0x3429db,_0x17782d[_0x58d423(_0x53687e._0x122447)]);}),_0xb52988[_0x36f89e(_0x5ee8ee._0x1f4f7f)](_0x4c5374);});}function buildEmbedUrl(_0x1d0c66,_0x34f812,_0x1f0370,_0x1a7d95,_0x588d1a,_0x40242f,_0x3cdf74=0x0){const _0x5d6f4e={_0x5c2c11:0x3aa,_0x23c9ac:0x23f,_0x4b0326:0x1ee,_0x2731fe:0x212,_0x45e2f4:0x48d,_0x3532f7:0x2a9,_0x1e2b77:0x27f,_0x1e81e8:0x234,_0x5d435f:0x21c,_0xfcd269:0x1d5,_0x5818a0:0x4b2},_0x1aa10e=_0x94aeb3,_0xfcf9f0=_0x1f0370&&_0x1f0370!==_0x1aa10e(_0x5d6f4e._0x5c2c11)?_0x1f0370:null;if(_0x34f812===_0x1aa10e(0x419))switch(_0x1d0c66){case _0x1aa10e(0x21e):return _0xfcf9f0?_0x1aa10e(_0x5d6f4e._0x23c9ac)+_0xfcf9f0+_0x1aa10e(0x212)+_0x3cdf74:_0x1aa10e(_0x5d6f4e._0x4b0326)+_0x1a7d95+_0x1aa10e(_0x5d6f4e._0x2731fe)+_0x3cdf74;case _0x1aa10e(_0x5d6f4e._0x45e2f4):return _0x1aa10e(_0x5d6f4e._0x3532f7)+(_0xfcf9f0??_0x1a7d95);case _0x1aa10e(0x28f):return'https://moviesapi.club/movie/'+(_0xfcf9f0??_0x1a7d95);}else switch(_0x1d0c66){case'primesrc':return _0xfcf9f0?_0x1aa10e(0x2a3)+_0xfcf9f0+_0x1aa10e(_0x5d6f4e._0x1e2b77)+_0x588d1a+'&episode='+_0x40242f+_0x1aa10e(0x212)+_0x3cdf74:_0x1aa10e(_0x5d6f4e._0x1e81e8)+_0x1a7d95+_0x1aa10e(0x27f)+_0x588d1a+_0x1aa10e(0x349)+_0x40242f+_0x1aa10e(0x212)+_0x3cdf74;case _0x1aa10e(0x48d):return _0x1aa10e(0x500)+(_0xfcf9f0??_0x1a7d95)+_0x1aa10e(_0x5d6f4e._0x5d435f)+_0x588d1a+_0x1aa10e(_0x5d6f4e._0xfcd269)+_0x40242f;case'moviesapi':return _0x1aa10e(_0x5d6f4e._0x5818a0)+(_0xfcf9f0??_0x1a7d95)+'-'+_0x588d1a+'-'+_0x40242f;}}function switchSource(_0x378a2c){const _0x1f9ab6={_0x1cc32d:0x2f4,_0x4cc716:0x4ec,_0x2a2ee1:0x365,_0x4612ee:0x43f},_0x41314b=_0x94aeb3;currentSource=_0x378a2c,localStorage[_0x41314b(_0x1f9ab6._0x1cc32d)](_0x41314b(0x434),_0x378a2c),document['querySelectorAll'](_0x41314b(_0x1f9ab6._0x4cc716))['forEach'](_0x4e435c=>_0x4e435c[_0x41314b(0x450)]['toggle'](_0x41314b(0x4f3),_0x4e435c[_0x41314b(0x427)][_0x41314b(0x229)]===_0x378a2c));const {type:_0xf53a0c,imdb:_0x503f77,tmdbId:_0xf61e7d,season:_0x6ac03d,episode:_0x3af062}=currentEmbed;if(!_0xf53a0c)return;const _0x40049e=buildEmbedUrl(_0x378a2c,_0xf53a0c,_0x503f77,_0xf61e7d,_0x6ac03d,_0x3af062);document[_0x41314b(_0x1f9ab6._0x2a2ee1)](_0x41314b(_0x1f9ab6._0x4612ee))[_0x41314b(0x229)]=_0x40049e,addIframeBlocker();}function toggleFullscreen(){const _0x316973={_0xd6b3ae:0x365,_0x6002e5:0x236,_0x50a311:0x365,_0x1c728c:0x365,_0x25820e:0x29f,_0x394b4e:0x45b,_0x3d779c:0x437,_0x5e9f80:0x291,_0x38153d:0x228,_0x1f74f0:0x1e5,_0x10dd9f:0x4e5,_0x18979f:0x34a,_0x58475c:0x228},_0x287c6e=_0x94aeb3,_0x1526a1=document[_0x287c6e(_0x316973._0xd6b3ae)](_0x287c6e(_0x316973._0x6002e5)),_0x3c1c6e=document['getElementById'](_0x287c6e(0x26c)),_0xad43ce=document[_0x287c6e(_0x316973._0x50a311)](_0x287c6e(0x3c0)),_0x19d8ef=document[_0x287c6e(_0x316973._0x1c728c)](_0x287c6e(_0x316973._0x25820e));if(!document['fullscreenElement']){if(_0x1526a1[_0x287c6e(0x323)])_0x1526a1[_0x287c6e(0x323)]()[_0x287c6e(_0x316973._0x394b4e)](_0x5212ee=>console[_0x287c6e(0x463)](_0x287c6e(0x505),_0x5212ee));else{if(_0x1526a1['webkitRequestFullscreen'])_0x1526a1[_0x287c6e(0x50b)]()[_0x287c6e(0x45b)](_0x40b86c=>console[_0x287c6e(0x463)](_0x287c6e(0x505),_0x40b86c));else _0x1526a1[_0x287c6e(0x2ee)]&&_0x1526a1['msRequestFullscreen']()[_0x287c6e(0x45b)](_0x1c9d42=>console[_0x287c6e(0x463)](_0x287c6e(0x505),_0x1c9d42));}isFullscreen=!![],_0xad43ce['style'][_0x287c6e(_0x316973._0x3d779c)]='none',_0x19d8ef[_0x287c6e(_0x316973._0x5e9f80)][_0x287c6e(0x437)]=_0x287c6e(0x4e5),_0x3c1c6e[_0x287c6e(_0x316973._0x38153d)]='Exit\x20Fullscreen\x20(Esc)';}else{if(document['exitFullscreen'])document[_0x287c6e(_0x316973._0x1f74f0)]();else{if(document['webkitExitFullscreen'])document[_0x287c6e(0x408)]();else document[_0x287c6e(0x30a)]&&document[_0x287c6e(0x30a)]();}isFullscreen=![],_0xad43ce[_0x287c6e(0x291)]['display']=_0x287c6e(_0x316973._0x10dd9f),_0x19d8ef['style'][_0x287c6e(_0x316973._0x3d779c)]=_0x287c6e(_0x316973._0x18979f),_0x3c1c6e[_0x287c6e(_0x316973._0x58475c)]='Toggle\x20Fullscreen\x20(F)';}}document[_0x94aeb3(0x389)](_0x94aeb3(0x49e),updateFullscreenIcon),document[_0x94aeb3(0x389)](_0x94aeb3(0x267),updateFullscreenIcon),document[_0x94aeb3(0x389)](_0x94aeb3(0x2e4),updateFullscreenIcon);function updateFullscreenIcon(){const _0x34fdef={_0x59b31f:0x34a,_0x2c71bb:0x4e5,_0x33c3f6:0x291,_0x202c26:0x44c},_0x4e1cb2=_0x94aeb3,_0x5912e1=document['getElementById']('player-container'),_0x223a98=document[_0x4e1cb2(0x365)](_0x4e1cb2(0x3c0)),_0x1a5d8a=document['getElementById'](_0x4e1cb2(0x29f)),_0x38ca52=document[_0x4e1cb2(0x365)](_0x4e1cb2(0x26c));isFullscreen=!!document[_0x4e1cb2(0x257)],_0x223a98[_0x4e1cb2(0x291)][_0x4e1cb2(0x437)]=isFullscreen?_0x4e1cb2(_0x34fdef._0x59b31f):_0x4e1cb2(_0x34fdef._0x2c71bb),_0x1a5d8a[_0x4e1cb2(_0x34fdef._0x33c3f6)]['display']=isFullscreen?_0x4e1cb2(0x4e5):_0x4e1cb2(0x34a),_0x38ca52[_0x4e1cb2(0x228)]=isFullscreen?_0x4e1cb2(_0x34fdef._0x202c26):'Toggle\x20Fullscreen\x20(F)';}function addIframeBlocker(){const _0x7f1f8d={_0x532ddf:0x3e6,_0x3d3cc4:0x4c4,_0x2d01a0:0x42a,_0x5738f4:0x389,_0x54f047:0x26e},_0x4ba02a=_0x94aeb3,_0x101f16=document['getElementById']('player-container'),_0x1bbbe2=document[_0x4ba02a(0x365)](_0x4ba02a(_0x7f1f8d._0x532ddf));if(_0x1bbbe2)_0x1bbbe2['remove']();const _0x515f40=document[_0x4ba02a(0x1e2)]('div');_0x515f40['id']=_0x4ba02a(0x3e6),_0x515f40[_0x4ba02a(0x291)][_0x4ba02a(_0x7f1f8d._0x3d3cc4)]=_0x4ba02a(_0x7f1f8d._0x2d01a0),_0x515f40[_0x4ba02a(_0x7f1f8d._0x5738f4)](_0x4ba02a(0x22f),()=>{const _0x28bda8=_0x4ba02a;_0x515f40[_0x28bda8(0x317)]();}),_0x101f16[_0x4ba02a(_0x7f1f8d._0x54f047)](_0x515f40);}document[_0x94aeb3(0x389)](_0x94aeb3(0x45e),_0x4f9aa1=>{const _0x1b6d70={_0xf19146:0x424,_0x3d54b7:0x4f4,_0x3d7634:0x4e1,_0x4df4eb:0x3d7,_0x6431bf:0x2b0,_0x58b0b4:0x365,_0x4b5760:0x4da,_0x14c89c:0x450,_0x8b5aa2:0x4f3,_0x43450e:0x470,_0x353be0:0x439,_0x37466a:0x263,_0x50de2c:0x291,_0xc80ddd:0x437,_0x1e2bcd:0x34a,_0x5e5925:0x477,_0xdaecdb:0x21f,_0x32d0dd:0x503,_0x52412c:0x439,_0x4d7693:0x1d2,_0x1acfa9:0x477},_0x42ec9a=_0x94aeb3,_0x53ea21=[_0x42ec9a(_0x1b6d70._0xf19146),_0x42ec9a(_0x1b6d70._0x3d54b7),_0x42ec9a(_0x1b6d70._0x3d7634)][_0x42ec9a(0x271)](_0x4f9aa1[_0x42ec9a(_0x1b6d70._0x4df4eb)]['tagName'])||_0x4f9aa1[_0x42ec9a(0x3d7)][_0x42ec9a(_0x1b6d70._0x6431bf)],_0x4858ef=document[_0x42ec9a(_0x1b6d70._0x58b0b4)](_0x42ec9a(_0x1b6d70._0x4b5760))?.[_0x42ec9a(_0x1b6d70._0x14c89c)][_0x42ec9a(0x385)](_0x42ec9a(_0x1b6d70._0x8b5aa2));if(_0x4858ef&&!_0x53ea21&&!_0x4f9aa1[_0x42ec9a(_0x1b6d70._0x43450e)]&&!_0x4f9aa1[_0x42ec9a(_0x1b6d70._0x353be0)]&&_0x4f9aa1[_0x42ec9a(0x477)][_0x42ec9a(0x1d2)]()==='f'){_0x4f9aa1[_0x42ec9a(_0x1b6d70._0x37466a)](),toggleFullscreen();return;}if(_0x4f9aa1[_0x42ec9a(0x477)]===_0x42ec9a(0x3b8)){const _0x5698fb=document[_0x42ec9a(_0x1b6d70._0x58b0b4)]('import-overlay'),_0x287918=document[_0x42ec9a(0x365)](_0x42ec9a(0x422));if(_0x5698fb&&_0x5698fb[_0x42ec9a(_0x1b6d70._0x50de2c)][_0x42ec9a(_0x1b6d70._0xc80ddd)]!==_0x42ec9a(_0x1b6d70._0x1e2bcd)){closeImportCard();return;}if(_0x287918&&_0x287918[_0x42ec9a(0x291)][_0x42ec9a(0x437)]!==_0x42ec9a(0x34a)){closeExportCard();return;}closeShortcuts();return;}if(_0x4f9aa1[_0x42ec9a(_0x1b6d70._0x5e5925)]==='/'&&!_0x53ea21){_0x4f9aa1['preventDefault']();const _0x4fc896=document[_0x42ec9a(0x365)](_0x42ec9a(0x4d6));if(_0x4fc896){if(document[_0x42ec9a(0x365)](_0x42ec9a(0x21f))[_0x42ec9a(0x291)][_0x42ec9a(0x437)]==='none')showPage(_0x42ec9a(_0x1b6d70._0xdaecdb));window[_0x42ec9a(0x51e)]({'top':0x0,'behavior':_0x42ec9a(0x49a)}),_0x4fc896[_0x42ec9a(_0x1b6d70._0x32d0dd)]();}return;}if(_0x4f9aa1[_0x42ec9a(0x477)]==='?'&&!_0x53ea21){_0x4f9aa1[_0x42ec9a(0x263)](),openShortcuts();return;}if(_0x53ea21||_0x4f9aa1['ctrlKey']||_0x4f9aa1[_0x42ec9a(_0x1b6d70._0x52412c)])return;if(_0x4f9aa1[_0x42ec9a(0x477)][_0x42ec9a(_0x1b6d70._0x4d7693)]()==='h')showHome();if(_0x4f9aa1[_0x42ec9a(_0x1b6d70._0x1acfa9)][_0x42ec9a(0x1d2)]()==='l')showMyList();if(_0x4f9aa1[_0x42ec9a(0x477)]['toLowerCase']()==='s')showStats();if(_0x4f9aa1['key'][_0x42ec9a(0x1d2)]()==='c')showCollections();}),document[_0x94aeb3(0x389)](_0x94aeb3(0x22f),_0x477b48=>{const _0x486905={_0x3e7a36:0x3d7,_0x1b17a8:0x437,_0x180c1e:0x3d7,_0x9bbc80:0x36f,_0x1a5aac:0x31c},_0x1fccbf=_0x94aeb3,_0x40cf91=document[_0x1fccbf(0x365)]('recent-searches'),_0x70d5df=document['getElementById']('search-input');!_0x40cf91[_0x1fccbf(0x385)](_0x477b48[_0x1fccbf(_0x486905._0x3e7a36)])&&_0x477b48[_0x1fccbf(0x3d7)]!==_0x70d5df&&(_0x40cf91[_0x1fccbf(0x291)][_0x1fccbf(_0x486905._0x1b17a8)]='none'),!_0x477b48[_0x1fccbf(_0x486905._0x180c1e)][_0x1fccbf(_0x486905._0x9bbc80)](_0x1fccbf(0x344))&&document[_0x1fccbf(_0x486905._0x1a5aac)](_0x1fccbf(0x3a5))['forEach'](_0x80cb36=>_0x80cb36['classList'][_0x1fccbf(0x317)](_0x1fccbf(0x33f)));});function renderNetworks(_0x5181d9,_0x288f24,_0x2aaf82){const _0x448165={_0x568120:0x319,_0x165477:0x20c,_0x346ea1:0x354,_0x17ecc2:0x4df,_0x5a9fcf:0x1f6,_0x2b4d01:0x2c0,_0x34a138:0x3fc,_0x1fd96a:0x518,_0x32d0fb:0x3ca,_0x560571:0x2f8,_0x2afb1f:0x4c2,_0x231c3b:0x504,_0x37ee29:0x276,_0x3ed1c1:0x338,_0x5d26b5:0x437},_0x50a443={_0x31077d:0x1e2,_0x20dfb:0x308,_0x38418d:0x269,_0x4152a9:0x456,_0x4f82f2:0x22f,_0x176e82:0x334,_0x5270d2:0x26e},_0x38a2a3={_0x1457b8:0x280,_0x32a0d0:0x35b},_0x24d1f2={_0x2ea0f2:0x42c},_0x38be2a=_0x94aeb3,_0xfcdc36=document['getElementById'](_0x38be2a(0x2ce)),_0xa53f59={0xd5:_0x38be2a(0x298),0x400:_0x38be2a(_0x448165._0x568120),0x31:_0x38be2a(_0x448165._0x165477),0xab3:_0x38be2a(_0x448165._0x346ea1),0x1c5:_0x38be2a(_0x448165._0x17ecc2),0x9f8:_0x38be2a(_0x448165._0x5a9fcf),0x38:_0x38be2a(_0x448165._0x2b4d01),0x15:_0x38be2a(_0x448165._0x34a138),0x10:_0x38be2a(_0x448165._0x1fd96a),0x6:_0x38be2a(0x518),0x13:_0x38be2a(_0x448165._0x32d0fb),0xc72:_0x38be2a(0x362),0x1101:_0x38be2a(0x433),0x1a4:'Marvel\x20Studios',0xae:_0x38be2a(0x447),0x22:_0x38be2a(0x347),0x21:'Universal',0x4:'Paramount',0x2:_0x38be2a(_0x448165._0x560571),0x209:_0x38be2a(0x253),0x39b:'Legendary',0x1c7f:_0x38be2a(_0x448165._0x2afb1f),0x270c:_0x38be2a(_0x448165._0x231c3b),0x14418:_0x38be2a(0x1d6)},_0x27b47f=[];_0x5181d9[_0x38be2a(0x276)](0x0,0x3)[_0x38be2a(0x338)](_0x55e04a=>{const _0x3d756f=_0x38be2a;_0x27b47f[_0x3d756f(0x2f2)]({'label':_0xa53f59[_0x55e04a['id']]||_0x55e04a[_0x3d756f(0x451)],'type':_0x3d756f(_0x24d1f2._0x2ea0f2),'id':_0x55e04a['id'],'mediaType':'tv'});});_0x2aaf82===_0x38be2a(0x419)&&_0x288f24[_0x38be2a(_0x448165._0x37ee29)](0x0,0x3)[_0x38be2a(_0x448165._0x3ed1c1)](_0x1f78c5=>{const _0x59e510=_0x38be2a;_0xa53f59[_0x1f78c5['id']]&&_0x27b47f['push']({'label':_0xa53f59[_0x1f78c5['id']],'type':_0x59e510(0x4fa),'id':_0x1f78c5['id'],'mediaType':'movie'});});if(!_0x27b47f[_0x38be2a(0x3dd)]){_0xfcdc36['style'][_0x38be2a(_0x448165._0x5d26b5)]='none';return;}_0xfcdc36[_0x38be2a(0x291)][_0x38be2a(_0x448165._0x5d26b5)]=_0x38be2a(0x3e2),_0xfcdc36[_0x38be2a(0x2e8)]='<span\x20style=\x22font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-right:4px;\x22>On</span>',_0x27b47f['forEach'](_0x3b2122=>{const _0x2441ad=_0x38be2a,_0x156f8b=document[_0x2441ad(_0x50a443._0x31077d)](_0x2441ad(0x210));_0x156f8b[_0x2441ad(_0x50a443._0x20dfb)]=_0x2441ad(0x42e),_0x156f8b['innerHTML']=icon(_0x2441ad(_0x50a443._0x38418d),0xa)+'\x20'+esc(_0x3b2122[_0x2441ad(_0x50a443._0x4152a9)]),_0x156f8b[_0x2441ad(0x389)](_0x2441ad(_0x50a443._0x4f82f2),()=>browseNetwork(_0x3b2122['id'],_0x3b2122[_0x2441ad(0x456)],_0x3b2122[_0x2441ad(0x454)],_0x3b2122[_0x2441ad(0x32a)])),_0x156f8b[_0x2441ad(0x389)](_0x2441ad(_0x50a443._0x176e82),_0x4aa63e=>{const _0x41bd69=_0x2441ad;_0x4aa63e[_0x41bd69(0x263)](),showCardContextMenu(_0x4aa63e,_0x41bd69(_0x38a2a3._0x1457b8)+_0x3b2122['id']+_0x41bd69(_0x38a2a3._0x32a0d0)+_0x3b2122['type'],_0x3b2122[_0x41bd69(0x456)]);}),_0xfcdc36[_0x2441ad(_0x50a443._0x5270d2)](_0x156f8b);});}async function browseGenre(_0x1aacf3,_0x3d51af){const _0xa33468={_0x4e6087:0x3a2,_0x553f5f:0x2d9,_0x937234:0x27d,_0x208fb9:0x365,_0x42ae44:0x3fe,_0x2b1459:0x2e8,_0x8eadae:0x4ea,_0x3123c8:0x423,_0x406be5:0x3bf,_0x5d4ed8:0x45a,_0x569738:0x365,_0x5e9fb6:0x47b,_0x1fd286:0x437,_0x54ebd3:0x3e2,_0x32961d:0x3dd,_0x3abd1e:0x351},_0xb5e307=_0x94aeb3;_resetSectionState(),showPage('search-page'),document['getElementById'](_0xb5e307(0x4d6))['value']=_0x3d51af,document[_0xb5e307(0x365)](_0xb5e307(_0xa33468._0x4e6087))[_0xb5e307(_0xa33468._0x553f5f)]=_0x3d51af,document['getElementById'](_0xb5e307(_0xa33468._0x937234))[_0xb5e307(0x2d9)]=_0xb5e307(0x4cc),document[_0xb5e307(_0xa33468._0x208fb9)](_0xb5e307(_0xa33468._0x42ae44))[_0xb5e307(_0xa33468._0x2b1459)]=_0xb5e307(_0xa33468._0x8eadae),document[_0xb5e307(0x365)](_0xb5e307(0x3f6))[_0xb5e307(0x291)]['cssText']=_0xb5e307(0x39f),setActiveTab('');try{const [_0x310760,_0x2cd255]=await Promise[_0xb5e307(0x3bf)]([tmdb(_0xb5e307(0x20e),{'with_genres':_0x1aacf3,'sort_by':_0xb5e307(0x46e),'page':0x1}),tmdb('/discover/tv',{'with_genres':_0x1aacf3,'sort_by':'popularity.desc','page':0x1})]);allResults=[..._0x310760[_0xb5e307(_0xa33468._0x3123c8)][_0xb5e307(0x213)](_0x2f23e4=>({..._0x2f23e4,'media_type':_0xb5e307(0x419)})),..._0x2cd255['results'][_0xb5e307(0x213)](_0x290cb5=>({..._0x290cb5,'media_type':'tv'}))]['sort']((_0x10e5e5,_0x50c6c0)=>(_0x50c6c0[_0xb5e307(0x1e3)]||0x0)-(_0x10e5e5['popularity']||0x0)),activeGenre=_0xb5e307(_0xa33468._0x406be5),document[_0xb5e307(0x31c)](_0xb5e307(_0xa33468._0x5d4ed8))['forEach'](_0x3511e7=>_0x3511e7[_0xb5e307(0x450)][_0xb5e307(0x410)](_0xb5e307(0x4f3),_0x3511e7[_0xb5e307(0x427)]['genre']===_0xb5e307(0x3bf))),document[_0xb5e307(_0xa33468._0x569738)](_0xb5e307(_0xa33468._0x5e9fb6))[_0xb5e307(0x291)][_0xb5e307(_0xa33468._0x1fd286)]=_0xb5e307(_0xa33468._0x54ebd3),document[_0xb5e307(_0xa33468._0x208fb9)]('search-count')[_0xb5e307(0x2d9)]=allResults[_0xb5e307(_0xa33468._0x32961d)]+_0xb5e307(0x3a3),renderCards('search-results',allResults);}catch(_0x2dab82){document[_0xb5e307(0x365)]('search-results')[_0xb5e307(0x2e8)]=_0xb5e307(_0xa33468._0x3abd1e);}}async function browseNetwork(_0x21eb21,_0x39c1e2,_0x5e9329,_0x577f21){const _0x309463={_0x4be798:0x21f,_0x584bfa:0x365,_0x56a0b8:0x4cc,_0x5a4b58:0x2e8,_0x22c946:0x4ea,_0x46d071:0x365,_0x402d94:0x3f6,_0x40cae2:0x39f,_0x1edc22:0x501,_0x221405:0x46e,_0x5aab26:0x213,_0x4d8482:0x42c,_0xc88b32:0x3de,_0x54fab6:0x45a,_0x38bf07:0x3e2,_0x4c8eda:0x27d,_0x1da8be:0x2d9,_0x364158:0x3fe,_0x20e416:0x425,_0x5ccd77:0x351},_0x47297b=_0x94aeb3;_resetSectionState(),showPage(_0x47297b(_0x309463._0x4be798)),document['getElementById'](_0x47297b(0x4d6))[_0x47297b(0x2e5)]=_0x39c1e2,document[_0x47297b(_0x309463._0x584bfa)](_0x47297b(0x3a2))['textContent']=_0x39c1e2,document['getElementById'](_0x47297b(0x27d))[_0x47297b(0x2d9)]=_0x47297b(_0x309463._0x56a0b8),document[_0x47297b(_0x309463._0x584bfa)](_0x47297b(0x3fe))[_0x47297b(_0x309463._0x5a4b58)]=_0x47297b(_0x309463._0x22c946),document[_0x47297b(_0x309463._0x46d071)](_0x47297b(_0x309463._0x402d94))['style']['cssText']=_0x47297b(_0x309463._0x40cae2),setActiveTab('');try{const _0x1a1b07=_0x5e9329==='network'?'with_networks':_0x47297b(0x512),_0xabc94a=_0x577f21==='tv'?_0x47297b(_0x309463._0x1edc22):_0x47297b(0x20e),_0x21eb91=await tmdb(_0xabc94a,{[_0x1a1b07]:_0x21eb21,'sort_by':_0x47297b(_0x309463._0x221405),'page':0x1});allResults=_0x21eb91['results'][_0x47297b(_0x309463._0x5aab26)](_0x3a8bf0=>({..._0x3a8bf0,'media_type':_0x577f21})),currentSection={'mode':_0x47297b(_0x309463._0x4d8482),'networkId':_0x21eb21,'type':_0x5e9329,'mediaType':_0x577f21,'param':_0x1a1b07},hasMorePages=_0x21eb91[_0x47297b(_0x309463._0xc88b32)]>0x1,activeGenre='all',document[_0x47297b(0x31c)](_0x47297b(_0x309463._0x54fab6))['forEach'](_0x13f9d9=>_0x13f9d9[_0x47297b(0x450)][_0x47297b(0x410)](_0x47297b(0x4f3),_0x13f9d9[_0x47297b(0x427)][_0x47297b(0x2d3)]===_0x47297b(0x3bf))),document[_0x47297b(0x365)](_0x47297b(0x47b))[_0x47297b(0x291)][_0x47297b(0x437)]=_0x47297b(_0x309463._0x38bf07),document['getElementById'](_0x47297b(_0x309463._0x4c8eda))[_0x47297b(_0x309463._0x1da8be)]=_0x21eb91[_0x47297b(0x21b)]+'\x20titles',renderCards(_0x47297b(_0x309463._0x364158),allResults);const _0x337cac=document[_0x47297b(_0x309463._0x584bfa)](_0x47297b(_0x309463._0x364158));_0x337cac[_0x47297b(_0x309463._0x20e416)]('afterend',_0x47297b(0x417)),attachScrollObserver();}catch(_0x117377){document[_0x47297b(0x365)](_0x47297b(0x3fe))[_0x47297b(_0x309463._0x5a4b58)]=_0x47297b(_0x309463._0x5ccd77);}}async function loadMoreResults(){const _0x24cdbc={_0x3ba95f:0x501,_0x27a131:0x423,_0x4b469c:0x423,_0x55e49f:0x3de,_0x104b56:0x239,_0x4c4d1d:0x2e6,_0x8762d7:0x423,_0x16ac2e:0x365,_0x401287:0x338,_0x43714a:0x2e8},_0x15dc38={_0x2b379c:0x3a6,_0x34edde:0x4ae},_0x17a378=_0x94aeb3;if(isLoadingMore||!hasMorePages||!currentSection)return;isLoadingMore=!![];const _0xe57b76=document['getElementById'](_0x17a378(0x348));if(_0xe57b76)_0xe57b76[_0x17a378(0x2e8)]=_0x17a378(0x307);try{let _0x1f0afb;const {mediaType:_0x22b5f6,mode:_0x5427c0,query:_0x105f66}=currentSection;if(_0x5427c0==='search')_0x1f0afb=await tmdb('/search/multi',{'query':_0x105f66,'page':currentPage+0x1});else{if(_0x5427c0===_0x17a378(0x42c)){const {networkId:_0x126fa0,type:_0xd9cf59,mediaType:_0x57e2c7,param:_0x117912}=currentSection,_0x27deb4=_0x57e2c7==='tv'?_0x17a378(_0x24cdbc._0x3ba95f):_0x17a378(0x20e);_0x1f0afb=await tmdb(_0x27deb4,{[_0x117912]:_0x126fa0,'sort_by':'popularity.desc','page':currentPage+0x1}),_0x1f0afb[_0x17a378(_0x24cdbc._0x27a131)]=_0x1f0afb[_0x17a378(_0x24cdbc._0x4b469c)]['map'](_0x453782=>({..._0x453782,'media_type':_0x57e2c7}));}else _0x1f0afb=await tmdb('/'+_0x22b5f6+'/popular',{'page':currentPage+0x1});}currentPage++,hasMorePages=currentPage<_0x1f0afb[_0x17a378(_0x24cdbc._0x55e49f)];const _0x182f7e=_0x5427c0===_0x17a378(_0x24cdbc._0x104b56)?_0x1f0afb[_0x17a378(0x423)][_0x17a378(_0x24cdbc._0x4c4d1d)](_0x550239=>_0x550239[_0x17a378(0x3a6)]===_0x17a378(0x419)||_0x550239[_0x17a378(0x3a6)]==='tv'):_0x1f0afb[_0x17a378(_0x24cdbc._0x8762d7)]['map'](_0x461c98=>({..._0x461c98,'media_type':_0x22b5f6})),_0xee213=document[_0x17a378(_0x24cdbc._0x16ac2e)]('search-results');_0x182f7e[_0x17a378(_0x24cdbc._0x401287)]((_0x1355cc,_0x27f423)=>{const _0x3acb9f=_0x17a378,_0x50925a=_0x1355cc[_0x3acb9f(_0x15dc38._0x2b379c)]+'-'+_0x1355cc['id'];!loadedIds[_0x3acb9f(0x2da)](_0x50925a)&&(loadedIds[_0x3acb9f(_0x15dc38._0x34edde)](_0x50925a),_0xee213['appendChild'](makeCard(_0x1355cc,_0x27f423)));});}catch(_0x4e3873){}isLoadingMore=![];const _0x332e0b=document[_0x17a378(_0x24cdbc._0x16ac2e)](_0x17a378(0x348));if(_0x332e0b)_0x332e0b[_0x17a378(_0x24cdbc._0x43714a)]=hasMorePages?'':_0x17a378(0x412);}const scrollObserver=new IntersectionObserver(_0x4544aa=>{if(_0x4544aa[0x0]['isIntersecting'])loadMoreResults();},{'rootMargin':'200px'});function attachScrollObserver(){const _0x365e02=_0x94aeb3,_0x298c02=document['getElementById']('scroll-sentinel');if(_0x298c02)scrollObserver[_0x365e02(0x358)](_0x298c02);}function saveHistory(_0x2743e7){const _0x5651a3={_0x1c06a9:0x4ae},_0x1bfbae=_0x94aeb3;SV[_0x1bfbae(0x3f7)][_0x1bfbae(_0x5651a3._0x1c06a9)](_0x2743e7);}function getHistory(){const _0x356333={_0x574014:0x3f7},_0x986138=_0x94aeb3;return SV[_0x986138(_0x356333._0x574014)][_0x986138(0x41a)]();}function clearHistoryItem(_0x27e803){const _0x586ed8={_0x489dbb:0x3d1},_0x224753={_0x59058c:0x3f7},_0x51f831=_0x94aeb3,_0x1770cb=SV['history'][_0x51f831(0x4c5)]();SV[_0x51f831(0x3f7)][_0x51f831(0x317)](_0x27e803),renderContinueWatching(),showUndoToast(_0x51f831(_0x586ed8._0x489dbb),()=>{const _0x7321d1=_0x51f831;SV[_0x7321d1(_0x224753._0x59058c)]['set'](_0x1770cb),renderContinueWatching();});}function renderContinueWatching(){const _0x5be161={_0x29423f:0x365,_0x19619c:0x3dd,_0x547b84:0x291,_0x41d463:0x437,_0x28c023:0x291,_0x4b4b5a:0x338},_0x2de863={_0x4261fd:0x1e2,_0x494bcc:0x2c2,_0x44f54f:0x3bb,_0x466d6f:0x454,_0x5da1b0:0x37e,_0x37a10b:0x304,_0x5996b3:0x453,_0x23cde9:0x42d,_0x46898f:0x1de,_0x44ba0c:0x228,_0x5556b2:0x2b6,_0x18ee28:0x2e8,_0x49f44f:0x335,_0x4318b3:0x3a7,_0x26658b:0x2a6,_0x4818d6:0x3dc,_0x522e7c:0x292,_0x253474:0x22f,_0xd10c33:0x389,_0x22fcbf:0x519,_0x3b8c88:0x22f,_0x58f0d6:0x26e},_0x1100eb={_0x35d859:0x454,_0x8156ee:0x228},_0x1f86c1={_0x54de9f:0x3bb,_0x1a2199:0x39e},_0x1680f2={_0x53b861:0x3d7,_0x278b43:0x343,_0x3cfc6d:0x228,_0x32b306:0x39e},_0x4dbbfa=_0x94aeb3,_0x20861c=document[_0x4dbbfa(_0x5be161._0x29423f)](_0x4dbbfa(0x3ff)),_0x591a67=document['getElementById']('continue-watching-row'),_0x2ac8b4=getHistory()['slice'](0x0,0xe);if(!_0x2ac8b4[_0x4dbbfa(_0x5be161._0x19619c)]){_0x20861c[_0x4dbbfa(_0x5be161._0x547b84)][_0x4dbbfa(_0x5be161._0x41d463)]='none';return;}_0x20861c[_0x4dbbfa(_0x5be161._0x28c023)]['display']='block',_0x591a67[_0x4dbbfa(0x2e8)]='',_0x2ac8b4[_0x4dbbfa(_0x5be161._0x4b4b5a)]((_0x53ff3c,_0x4a8743)=>{const _0x2b2290={_0x3a53e6:0x454,_0x2d6a3e:0x39e,_0x95a775:0x3bb,_0x288369:0x4fb,_0x1f1c43:0x427},_0x733ced={_0xb5fc87:0x304,_0x573622:0x454},_0x5cbb5b={_0x6c61a:0x1fb},_0x4fd4c9=_0x4dbbfa,_0x47f37b=document[_0x4fd4c9(_0x2de863._0x4261fd)](_0x4fd4c9(_0x2de863._0x494bcc));_0x47f37b[_0x4fd4c9(0x308)]='card',_0x47f37b[_0x4fd4c9(0x291)][_0x4fd4c9(0x398)]=_0x4a8743*0.04+'s',_0x47f37b[_0x4fd4c9(0x291)][_0x4fd4c9(0x1df)]='relative';const _0x5382e2=posterUrl(_0x53ff3c[_0x4fd4c9(_0x2de863._0x44f54f)]),_0xe777f5=_0x53ff3c[_0x4fd4c9(_0x2de863._0x466d6f)]==='tv'?'S'+_0x53ff3c[_0x4fd4c9(_0x2de863._0x5da1b0)]+'\x20E'+_0x53ff3c[_0x4fd4c9(_0x2de863._0x37a10b)]:_0x53ff3c[_0x4fd4c9(0x39e)]||'',_0x3619e2=_0x53ff3c[_0x4fd4c9(0x2e9)]||0x0,_0x96870e=_0x53ff3c[_0x4fd4c9(0x454)]==='movie'?(_0x53ff3c[_0x4fd4c9(0x483)]||0x5a)*0x3c:(_0x53ff3c[_0x4fd4c9(0x497)]||0x28)*0x3c,_0x4f6ba6=_0x96870e>0x0?Math[_0x4fd4c9(0x414)](Math[_0x4fd4c9(_0x2de863._0x5996b3)](_0x3619e2/_0x96870e*0x64),0x63):0x0,_0x40c5e9='<svg\x20width=\x2228\x22\x20height=\x2228\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x221.5\x22\x20opacity=\x220.3\x22><rect\x20x=\x222\x22\x20y=\x222\x22\x20width=\x2220\x22\x20height=\x2220\x22\x20rx=\x222\x22/><circle\x20cx=\x228.5\x22\x20cy=\x228.5\x22\x20r=\x221.5\x22/><polyline\x20points=\x2221\x2015\x2016\x2010\x205\x2021\x22/></svg>',_0x5f2c9f=_0x5382e2?_0x4fd4c9(_0x2de863._0x23cde9)+_0x5382e2+_0x4fd4c9(0x3b9)+_0x40c5e9+_0x4fd4c9(_0x2de863._0x46898f)+esc(_0x53ff3c[_0x4fd4c9(_0x2de863._0x44ba0c)])+_0x4fd4c9(_0x2de863._0x5556b2):_0x4fd4c9(0x45d)+_0x40c5e9+'<span>'+esc(_0x53ff3c[_0x4fd4c9(_0x2de863._0x44ba0c)])+_0x4fd4c9(0x2b6),_0x51c4dd=isInMyList(_0x53ff3c['id']);_0x47f37b[_0x4fd4c9(_0x2de863._0x18ee28)]=_0x4fd4c9(0x306)+_0x5f2c9f+_0x4fd4c9(_0x2de863._0x49f44f)+(_0x4f6ba6>0x0?'<div\x20class=\x22card-progress\x22><div\x20class=\x22card-progress-fill\x22\x20style=\x22width:'+_0x4f6ba6+_0x4fd4c9(_0x2de863._0x4318b3):'')+_0x4fd4c9(0x288)+_0x51c4dd+_0x4fd4c9(_0x2de863._0x26658b)+(_0x51c4dd?_0x4fd4c9(_0x2de863._0x4818d6):'<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><line\x20x1=\x2212\x22\x20y1=\x225\x22\x20x2=\x2212\x22\x20y2=\x2219\x22/><line\x20x1=\x225\x22\x20y1=\x2212\x22\x20x2=\x2219\x22\x20y2=\x2212\x22/></svg>')+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22cw-hover-right\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cw-hover-btn\x20cw-detail-btn\x22\x20title=\x22Details\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><circle\x20cx=\x2212\x22\x20cy=\x2212\x22\x20r=\x2210\x22/><line\x20x1=\x2212\x22\x20y1=\x228\x22\x20x2=\x2212\x22\x20y2=\x2212\x22/><line\x20x1=\x2212\x22\x20y1=\x2216\x22\x20x2=\x2212.01\x22\x20y2=\x2216\x22/></svg>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-info\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-title\x22>'+esc(_0x53ff3c[_0x4fd4c9(0x228)])+_0x4fd4c9(_0x2de863._0x522e7c)+esc(_0xe777f5)+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cw-remove-btn\x22\x20style=\x22position:relative;z-index:2;\x22>\x20✕\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>',_0x47f37b[_0x4fd4c9(0x519)]('.cw-remove-btn')['addEventListener'](_0x4fd4c9(_0x2de863._0x253474),_0xc3344d=>{const _0x5bd8f7=_0x4fd4c9;_0xc3344d[_0x5bd8f7(_0x5cbb5b._0x6c61a)](),clearHistoryItem(_0x53ff3c['id']);});const _0x1b4ee5=_0x47f37b[_0x4fd4c9(0x519)](_0x4fd4c9(0x344));_0x1b4ee5[_0x4fd4c9(_0x2de863._0xd10c33)](_0x4fd4c9(0x22f),_0x125be5=>{const _0x3d0855=_0x4fd4c9;if(_0x125be5[_0x3d0855(_0x1680f2._0x53b861)]['closest'](_0x3d0855(_0x1680f2._0x278b43)))return;openQuickDetail(_0x53ff3c['id'],_0x53ff3c[_0x3d0855(0x454)],{'id':_0x53ff3c['id'],'title':_0x53ff3c[_0x3d0855(_0x1680f2._0x3cfc6d)],'name':_0x53ff3c['title'],'poster_path':_0x53ff3c[_0x3d0855(0x3bb)],'release_date':_0x53ff3c['year']?_0x53ff3c['year']+_0x3d0855(0x352):'','first_air_date':_0x53ff3c['year']?_0x53ff3c[_0x3d0855(_0x1680f2._0x32b306)]+'-01-01':'','media_type':_0x53ff3c[_0x3d0855(0x454)]});}),_0x47f37b[_0x4fd4c9(_0x2de863._0x22fcbf)]('.cw-play-btn')[_0x4fd4c9(0x389)](_0x4fd4c9(_0x2de863._0x3b8c88),_0x294740=>{const _0x385a0f=_0x4fd4c9;_0x294740['stopPropagation'](),savedScrollY=window[_0x385a0f(0x33e)];const _0x5358f4=_0x53ff3c[_0x385a0f(0x2e9)]||0x0;_0x53ff3c['type']==='tv'?(_pendingEp={'season':_0x53ff3c[_0x385a0f(0x37e)],'episode':_0x53ff3c[_0x385a0f(_0x733ced._0xb5fc87)]},_pendingTimestamp=_0x5358f4):_pendingTimestamp=_0x5358f4,openDetail(_0x53ff3c['id'],_0x53ff3c[_0x385a0f(_0x733ced._0x573622)],!![],![]);});const _0x2bba1d=_0x47f37b[_0x4fd4c9(0x519)](_0x4fd4c9(0x391));_0x2bba1d['addEventListener'](_0x4fd4c9(0x22f),_0x219cbd=>{const _0x5aa741=_0x4fd4c9;_0x219cbd['stopPropagation']();let _0x5a2a43=getMyList();isInMyList(_0x53ff3c['id'])?(saveMyList(_0x5a2a43[_0x5aa741(0x2e6)](_0x14f29a=>_0x14f29a['id']!==_0x53ff3c['id'])),_0x2bba1d[_0x5aa741(0x2e8)]=_0x5aa741(0x320),_0x2bba1d[_0x5aa741(0x427)][_0x5aa741(0x1e6)]=_0x5aa741(0x369),showToast(_0x5aa741(0x329))):(saveMyList([{'id':_0x53ff3c['id'],'type':_0x53ff3c[_0x5aa741(_0x2b2290._0x3a53e6)],'title':_0x53ff3c[_0x5aa741(0x228)],'year':_0x53ff3c[_0x5aa741(_0x2b2290._0x2d6a3e)],'poster':_0x53ff3c[_0x5aa741(_0x2b2290._0x95a775)]||null,'addedAt':Date[_0x5aa741(_0x2b2290._0x288369)]()},..._0x5a2a43]),_0x2bba1d[_0x5aa741(0x2e8)]='<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222.5\x22\x20stroke-linecap=\x22round\x22><polyline\x20points=\x2220\x206\x209\x2017\x204\x2012\x22/></svg>',_0x2bba1d[_0x5aa741(_0x2b2290._0x1f1c43)]['inList']='true',showToast(_0x5aa741(0x48e)));}),_0x47f37b['querySelector']('.cw-detail-btn')[_0x4fd4c9(0x389)](_0x4fd4c9(0x22f),_0x23d66c=>{const _0x56bfe4=_0x4fd4c9;_0x23d66c['stopPropagation'](),openQuickDetail(_0x53ff3c['id'],_0x53ff3c[_0x56bfe4(0x454)],{'id':_0x53ff3c['id'],'title':_0x53ff3c[_0x56bfe4(0x228)],'name':_0x53ff3c[_0x56bfe4(0x228)],'poster_path':_0x53ff3c[_0x56bfe4(_0x1f86c1._0x54de9f)],'release_date':_0x53ff3c['year']?_0x53ff3c[_0x56bfe4(0x39e)]+'-01-01':'','first_air_date':_0x53ff3c[_0x56bfe4(0x39e)]?_0x53ff3c[_0x56bfe4(_0x1f86c1._0x1a2199)]+_0x56bfe4(0x352):'','media_type':_0x53ff3c[_0x56bfe4(0x454)]});}),_0x47f37b[_0x4fd4c9(_0x2de863._0xd10c33)](_0x4fd4c9(0x334),_0x2ac00e=>{const _0x52f9ee=_0x4fd4c9;_0x2ac00e['preventDefault'](),showCardContextMenu(_0x2ac00e,_0x52f9ee(0x237)+_0x53ff3c[_0x52f9ee(_0x1100eb._0x35d859)]+_0x52f9ee(0x2b5)+_0x53ff3c['id']+_0x52f9ee(0x4d0)+slugify(_0x53ff3c['title']||''),_0x53ff3c[_0x52f9ee(_0x1100eb._0x8156ee)]||'');}),_0x591a67[_0x4fd4c9(_0x2de863._0x58f0d6)](_0x47f37b);});}function startWatchTimer(_0x493507,_0x31fdf9,_0x340941=null){const _0xe9bd79={_0x237fe7:0x43a,_0x375f3b:0x4fb,_0x25272b:0x4c5,_0x37167e:0x3f7,_0x3bbcac:0x2de};stopWatchTimer(),watchStart=null;let _0x191e9e=_0x340941===null;watchTimer=setInterval(()=>{const _0x188c02=_0xf103;if(!watchStart)watchStart=Date['now']();const _0x7efc9=Math[_0x188c02(_0xe9bd79._0x237fe7)]((Date[_0x188c02(_0xe9bd79._0x375f3b)]()-watchStart)/0x3e8);!_0x191e9e&&_0x7efc9>=0xb4&&(saveHistory(_0x340941),_0x191e9e=!![],renderContinueWatching());if(_0x191e9e){const _0x110595=SV[_0x188c02(0x3f7)][_0x188c02(_0xe9bd79._0x25272b)]();_0x110595[_0x493507]&&(_0x110595[_0x493507][_0x188c02(0x2e9)]=_0x7efc9,SV[_0x188c02(_0xe9bd79._0x37167e)][_0x188c02(_0xe9bd79._0x3bbcac)](_0x110595));}},0x4e20);}function stopWatchTimer(){clearInterval(watchTimer),watchTimer=null,watchStart=null;}let _scrollRaf=![];window[_0x94aeb3(0x389)](_0x94aeb3(0x3d4),()=>{const _0x134dc4={_0x36f76e:0x365};if(_scrollRaf)return;_scrollRaf=!![],requestAnimationFrame(()=>{const _0x1d0406=_0xf103;document[_0x1d0406(_0x134dc4._0x36f76e)](_0x1d0406(0x33d))[_0x1d0406(0x450)]['toggle']('visible',window['scrollY']>0x190),_scrollRaf=![];});},{'passive':!![]});async function fetchSection(_0x4d3797){const _0x281ddf={_0x529856:0x291,_0x30e527:0x4c4,_0x44c80d:0x39f,_0x25dfe2:0x2b8,_0x3e5ff7:0x1dc,_0x3ffd1b:0x3b6,_0x3a6900:0x2d9,_0x4effa0:0x4cc,_0xc0bff9:0x365,_0x34b8e4:0x4ea,_0x2327c0:0x3c4,_0x589fcb:0x350,_0x1cac18:0x365,_0xe61661:0x21b,_0x121a81:0x213,_0x3ddc9b:0x45a,_0x3c5bda:0x3e2,_0x2a5e62:0x425},_0x4b9246=_0x94aeb3;_resetSectionState(),showPage('search-page'),pushState({'browse':_0x4d3797}),document['getElementById']('filter-toggle')[_0x4b9246(_0x281ddf._0x529856)][_0x4b9246(_0x281ddf._0x30e527)]=_0x4b9246(_0x281ddf._0x44c80d);const _0x1e19cf=_0x4d3797===_0x4b9246(0x419)?_0x4b9246(_0x281ddf._0x25dfe2):_0x4b9246(_0x281ddf._0x3e5ff7),_0xdfe5b3=document[_0x4b9246(0x365)](_0x4b9246(0x4d6));_0xdfe5b3[_0x4b9246(0x2e5)]='',_0xdfe5b3['placeholder']=_0x4b9246(_0x281ddf._0x3ffd1b),document[_0x4b9246(0x365)](_0x4b9246(0x3a2))[_0x4b9246(_0x281ddf._0x3a6900)]=_0x1e19cf,document[_0x4b9246(0x365)]('search-count')['textContent']=_0x4b9246(_0x281ddf._0x4effa0),document[_0x4b9246(_0x281ddf._0xc0bff9)](_0x4b9246(0x3fe))['innerHTML']=_0x4b9246(_0x281ddf._0x34b8e4),setActiveTab(_0x4d3797==='movie'?_0x4b9246(0x3ac):_0x4b9246(_0x281ddf._0x2327c0));try{const _0x16114a=await tmdb(_0x4b9246(_0x281ddf._0x589fcb)+_0x4d3797,{'sort_by':_0x4b9246(0x46e),'vote_count.gte':0x64,'page':0x1});document[_0x4b9246(_0x281ddf._0x1cac18)](_0x4b9246(0x27d))[_0x4b9246(0x2d9)]=_0x16114a[_0x4b9246(_0x281ddf._0xe61661)]+_0x4b9246(0x4ca),allResults=_0x16114a['results'][_0x4b9246(_0x281ddf._0x121a81)](_0x514657=>({..._0x514657,'media_type':_0x4d3797})),currentSection={'mode':'section','mediaType':_0x4d3797},hasMorePages=_0x16114a[_0x4b9246(0x3de)]>0x1,activeGenre=_0x4b9246(0x3bf),document[_0x4b9246(0x31c)](_0x4b9246(_0x281ddf._0x3ddc9b))[_0x4b9246(0x338)](_0x55d2d7=>_0x55d2d7[_0x4b9246(0x450)][_0x4b9246(0x410)](_0x4b9246(0x4f3),_0x55d2d7[_0x4b9246(0x427)][_0x4b9246(0x2d3)]===_0x4b9246(0x3bf))),document[_0x4b9246(0x365)]('genre-bar')['style'][_0x4b9246(0x437)]=_0x4b9246(_0x281ddf._0x3c5bda),renderCards('search-results',allResults);const _0x5ad284=document[_0x4b9246(0x365)]('search-results');_0x5ad284[_0x4b9246(_0x281ddf._0x2a5e62)](_0x4b9246(0x469),'<div\x20id=\x22scroll-sentinel\x22></div>'),attachScrollObserver(),_renderHiddenCount();}catch(_0x599551){}}async function renderCollection(_0x4b16b0,_0x3c78b3){const _0x4e219e={_0xc3d014:0x34a,_0x124818:0x437,_0x5b0452:0x2d0,_0x190988:0x291,_0x51b70a:0x34a,_0x330014:0x365,_0x5b52b7:0x2d9,_0x2db84f:0x338,_0x5e4681:0x291,_0x5a1a8d:0x291},_0x235cb0={_0x428166:0x419},_0x3323a2=_0x94aeb3,_0x5c037c=document[_0x3323a2(0x365)](_0x3323a2(0x25b)),_0x1ecfdb=document[_0x3323a2(0x365)](_0x3323a2(0x3c1));if(!_0x4b16b0){_0x5c037c[_0x3323a2(0x291)][_0x3323a2(0x437)]=_0x3323a2(_0x4e219e._0xc3d014),_0x1ecfdb['style'][_0x3323a2(_0x4e219e._0x124818)]=_0x3323a2(0x34a);return;}try{const _0x422a25=await tmdb(_0x3323a2(_0x4e219e._0x5b0452)+_0x4b16b0['id']),_0x2deff8=(_0x422a25['parts']||[])[_0x3323a2(0x459)]((_0x203461,_0x326d2d)=>(_0x203461[_0x3323a2(0x1fc)]||'')[_0x3323a2(0x4b4)](_0x326d2d['release_date']||''));if(_0x2deff8['length']<=0x1){_0x5c037c[_0x3323a2(_0x4e219e._0x190988)][_0x3323a2(_0x4e219e._0x124818)]='none',_0x1ecfdb[_0x3323a2(_0x4e219e._0x190988)][_0x3323a2(0x437)]=_0x3323a2(_0x4e219e._0x51b70a);return;}document[_0x3323a2(_0x4e219e._0x330014)]('collection-title')[_0x3323a2(_0x4e219e._0x5b52b7)]=_0x422a25['name']||_0x3323a2(0x378);const _0xfd1607=document[_0x3323a2(_0x4e219e._0x330014)]('collection-row');_0xfd1607['innerHTML']='',_0x2deff8[_0x3323a2(_0x4e219e._0x2db84f)]((_0x529d5c,_0x4f0891)=>{const _0x4468b8=_0x3323a2,_0x188ecc=_0x529d5c['id']===_0x3c78b3,_0x4a29e=makeCard({..._0x529d5c,'media_type':_0x4468b8(_0x235cb0._0x428166)},_0x4f0891);if(_0x188ecc)_0x4a29e['style'][_0x4468b8(0x25f)]='2px\x20solid\x20var(--gold)';_0xfd1607[_0x4468b8(0x26e)](_0x4a29e);}),_0x5c037c[_0x3323a2(_0x4e219e._0x5e4681)][_0x3323a2(_0x4e219e._0x124818)]=_0x3323a2(0x4e5),_0x1ecfdb[_0x3323a2(0x291)][_0x3323a2(_0x4e219e._0x124818)]='inline-flex';}catch(_0x8ec0d6){_0x5c037c[_0x3323a2(0x291)][_0x3323a2(_0x4e219e._0x124818)]='none',_0x1ecfdb[_0x3323a2(_0x4e219e._0x5a1a8d)][_0x3323a2(0x437)]='none';}}function toggleTheme(){const _0x151fa2={_0x487b0f:0x47e,_0x3a8530:0x450,_0x53ab28:0x410,_0x296344:0x222,_0x3006dc:0x2c5,_0x56e050:0x365,_0x15f08e:0x291,_0x352f8c:0x34a,_0x358dd8:0x365,_0xa69755:0x1fa,_0x352b67:0x2f0,_0x372d55:0x256},_0x56e222=_0x94aeb3,_0x36eeee=document[_0x56e222(_0x151fa2._0x487b0f)][_0x56e222(_0x151fa2._0x3a8530)][_0x56e222(_0x151fa2._0x53ab28)]('light');localStorage[_0x56e222(0x2f4)](_0x56e222(0x2df),_0x36eeee?_0x56e222(_0x151fa2._0x296344):_0x56e222(_0x151fa2._0x3006dc)),document[_0x56e222(_0x151fa2._0x56e050)]('theme-icon-moon')[_0x56e222(_0x151fa2._0x15f08e)][_0x56e222(0x437)]=_0x36eeee?_0x56e222(0x34a):_0x56e222(0x4e5),document[_0x56e222(0x365)](_0x56e222(0x457))[_0x56e222(0x291)]['display']=_0x36eeee?'block':_0x56e222(_0x151fa2._0x352f8c),document[_0x56e222(_0x151fa2._0x358dd8)]('theme-toggle')[_0x56e222(0x291)][_0x56e222(_0x151fa2._0xa69755)]=_0x36eeee?_0x56e222(_0x151fa2._0x352b67):_0x56e222(_0x151fa2._0x372d55);}function switchDetailTab(_0x73653f,_0x29c4a9){const _0xadd8f0={_0x381092:0x338,_0x5925d0:0x365,_0x27b298:0x291},_0x3a29bc=_0x94aeb3;document[_0x3a29bc(0x31c)]('.pd-tab')[_0x3a29bc(0x338)](_0x328c6f=>_0x328c6f[_0x3a29bc(0x450)][_0x3a29bc(0x317)](_0x3a29bc(0x4f3))),document[_0x3a29bc(0x31c)](_0x3a29bc(0x38b))[_0x3a29bc(_0xadd8f0._0x381092)](_0x2e614e=>_0x2e614e[_0x3a29bc(0x291)]['display']='none');if(_0x29c4a9)_0x29c4a9[_0x3a29bc(0x450)]['add'](_0x3a29bc(0x4f3));const _0x3a272a=document[_0x3a29bc(_0xadd8f0._0x5925d0)](_0x3a29bc(0x200)+_0x73653f);if(_0x3a272a)_0x3a272a[_0x3a29bc(_0xadd8f0._0x27b298)][_0x3a29bc(0x437)]=_0x3a29bc(0x4e5);}function scrollToPlayer(){const _0x2792ff={_0xf668a1:0x365,_0x2b6959:0x236,_0x5f2652:0x49a},_0x1cf22a=_0x94aeb3;document[_0x1cf22a(_0x2792ff._0xf668a1)](_0x1cf22a(_0x2792ff._0x2b6959))[_0x1cf22a(0x254)]({'behavior':_0x1cf22a(_0x2792ff._0x5f2652),'block':_0x1cf22a(0x4f5)});}function showStats(_0x51bc85=![]){const _0x3497c0={_0x1f9253:0x228,_0x6896cd:0x2cf,_0x1d592f:0x4d6,_0x18a86a:0x384},_0x3f0387=_0x94aeb3;showPage('stats-page'),setActiveTab(_0x3f0387(0x283)),setMobileTab('mtab-stats');if(!_0x51bc85)pushState({'browse':_0x3f0387(0x2c4)});document[_0x3f0387(_0x3497c0._0x1f9253)]=_0x3f0387(_0x3497c0._0x6896cd);const _0x16eeb7=document[_0x3f0387(0x365)](_0x3f0387(_0x3497c0._0x1d592f));_0x16eeb7&&(_0x16eeb7['value']='',_0x16eeb7[_0x3f0387(_0x3497c0._0x18a86a)]=_0x3f0387(0x3b6)),renderStats();}function renderStats(){const _0x2a0c08={_0x5c7cf2:0x290,_0x64e91f:0x446,_0x5e4aed:0x338,_0x5af365:0x43a,_0x38dded:0x213,_0x3824be:0x2e8,_0xf800ac:0x44f,_0x25528d:0x478,_0x3c6f3b:0x1e1,_0x2adff1:0x38d,_0x231b29:0x4c6,_0x3bf868:0x4ef,_0x79940c:0x33b,_0x55b1a1:0x328,_0x31ece1:0x214,_0x259666:0x3f4,_0x230ebd:0x202,_0x1cec22:0x39c,_0x3e3793:0x209,_0x7f82f9:0x459,_0x209dc4:0x276,_0x1f300f:0x3dd,_0x58b1b0:0x32d,_0x46ccdc:0x2ca,_0x3fa437:0x1f5,_0x662948:0x371,_0x2da98c:0x286,_0x47dd26:0x458,_0x3feff6:0x4f6,_0x43e9d0:0x24e},_0x298526={_0x246e95:0x3bb,_0x5b8b5f:0x314,_0x4f153e:0x37e,_0x59a2cd:0x39e,_0x9d5e69:0x3af,_0x1bc41b:0x361,_0xbf009d:0x443,_0x109971:0x2c7,_0x458ac0:0x3bc},_0x44608d={_0x31833c:0x31c},_0x255bba={_0x1eb000:0x379},_0x5d7a6a={_0x2d99c1:0x1cd},_0xa78753=_0x94aeb3,_0x248c13=JSON[_0xa78753(0x452)](localStorage[_0xa78753(_0x2a0c08._0x5c7cf2)](_0xa78753(_0x2a0c08._0x64e91f))||'{}'),_0x3d02b2=Object[_0xa78753(0x41a)](_0x248c13),_0x59df2c=_0x3d02b2[_0xa78753(0x2e6)](_0x1b84ba=>_0x1b84ba[_0xa78753(0x454)]==='movie'),_0x4d1a2e=_0x3d02b2[_0xa78753(0x2e6)](_0x2a9442=>_0x2a9442['type']==='tv');let _0x1cc598=0x0;_0x3d02b2[_0xa78753(_0x2a0c08._0x5e4aed)](_0x478a1a=>{const _0x1260b3=_0xa78753;_0x1cc598+=_0x478a1a[_0x1260b3(0x2e9)]||0x0;});const _0x402cd6=Math[_0xa78753(0x43a)](_0x1cc598/0xe10),_0x53350f=Math[_0xa78753(_0x2a0c08._0x5af365)](_0x1cc598%0xe10/0x3c),_0x55d369=new Set(_0x3d02b2[_0xa78753(_0x2a0c08._0x38dded)](_0x47650f=>new Date(_0x47650f[_0xa78753(0x3af)])['toDateString']()));document[_0xa78753(0x365)]('stats-grid')[_0xa78753(_0x2a0c08._0x3824be)]=[{'value':_0x402cd6>0x0?_0x402cd6+'h\x20'+_0x53350f+'m':_0x53350f+'m','label':_0xa78753(_0x2a0c08._0xf800ac),'sub':_0xa78753(_0x2a0c08._0x25528d)},{'value':_0x59df2c['length'],'label':'Movies\x20Started','sub':'from\x20your\x20history'},{'value':_0x4d1a2e[_0xa78753(_0x2a0c08._0x3c6f3b)]((_0x4805fd,_0x4481d4)=>_0x4805fd+(_0x4481d4[_0xa78753(0x304)]||0x0),0x0),'label':_0xa78753(0x3b0),'sub':_0xa78753(0x41b)},{'value':_0x55d369[_0xa78753(_0x2a0c08._0x2adff1)],'label':_0xa78753(0x28e),'sub':_0xa78753(_0x2a0c08._0x231b29)}][_0xa78753(0x213)](_0x2da554=>_0xa78753(0x2db)+_0x2da554['value']+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22stat-label\x22>'+_0x2da554[_0xa78753(0x456)]+_0xa78753(0x332)+_0x2da554[_0xa78753(0x4e6)]+_0xa78753(0x247))['join']('');const _0x26b7d5={0x1c:_0xa78753(0x31f),0x23:_0xa78753(0x3ee),0x12:_0xa78753(_0x2a0c08._0x3bf868),0x1b:_0xa78753(_0x2a0c08._0x79940c),0x36e:_0xa78753(_0x2a0c08._0x55b1a1),0xc:_0xa78753(_0x2a0c08._0x31ece1),0x10:_0xa78753(_0x2a0c08._0x259666),0x50:_0xa78753(0x462),0x29fd:_0xa78753(0x1f1),0x35:_0xa78753(_0x2a0c08._0x230ebd),0x63:_0xa78753(0x2dc),0xe:_0xa78753(_0x2a0c08._0x1cec22),0x2a0d:_0xa78753(0x3a0),0x2a07:_0xa78753(_0x2a0c08._0x3e3793),0x2a0a:'Kids',0x2a0b:'News',0x2a0c:'Reality'},_0xb3775c={};_0x3d02b2['forEach'](_0x3946b8=>{const _0x13e4aa=_0xa78753;(_0x3946b8[_0x13e4aa(_0x5d7a6a._0x2d99c1)]||[])[_0x13e4aa(0x338)](_0x157e11=>{const _0x310489=_0x26b7d5[_0x157e11]||null;if(_0x310489)_0xb3775c[_0x310489]=(_0xb3775c[_0x310489]||0x0)+0x1;});});const _0x477b7c=Object[_0xa78753(0x380)](_0xb3775c)[_0xa78753(_0x2a0c08._0x7f82f9)]((_0x43e76a,_0x388684)=>_0x388684[0x1]-_0x43e76a[0x1])[_0xa78753(_0x2a0c08._0x209dc4)](0x0,0x6),_0x4d9a9d=_0x477b7c[0x0]?.[0x1]||0x1;document['getElementById'](_0xa78753(0x2b9))[_0xa78753(0x2e8)]=_0x477b7c[_0xa78753(_0x2a0c08._0x1f300f)]?_0x477b7c[_0xa78753(0x213)](([_0x58de9e,_0x573640])=>'\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22genre-bar-row\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22genre-bar-label\x22>'+_0x58de9e+_0xa78753(0x51a)+Math['round'](_0x573640/_0x4d9a9d*0x64)+_0xa78753(0x4ac)+_0x573640+_0xa78753(0x247))[_0xa78753(0x22c)](''):_0xa78753(_0x2a0c08._0x58b1b0);_0x477b7c['length']&&requestAnimationFrame(()=>requestAnimationFrame(()=>{const _0x5650ea=_0xa78753;document[_0x5650ea(_0x44608d._0x31833c)](_0x5650ea(0x46d))['forEach'](_0x80769d=>{const _0x1f0df5=_0x5650ea;_0x80769d['style'][_0x1f0df5(_0x255bba._0x1eb000)]=_0x80769d['dataset'][_0x1f0df5(0x379)]+'%';});}));const _0x17e6ae=_0x3d02b2[_0xa78753(0x459)]((_0x3ab88e,_0x25082f)=>_0x25082f['savedAt']-_0x3ab88e[_0xa78753(0x3af)])[_0xa78753(_0x2a0c08._0x209dc4)](0x0,0x6);document[_0xa78753(0x365)]('stats-recent')[_0xa78753(0x2e8)]=_0x17e6ae['map'](_0x3ac14c=>{const _0x30cc48=_0xa78753,_0x497d65=_0x3ac14c[_0x30cc48(_0x298526._0x246e95)]?TMDB_IMG+_0x30cc48(_0x298526._0x5b8b5f)+_0x3ac14c[_0x30cc48(_0x298526._0x246e95)]:null,_0x40c4d3=_0x3ac14c[_0x30cc48(0x454)]==='tv'?'S'+_0x3ac14c[_0x30cc48(_0x298526._0x4f153e)]+'\x20E'+_0x3ac14c['episode']:_0x3ac14c[_0x30cc48(_0x298526._0x59a2cd)]||'',_0x3c9dce=timeAgo(_0x3ac14c[_0x30cc48(_0x298526._0x9d5e69)]);return'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22recent-item-stat\x22>'+(_0x497d65?'<img\x20src=\x22'+_0x497d65+_0x30cc48(_0x298526._0x1bc41b):_0x30cc48(_0x298526._0xbf009d))+_0x30cc48(0x330)+esc(_0x3ac14c[_0x30cc48(0x228)])+_0x30cc48(_0x298526._0x109971)+esc(_0x40c4d3)+'\x20·\x20'+esc(_0x3c9dce)+_0x30cc48(_0x298526._0x458ac0);})['join']('')||_0xa78753(_0x2a0c08._0x46ccdc);const _0xe980dd={};_0x3d02b2['forEach'](_0x108304=>{const _0x133cdf=_0xa78753,_0x4de1c8=new Date(_0x108304[_0x133cdf(0x3af)])[_0x133cdf(0x371)]();_0xe980dd[_0x4de1c8]=(_0xe980dd[_0x4de1c8]||0x0)+0x1;});const _0x343c15=[];for(let _0x46246d=0x1d;_0x46246d>=0x0;_0x46246d--){const _0x51c11e=new Date();_0x51c11e[_0xa78753(_0x2a0c08._0x3fa437)](_0x51c11e['getDate']()-_0x46246d);const _0x477306=_0x51c11e[_0xa78753(_0x2a0c08._0x662948)](),_0x321280=_0xe980dd[_0x477306]||0x0,_0x452b52=_0x321280===0x0?'':_0x321280>=0x4?_0xa78753(_0x2a0c08._0x2da98c):_0x321280>=0x2?_0xa78753(0x4e7):_0xa78753(_0x2a0c08._0x47dd26);_0x343c15['push'](_0xa78753(_0x2a0c08._0x3feff6)+_0x452b52+_0xa78753(_0x2a0c08._0x43e9d0)+_0x477306+':\x20'+_0x321280+_0xa78753(0x373));}document[_0xa78753(0x365)]('stats-activity')['innerHTML']=_0x343c15[_0xa78753(0x22c)]('');}function timeAgo(_0x514610){const _0xda26a6={_0x37b363:0x4fb},_0x34e758=_0x94aeb3,_0x3e6f5b=Date[_0x34e758(_0xda26a6._0x37b363)]()-_0x514610,_0x1b8bc2=Math['floor'](_0x3e6f5b/0xea60),_0x1c93ca=Math[_0x34e758(0x43a)](_0x3e6f5b/0x36ee80),_0x194353=Math['floor'](_0x3e6f5b/0x5265c00);if(_0x1b8bc2<0x1)return _0x34e758(0x355);if(_0x1b8bc2<0x3c)return _0x1b8bc2+_0x34e758(0x2ab);if(_0x1c93ca<0x18)return _0x1c93ca+'h\x20ago';if(_0x194353<0x7)return _0x194353+_0x34e758(0x231);return new Date(_0x514610)[_0x34e758(0x2a5)]();}_0x94aeb3(0x27b)in navigator&&(navigator[_0x94aeb3(0x27b)][_0x94aeb3(0x4a9)]('/sw.js')[_0x94aeb3(0x3d3)](_0x428027=>{const _0x505188={_0x5a6cc4:0x47d,_0xf0d645:0x2bd},_0x5b6fc2={_0xf96c2:0x42f,_0x1fcea9:0x224},_0x462fa9=_0x94aeb3;console[_0x462fa9(0x318)](_0x462fa9(_0x505188._0x5a6cc4),_0x428027[_0x462fa9(0x45c)]),setInterval(()=>{const _0x1e5734=_0x462fa9;_0x428027[_0x1e5734(0x3e0)]();},0x927c0),_0x428027[_0x462fa9(0x389)](_0x462fa9(_0x505188._0xf0d645),()=>{const _0x54d3a8={_0x525fe7:0x32e,_0x3623f0:0x3d2,_0x48d6d5:0x27b},_0x3cf5e8=_0x462fa9,_0x5c54f2=_0x428027[_0x3cf5e8(_0x5b6fc2._0xf96c2)];_0x5c54f2[_0x3cf5e8(0x389)](_0x3cf5e8(_0x5b6fc2._0x1fcea9),()=>{const _0x4d77de=_0x3cf5e8;_0x5c54f2[_0x4d77de(_0x54d3a8._0x525fe7)]===_0x4d77de(_0x54d3a8._0x3623f0)&&(navigator[_0x4d77de(_0x54d3a8._0x48d6d5)][_0x4d77de(0x3c7)]&&showToast('New\x20update\x20available.\x20🚀\x20Refreshing...'));});});})[_0x94aeb3(0x45b)](_0x3d1ab8=>console['log']('SW\x20failed:',_0x3d1ab8)),navigator['serviceWorker'][_0x94aeb3(0x389)](_0x94aeb3(0x3ba),()=>{const _0x378a75=_0x94aeb3;window['location'][_0x378a75(0x1ef)]();}));async function loadNewThisWeek(){const _0xb29130={_0x3429d0:0x4ce,_0x383707:0x46e,_0x2777ce:0x3dd,_0x586d8b:0x4ce,_0x5aba05:0x2e8,_0x236332:0x2fb},_0x77a610=_0x94aeb3;showSkeletons(_0x77a610(_0xb29130._0x3429d0),0x7);try{const _0x33e99b=new Date(),_0xf7cb7f=new Date(_0x33e99b);_0xf7cb7f[_0x77a610(0x1f5)](_0x33e99b['getDate']()-0x7);const _0x147056=_0x1a89ff=>_0x1a89ff['toISOString']()[_0x77a610(0x276)](0x0,0xa),_0x112e00=_0x147056(_0xf7cb7f),_0x2f9acd=_0x147056(_0x33e99b),[_0x2f2144,_0x29e328]=await Promise['all']([tmdb(_0x77a610(0x20e),{'primary_release_date.gte':_0x112e00,'primary_release_date.lte':_0x2f9acd,'sort_by':_0x77a610(_0xb29130._0x383707)}),tmdb('/discover/tv',{'first_air_date.gte':_0x112e00,'first_air_date.lte':_0x2f9acd,'sort_by':_0x77a610(0x46e)})]),_0x477c2d=[..._0x2f2144['results'][_0x77a610(0x213)](_0x3c4881=>({..._0x3c4881,'media_type':_0x77a610(0x419)})),..._0x29e328[_0x77a610(0x423)][_0x77a610(0x213)](_0x1c23ba=>({..._0x1c23ba,'media_type':'tv'}))][_0x77a610(0x459)]((_0x5194c7,_0x5f34b7)=>(_0x5f34b7['popularity']||0x0)-(_0x5194c7[_0x77a610(0x1e3)]||0x0))['slice'](0x0,0xe);if(!_0x477c2d[_0x77a610(_0xb29130._0x2777ce)]){document[_0x77a610(0x365)](_0x77a610(_0xb29130._0x586d8b))[_0x77a610(_0xb29130._0x5aba05)]=_0x77a610(_0xb29130._0x236332);return;}renderCards(_0x77a610(0x4ce),_0x477c2d);}catch(_0x876597){}}function getMyList(){const _0x414aed={_0xbc8844:0x4c5},_0x491644=_0x94aeb3;return SV['list'][_0x491644(_0x414aed._0xbc8844)]();}function saveMyList(_0x236527){const _0x92e35={_0x2e019f:0x488},_0x53d155=_0x94aeb3;SV[_0x53d155(_0x92e35._0x2e019f)][_0x53d155(0x2de)](_0x236527);}function updateMyListBtn(_0x3d7beb){syncMyListBtns(isInMyList(_0x3d7beb));}function isInMyList(_0x3db85f){const _0x48c8c1={_0x264f6a:0x488},_0x34da7a=_0x94aeb3,_0x2a2cfe=window['_svMyListCache']!=null?window[_0x34da7a(0x43c)]:SV[_0x34da7a(_0x48c8c1._0x264f6a)][_0x34da7a(0x4c5)]();return _0x2a2cfe[_0x34da7a(0x2d1)](_0x408048=>_0x408048['id']===_0x3db85f);}function syncMyListBtns(_0x12a7c7){const _0xfcad29={_0x4ff0ac:0x437,_0x2224d8:0x34a,_0x1d9287:0x437};['2']['forEach'](_0x5555be=>{const _0x3bec5c=_0xf103,_0xdef9c0=document['getElementById'](_0x3bec5c(0x359)+_0x5555be),_0x349c7a=document['getElementById']('my-list-icon-check'+_0x5555be),_0x345406=document[_0x3bec5c(0x365)](_0x3bec5c(0x44b)+_0x5555be);if(_0xdef9c0)_0xdef9c0[_0x3bec5c(0x291)][_0x3bec5c(_0xfcad29._0x4ff0ac)]=_0x12a7c7?_0x3bec5c(_0xfcad29._0x2224d8):'block';if(_0x349c7a)_0x349c7a[_0x3bec5c(0x291)][_0x3bec5c(_0xfcad29._0x1d9287)]=_0x12a7c7?_0x3bec5c(0x4e5):_0x3bec5c(0x34a);if(_0x345406)_0x345406[_0x3bec5c(0x2d9)]=_0x12a7c7?'Saved':_0x3bec5c(0x27a);});}function toggleMyList(){const _0x4820d7={_0x2c74d9:0x239,_0x462f32:0x4c5,_0x49e3b7:0x454,_0x56a8d5:0x259,_0x175a4b:0x471,_0x303d09:0x1dd,_0x284206:0x2e6,_0x252d3b:0x4fb,_0x506409:0x48e},_0x49b060=_0x94aeb3,_0x23afda=new URLSearchParams(location[_0x49b060(_0x4820d7._0x2c74d9)]),_0x5d2dce=parseInt(_0x23afda[_0x49b060(0x4c5)]('id')),_0x22ec78=_0x23afda[_0x49b060(_0x4820d7._0x462f32)](_0x49b060(_0x4820d7._0x49e3b7));if(!_0x5d2dce||!_0x22ec78)return;const _0xc49c48=document[_0x49b060(0x365)](_0x49b060(0x360)),_0x1c1731=_0xc49c48?_0xc49c48['textContent']:'',_0x2bd070=document[_0x49b060(0x365)](_0x49b060(0x31b)),_0x5e7569=_0x2bd070?_0x2bd070[_0x49b060(0x2d9)][_0x49b060(_0x4820d7._0x56a8d5)](/\d{4}/):null,_0x1cc56e=_0x5e7569?_0x5e7569[0x0]:'',_0x5b5d41=currentShow?.[_0x49b060(0x3b7)]||null,_0x39169d=window[_0x49b060(_0x4820d7._0x175a4b)]||_0x5b5d41?.[_0x49b060(_0x4820d7._0x303d09)]||null;let _0x304580=getMyList();const _0x3d1eb9=_0x304580[_0x49b060(0x2d1)](_0x1943cf=>_0x1943cf['id']===_0x5d2dce);if(_0x3d1eb9){_0x304580=_0x304580[_0x49b060(_0x4820d7._0x284206)](_0x36540f=>_0x36540f['id']!==_0x5d2dce),syncMyListBtns(![]);const _0xca4d02=[..._0x304580];showUndoToast(_0x49b060(0x329),()=>{saveMyList(_0xca4d02),syncMyListBtns(!![]);});}else _0x304580['unshift']({'id':_0x5d2dce,'type':_0x22ec78,'title':_0x1c1731,'year':_0x1cc56e,'poster':_0x39169d,'addedAt':Date[_0x49b060(_0x4820d7._0x252d3b)]()}),syncMyListBtns(!![]),showToast(_0x49b060(_0x4820d7._0x506409));saveMyList(_0x304580);}let myListFilter=_0x94aeb3(0x3bf);function filterMyList(_0x140c67){const _0x3187fd={_0x1abdb7:0x3bf,_0x510bd7:0x419},_0x46dd47={_0x54208f:0x365,_0x25b1b1:0x410},_0x5717ef=_0x94aeb3;myListFilter=_0x140c67,[_0x5717ef(_0x3187fd._0x1abdb7),_0x5717ef(_0x3187fd._0x510bd7),'tv']['forEach'](_0x10a820=>{const _0x5581db=_0x5717ef,_0x5cc03d=document[_0x5581db(_0x46dd47._0x54208f)](_0x5581db(0x312)+_0x10a820);if(_0x5cc03d)_0x5cc03d[_0x5581db(0x450)][_0x5581db(_0x46dd47._0x25b1b1)]('active',_0x10a820===_0x140c67);}),renderMyList();}function showMyList(){const _0x1facd9={_0x128664:0x3e8,_0x3a768d:0x28b,_0x4cd443:0x228,_0x16e1d5:0x3bf,_0x235cff:0x419,_0x457eec:0x338},_0x5b6b55=_0x94aeb3;showPage(_0x5b6b55(_0x1facd9._0x128664)),setActiveTab(_0x5b6b55(_0x1facd9._0x3a768d)),setMobileTab(_0x5b6b55(0x2ef)),pushState({'browse':_0x5b6b55(0x1e8)}),document[_0x5b6b55(_0x1facd9._0x4cd443)]=_0x5b6b55(0x2cf),myListFilter=_0x5b6b55(0x3bf),[_0x5b6b55(_0x1facd9._0x16e1d5),_0x5b6b55(_0x1facd9._0x235cff),'tv'][_0x5b6b55(_0x1facd9._0x457eec)](_0x41a189=>{const _0x46d159=_0x5b6b55,_0x2be153=document[_0x46d159(0x365)]('mylist-filter-'+_0x41a189);if(_0x2be153)_0x2be153[_0x46d159(0x450)][_0x46d159(0x410)]('active',_0x41a189==='all');}),renderMyList();}function renderMyList(){const _0x2ffe83={_0x15da48:0x3bf,_0xb01616:0x2e6,_0x41be63:0x365,_0x43033a:0x1fe,_0x237ac4:0x308,_0x1ba322:0x365,_0x492488:0x4b8,_0x1e9edb:0x2a2,_0x39b380:0x4a1,_0x53a406:0x3dd,_0x392ee4:0x437,_0x340002:0x519,_0x503887:0x4c7,_0x349430:0x474,_0x132b35:0x364,_0x5a1d5b:0x4b3,_0x26c539:0x291,_0x2c6274:0x437},_0x4a4031={_0x91565a:0x1e2,_0xc8f580:0x2c2,_0x2734aa:0x308,_0x18bfbc:0x479,_0x1e1889:0x291,_0xb55f16:0x291,_0x45db68:0x4aa,_0x566044:0x3bb,_0x3b2e4f:0x452,_0x37a055:0x290,_0x38d5d3:0x2e8,_0x5bb879:0x436,_0x2d0118:0x228,_0x13ce3a:0x484,_0x7d6f7d:0x309,_0x523463:0x36e,_0xebe422:0x484,_0x4e55e8:0x461,_0xe5ba57:0x4a4,_0x5e3750:0x237,_0x1d8bb5:0x2b5,_0x3f20c5:0x4d0,_0xdd36:0x4c4,_0x510c34:0x289,_0x57c026:0x40d,_0xf809e7:0x1e7,_0x415027:0x26e},_0x4986fb={_0x2bef29:0x263,_0x449623:0x237,_0x1ff87e:0x4d0,_0x4a2b26:0x228},_0x3fcc26={_0x5ce47c:0x439,_0x57196d:0x22b,_0x580e62:0x454},_0x231f72=_0x94aeb3,_0x9747b9=getMyList(),_0x2b31f2=myListFilter===_0x231f72(_0x2ffe83._0x15da48)?_0x9747b9:_0x9747b9[_0x231f72(_0x2ffe83._0xb01616)](_0x456427=>_0x456427[_0x231f72(0x454)]===myListFilter),_0x1e8fa0=document[_0x231f72(_0x2ffe83._0x41be63)](_0x231f72(_0x2ffe83._0x43033a));_0x1e8fa0[_0x231f72(_0x2ffe83._0x237ac4)]='cards-grid';const _0x15fc09=document[_0x231f72(_0x2ffe83._0x1ba322)](_0x231f72(_0x2ffe83._0x492488)),_0x5405a2=document[_0x231f72(0x365)](_0x231f72(_0x2ffe83._0x1e9edb)),_0x21ee10=_0x9747b9[_0x231f72(0x3dd)],_0x42b1ea=_0x2b31f2[_0x231f72(0x3dd)];_0x5405a2[_0x231f72(0x2d9)]=myListFilter===_0x231f72(0x3bf)?_0x21ee10+_0x231f72(0x3ec)+(_0x21ee10!==0x1?'s':'')+'\x20saved':_0x42b1ea+_0x231f72(_0x2ffe83._0x39b380)+_0x21ee10+_0x231f72(0x3ec)+(_0x21ee10!==0x1?'s':'');if(!_0x2b31f2[_0x231f72(_0x2ffe83._0x53a406)]){_0x15fc09[_0x231f72(0x291)][_0x231f72(_0x2ffe83._0x392ee4)]=_0x231f72(0x4e5),_0x15fc09[_0x231f72(_0x2ffe83._0x340002)](_0x231f72(_0x2ffe83._0x503887))[_0x231f72(0x2d9)]=_0x21ee10===0x0?_0x231f72(_0x2ffe83._0x349430):'No\x20'+(myListFilter===_0x231f72(0x419)?_0x231f72(_0x2ffe83._0x132b35):_0x231f72(_0x2ffe83._0x5a1d5b))+_0x231f72(0x2ac),_0x15fc09['querySelector']('div[style*=\x22font-size:13px\x22]')[_0x231f72(0x2d9)]=_0x21ee10===0x0?'Hit\x20the\x20+\x20My\x20List\x20button\x20on\x20any\x20movie\x20or\x20show\x20to\x20save\x20it\x20here.':_0x231f72(0x243),_0x1e8fa0[_0x231f72(0x2e8)]='';return;}_0x15fc09[_0x231f72(_0x2ffe83._0x26c539)][_0x231f72(_0x2ffe83._0x2c6274)]='none',_0x1e8fa0[_0x231f72(0x2e8)]='',_0x2b31f2[_0x231f72(0x338)]((_0x39606f,_0x341a7f)=>{const _0x219a01=_0x231f72,_0x187e34=document[_0x219a01(_0x4a4031._0x91565a)](_0x219a01(_0x4a4031._0xc8f580));_0x187e34[_0x219a01(_0x4a4031._0x2734aa)]=_0x219a01(_0x4a4031._0x18bfbc),_0x187e34[_0x219a01(_0x4a4031._0x1e1889)]['animationDelay']=_0x341a7f*0.04+'s',_0x187e34[_0x219a01(_0x4a4031._0xb55f16)]['position']=_0x219a01(_0x4a4031._0x45db68);const _0x564b2e=_0x39606f[_0x219a01(_0x4a4031._0x566044)]?TMDB_IMG+_0x219a01(0x270)+_0x39606f['poster']:null,_0x3e7d6d=!!JSON[_0x219a01(_0x4a4031._0x3b2e4f)](localStorage[_0x219a01(_0x4a4031._0x37a055)](_0x219a01(0x446))||'{}')[_0x39606f['id']],_0x13e105=_0x3e7d6d?_0x219a01(0x4d3):'';_0x187e34[_0x219a01(_0x4a4031._0x38d5d3)]=_0x564b2e?_0x219a01(_0x4a4031._0x5bb879)+_0x564b2e+'\x22\x20loading=\x22lazy\x22\x20onerror=\x22this.style.display=\x27none\x27;this.nextElementSibling.style.display=\x27flex\x27\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-poster-placeholder\x22\x20style=\x22display:none\x22>'+esc(_0x39606f[_0x219a01(_0x4a4031._0x2d0118)])+_0x219a01(_0x4a4031._0x13ce3a)+_0x13e105+_0x219a01(_0x4a4031._0x7d6f7d):_0x219a01(_0x4a4031._0x523463)+esc(_0x39606f[_0x219a01(0x228)])+_0x219a01(_0x4a4031._0xebe422)+_0x13e105+_0x219a01(_0x4a4031._0x13ce3a),_0x187e34['innerHTML']+=_0x219a01(0x3d6)+esc(_0x39606f[_0x219a01(0x228)])+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22card-meta\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>'+esc(_0x39606f[_0x219a01(0x39e)]||'')+_0x219a01(_0x4a4031._0x4e55e8)+(_0x39606f[_0x219a01(0x454)]===_0x219a01(0x419)?_0x219a01(_0x4a4031._0xe5ba57):'TV')+_0x219a01(0x248)+_0x39606f['id']+_0x219a01(0x404);const _0x1b2d0c=document[_0x219a01(_0x4a4031._0x91565a)]('a');_0x1b2d0c['href']=_0x219a01(_0x4a4031._0x5e3750)+_0x39606f['type']+_0x219a01(_0x4a4031._0x1d8bb5)+_0x39606f['id']+_0x219a01(_0x4a4031._0x3f20c5)+slugify(_0x39606f[_0x219a01(_0x4a4031._0x2d0118)]),_0x1b2d0c['style'][_0x219a01(_0x4a4031._0xdd36)]=_0x219a01(_0x4a4031._0x510c34),_0x1b2d0c[_0x219a01(0x1f9)](_0x219a01(_0x4a4031._0x57c026),_0x219a01(0x4a3)),_0x1b2d0c['setAttribute'](_0x219a01(_0x4a4031._0xf809e7),'-1'),_0x1b2d0c['addEventListener']('click',_0x4c11f1=>{const _0x241eea=_0x219a01;if(_0x4c11f1[_0x241eea(0x470)]||_0x4c11f1[_0x241eea(_0x3fcc26._0x5ce47c)]||_0x4c11f1[_0x241eea(_0x3fcc26._0x57196d)])return;_0x4c11f1[_0x241eea(0x263)](),openDetail(_0x39606f['id'],_0x39606f[_0x241eea(_0x3fcc26._0x580e62)]);}),_0x187e34['style']['position']=_0x219a01(_0x4a4031._0x45db68),_0x187e34['addEventListener'](_0x219a01(0x334),_0x3fb89d=>{const _0x24f448=_0x219a01;_0x3fb89d[_0x24f448(_0x4986fb._0x2bef29)](),showCardContextMenu(_0x3fb89d,_0x24f448(_0x4986fb._0x449623)+_0x39606f[_0x24f448(0x454)]+'&id='+_0x39606f['id']+_0x24f448(_0x4986fb._0x1ff87e)+slugify(_0x39606f[_0x24f448(0x228)]),_0x39606f[_0x24f448(_0x4986fb._0x4a2b26)]||'');}),_0x187e34[_0x219a01(_0x4a4031._0x415027)](_0x1b2d0c),_0x1e8fa0['appendChild'](_0x187e34);});}function removeFromMyList(_0x4c0489){const _0x18701b={_0x16850e:0x329},_0x4ed101=_0x94aeb3,_0x4b28d5=getMyList();saveMyList(_0x4b28d5['filter'](_0x4b3e32=>_0x4b3e32['id']!==_0x4c0489)),renderMyList(),showUndoToast(_0x4ed101(_0x18701b._0x16850e),()=>{saveMyList(_0x4b28d5),renderMyList();});}const KNOWN_COLLECTIONS=[{'id':0x81b29,'name':'Spider-Man\x20(MCU)'},{'id':0x15127,'name':_0x94aeb3(0x1f7)},{'id':0x107,'name':_0x94aeb3(0x225)},{'id':0x77,'name':_0x94aeb3(0x250)},{'id':0x1dc52,'name':'John\x20Wick'},{'id':0x1f9b,'name':_0x94aeb3(0x395)},{'id':0xba4,'name':_0x94aeb3(0x29e)},{'id':0x250d,'name':_0x94aeb3(0x4fd)},{'id':0x2ec,'name':_0x94aeb3(0x38c)},{'id':0x673b5,'name':_0x94aeb3(0x47c)},{'id':0x200e0,'name':_0x94aeb3(0x430)},{'id':0x54,'name':_0x94aeb3(0x1d1)},{'id':0x285,'name':_0x94aeb3(0x3d9)},{'id':0xa,'name':_0x94aeb3(0x4ff)},{'id':0x4a4fa,'name':_0x94aeb3(0x32b)},{'id':0x83,'name':_0x94aeb3(0x38a)},{'id':0x72648,'name':'Wonder\x20Woman'},{'id':0x1c47e,'name':'Guardians\x20of\x20the\x20Galaxy'},{'id':0x15438,'name':_0x94aeb3(0x387)},{'id':0x21ca,'name':_0x94aeb3(0x42b)},{'id':0x928,'name':'Matrix'},{'id':0x622,'name':_0x94aeb3(0x4ad)},{'id':0xe6,'name':'Batman'},{'id':0x148,'name':_0x94aeb3(0x1cf)},{'id':0x815e4,'name':'Black\x20Panther'},{'id':0x20233,'name':_0x94aeb3(0x327)},{'id':0x7b4a,'name':_0x94aeb3(0x2ed)},{'id':0x22c,'name':'The\x20Transporter'},{'id':0x4d9,'name':'Harry\x20Potter\x20Complete'},{'id':0x1e7cf,'name':_0x94aeb3(0x372)},{'id':0x127,'name':_0x94aeb3(0x50a)},{'id':0x502b4,'name':_0x94aeb3(0x333)},{'id':0x2df,'name':_0x94aeb3(0x36a)},{'id':0x15c31,'name':'The\x20Conjuring\x20Universe'},{'id':0x15027,'name':_0x94aeb3(0x4d8)},{'id':0x2610,'name':_0x94aeb3(0x233)},{'id':0x1553f,'name':_0x94aeb3(0x20a)},{'id':0x1728c,'name':_0x94aeb3(0x275)},{'id':0x1f0,'name':_0x94aeb3(0x245)},{'id':0x2df,'name':_0x94aeb3(0x36a)},{'id':0xa4c,'name':_0x94aeb3(0x39a)},{'id':0x1a4,'name':'The\x20Chronicles\x20of\x20Narnia'},{'id':0x6d696,'name':'Deadpool\x20Collection'},{'id':0x200dc,'name':_0x94aeb3(0x232)},{'id':0x200df,'name':_0x94aeb3(0x43b)},{'id':0xcef8,'name':_0x94aeb3(0x26d)},{'id':0x62c81,'name':_0x94aeb3(0x295)},{'id':0x5206f,'name':_0x94aeb3(0x498)},{'id':0x81b2a,'name':_0x94aeb3(0x2b7)},{'id':0x6ed69,'name':_0x94aeb3(0x293)},{'id':0x16662,'name':_0x94aeb3(0x4d2)},{'id':0x1156,'name':'Rambo'},{'id':0x2185,'name':_0x94aeb3(0x495)},{'id':0x15067,'name':_0x94aeb3(0x44a)},{'id':0x18a65,'name':_0x94aeb3(0x366)},{'id':0x98527,'name':_0x94aeb3(0x2d2)}];function getDiscoveredCollections(){const _0xfcd94={_0x2aaa6c:0x452,_0x21b65f:0x290,_0x1e4f80:0x226},_0x19c36d=_0x94aeb3;return JSON[_0x19c36d(_0xfcd94._0x2aaa6c)](localStorage[_0x19c36d(_0xfcd94._0x21b65f)](_0x19c36d(_0xfcd94._0x1e4f80))||'[]');}function saveDiscoveredCollection(_0x2f760a){const _0x1db817={_0x484734:0x226,_0x760944:0x276},_0x38d99e=_0x94aeb3;if(!_0x2f760a?.['id'])return;const _0x33947c=getDiscoveredCollections();if(_0x33947c['some'](_0x9e1899=>_0x9e1899['id']===_0x2f760a['id']))return;_0x33947c[_0x38d99e(0x511)]({'id':_0x2f760a['id'],'name':_0x2f760a[_0x38d99e(0x451)]}),localStorage[_0x38d99e(0x2f4)](_0x38d99e(_0x1db817._0x484734),JSON['stringify'](_0x33947c[_0x38d99e(_0x1db817._0x760944)](0x0,0x32)));}function _buildCollectionCard(_0x41baa7){const _0x1a9838={_0x2604cb:0x2f9,_0x476bc9:0x1dd,_0x51831a:0x452,_0x559a2c:0x446,_0x2ecf3f:0x3dd,_0x12b00a:0x1e2,_0x35341c:0x2c2,_0x419541:0x308,_0x3233d7:0x294,_0x32adad:0x438,_0x50c38a:0x22f,_0x3e0c4c:0x389},_0x32fea0={_0x5646c7:0x394},_0x115061=_0x94aeb3,_0x18658=_0x41baa7[_0x115061(_0x1a9838._0x2604cb)]?TMDB_IMG+'w780'+_0x41baa7['backdrop_path']:_0x41baa7['poster_path']?TMDB_IMG+'w342'+_0x41baa7[_0x115061(_0x1a9838._0x476bc9)]:null,_0x2a5441=JSON[_0x115061(_0x1a9838._0x51831a)](localStorage['getItem'](_0x115061(_0x1a9838._0x559a2c))||'{}'),_0x4466c3=_0x41baa7[_0x115061(0x22a)][_0x115061(0x2e6)](_0x269ca3=>_0x2a5441[_0x269ca3['id']])[_0x115061(_0x1a9838._0x2ecf3f)],_0x14fc33=document[_0x115061(_0x1a9838._0x12b00a)](_0x115061(_0x1a9838._0x35341c));return _0x14fc33[_0x115061(_0x1a9838._0x419541)]=_0x115061(0x215),_0x14fc33[_0x115061(0x2e8)]=_0x115061(0x401)+(_0x18658?_0x115061(_0x1a9838._0x3233d7)+_0x18658+')':'')+_0x115061(0x441)+esc(_0x41baa7['name'])+_0x115061(0x1d3)+_0x41baa7[_0x115061(0x22a)]['length']+_0x115061(0x316)+(_0x4466c3?_0x115061(0x205)+_0x4466c3+_0x115061(_0x1a9838._0x32adad):'')+_0x115061(0x1da),_0x14fc33['addEventListener'](_0x115061(_0x1a9838._0x50c38a),()=>openCollectionDetail(_0x41baa7['id'],_0x41baa7['name'])),_0x14fc33[_0x115061(_0x1a9838._0x3e0c4c)](_0x115061(0x334),_0xcd18ff=>{const _0x531dbe=_0x115061;_0xcd18ff['preventDefault'](),showCardContextMenu(_0xcd18ff,_0x531dbe(_0x32fea0._0x5646c7)+_0x41baa7['id'],_0x41baa7[_0x531dbe(0x451)]);}),_0x14fc33;}async function showCollections(){const _0x26fd99={_0x429de2:0x2f7,_0x31c3be:0x3f2,_0x1cf510:0x489,_0x5b5d3d:0x228,_0x38a6a7:0x4cc,_0x4c5ff4:0x508,_0x1e9644:0x22c,_0x3e0e9e:0x213,_0x53801c:0x2e6,_0x522fd0:0x2e6,_0x24c408:0x2e6,_0x323d09:0x2d9,_0x722c08:0x3dd,_0x1b61aa:0x1e2,_0x4abb0c:0x4c4,_0x1ae500:0x482},_0x16b61c=_0x94aeb3;showPage(_0x16b61c(_0x26fd99._0x429de2)),setActiveTab(_0x16b61c(_0x26fd99._0x31c3be)),setMobileTab(_0x16b61c(0x264)),pushState({'browse':_0x16b61c(_0x26fd99._0x1cf510)}),document[_0x16b61c(_0x26fd99._0x5b5d3d)]=_0x16b61c(0x4be);const _0x2f68ba=document[_0x16b61c(0x365)](_0x16b61c(0x374)),_0x31dd9f=document['getElementById'](_0x16b61c(0x357));_0x31dd9f['textContent']=_0x16b61c(_0x26fd99._0x38a6a7),_0x2f68ba['innerHTML']=Array(0xc)[_0x16b61c(_0x26fd99._0x4c5ff4)]('<div\x20class=\x22skeleton\x22\x20style=\x22aspect-ratio:16/9;border-radius:12px;\x22></div>')[_0x16b61c(_0x26fd99._0x1e9644)]('');const _0x1d86b1=new Set(KNOWN_COLLECTIONS[_0x16b61c(_0x26fd99._0x3e0e9e)](_0x1f2542=>_0x1f2542['id'])),_0x5c5531=getDiscoveredCollections()['filter'](_0x442f86=>!_0x1d86b1['has'](_0x442f86['id'])),_0x377141=[...KNOWN_COLLECTIONS,..._0x5c5531],_0x510878=await Promise[_0x16b61c(0x261)](_0x377141[_0x16b61c(0x213)](_0x3d84e7=>tmdb(_0x16b61c(0x2d0)+_0x3d84e7['id']))),_0x1cef09=_0x510878['filter'](_0xc91c13=>_0xc91c13[_0x16b61c(0x24f)]===_0x16b61c(0x4b1))[_0x16b61c(_0x26fd99._0x3e0e9e)](_0x3072e1=>_0x3072e1['value'])[_0x16b61c(_0x26fd99._0x53801c)](_0x5dc5bf=>_0x5dc5bf[_0x16b61c(0x22a)]?.[_0x16b61c(0x3dd)]>0x1),_0x22a046=new Set(_0x5c5531[_0x16b61c(0x213)](_0xef1055=>_0xef1055['id'])),_0x11e431=_0x1cef09[_0x16b61c(_0x26fd99._0x522fd0)](_0x110f25=>_0x22a046[_0x16b61c(0x2da)](_0x110f25['id'])),_0x48597f=_0x1cef09[_0x16b61c(_0x26fd99._0x24c408)](_0x214580=>!_0x22a046['has'](_0x214580['id']));_0x31dd9f[_0x16b61c(_0x26fd99._0x323d09)]=_0x1cef09[_0x16b61c(0x3dd)]+'\x20collection'+(_0x1cef09[_0x16b61c(_0x26fd99._0x722c08)]!==0x1?'s':''),_0x2f68ba[_0x16b61c(0x2e8)]='';if(_0x11e431[_0x16b61c(0x3dd)]){const _0x37740c=document[_0x16b61c(_0x26fd99._0x1b61aa)](_0x16b61c(0x2c2));_0x37740c[_0x16b61c(0x291)][_0x16b61c(_0x26fd99._0x4abb0c)]=_0x16b61c(_0x26fd99._0x1ae500),_0x37740c[_0x16b61c(_0x26fd99._0x323d09)]=_0x16b61c(0x4a2),_0x2f68ba[_0x16b61c(0x26e)](_0x37740c),_0x11e431[_0x16b61c(0x338)](_0x2e1fc1=>_0x2f68ba['appendChild'](_buildCollectionCard(_0x2e1fc1)));const _0xa25383=document[_0x16b61c(0x1e2)]('div');_0xa25383['style'][_0x16b61c(0x4c4)]='grid-column:1/-1;height:1px;background:var(--border);margin:8px\x200\x2012px;',_0x2f68ba['appendChild'](_0xa25383);}_0x48597f[_0x16b61c(0x338)](_0x148e84=>_0x2f68ba[_0x16b61c(0x26e)](_buildCollectionCard(_0x148e84)));}async function openCollectionDetail(_0x133daa,_0x224a51){const _0x256b31={_0x773d3f:0x365,_0x3c93d1:0x27d,_0x465426:0x4cc,_0x3de9b9:0x365,_0xae9209:0x4ea,_0x1d1b3c:0x47b,_0x34c4a5:0x291,_0x5a531f:0x2d0,_0x2c61f8:0x213,_0x3bac51:0x2d9,_0x4977b7:0x365,_0x50d157:0x3fe,_0x5a70fd:0x2e8},_0x1f3253=_0x94aeb3;showPage(_0x1f3253(0x21f)),document[_0x1f3253(_0x256b31._0x773d3f)]('search-query-display')['textContent']=_0x224a51,document['getElementById'](_0x1f3253(_0x256b31._0x3c93d1))[_0x1f3253(0x2d9)]=_0x1f3253(_0x256b31._0x465426),document[_0x1f3253(_0x256b31._0x3de9b9)](_0x1f3253(0x3fe))[_0x1f3253(0x2e8)]=_0x1f3253(_0x256b31._0xae9209),document['getElementById'](_0x1f3253(_0x256b31._0x1d1b3c))[_0x1f3253(_0x256b31._0x34c4a5)]['display']=_0x1f3253(0x34a);try{const _0x2d5b64=await tmdb(_0x1f3253(_0x256b31._0x5a531f)+_0x133daa),_0x18ece1=(_0x2d5b64['parts']||[])['sort']((_0x1174b7,_0x1780af)=>(_0x1174b7['release_date']||'')[_0x1f3253(0x4b4)](_0x1780af['release_date']||''))[_0x1f3253(_0x256b31._0x2c61f8)](_0x30a441=>({..._0x30a441,'media_type':_0x1f3253(0x419)}));document[_0x1f3253(0x365)](_0x1f3253(_0x256b31._0x3c93d1))[_0x1f3253(_0x256b31._0x3bac51)]=_0x18ece1[_0x1f3253(0x3dd)]+_0x1f3253(0x316),renderCards(_0x1f3253(0x3fe),_0x18ece1);}catch(_0xe6a6f5){document[_0x1f3253(_0x256b31._0x4977b7)](_0x1f3253(_0x256b31._0x50d157))[_0x1f3253(_0x256b31._0x5a70fd)]='<div\x20class=\x22empty-state\x22><p>Failed\x20to\x20load\x20collection.</p></div>';}}function openShortcuts(){const _0x1d16b7={_0x5a414f:0x365,_0x57c147:0x291,_0x34e4ef:0x437,_0x2d98b2:0x3e2},_0x38a3ec={_0x57085e:0x389,_0x13a9f0:0x4c9},_0x17d22b={_0x33d394:0x3d7},_0x3738c8=_0x94aeb3,_0x576097=document[_0x3738c8(_0x1d16b7._0x5a414f)](_0x3738c8(0x41d));_0x576097[_0x3738c8(_0x1d16b7._0x57c147)][_0x3738c8(_0x1d16b7._0x34e4ef)]=_0x3738c8(_0x1d16b7._0x2d98b2),document[_0x3738c8(0x47e)]['style'][_0x3738c8(0x27e)]=_0x3738c8(0x4ab),setTimeout(()=>{const _0x2ab9e7=_0x3738c8,_0x3be7c6=_0x1fa2cf=>{const _0x48d4b3=_0xf103;_0x1fa2cf[_0x48d4b3(_0x17d22b._0x33d394)]===_0x576097&&(closeShortcuts(),_0x576097['removeEventListener'](_0x48d4b3(0x4c9),_0x3be7c6));};_0x576097[_0x2ab9e7(_0x38a3ec._0x57085e)](_0x2ab9e7(_0x38a3ec._0x13a9f0),_0x3be7c6);},0x0);}function closeShortcuts(){const _0x64866b={_0x4e54ba:0x365,_0x2d9847:0x41d,_0x3b7abe:0x291,_0x596eee:0x291},_0x480555=_0x94aeb3,_0x19362a=document[_0x480555(_0x64866b._0x4e54ba)](_0x480555(_0x64866b._0x2d9847));_0x19362a[_0x480555(_0x64866b._0x3b7abe)]['display']='none',document['body'][_0x480555(_0x64866b._0x596eee)][_0x480555(0x27e)]='';}function showCardContextMenu(_0x2aefea,_0x5b763a,_0x22c816,_0x48d6ec=null){const _0xbd4ce7={_0x4ab363:0x30c,_0x20d425:0x1e2,_0x3b15bb:0x30c,_0x59cf3c:0x308,_0x45a72f:0x4c5,_0x54dfa4:0x40b,_0x28a86f:0x33c,_0x29af16:0x49f,_0x4fa66f:0x2d6,_0x5911b8:0x4c4,_0x172d09:0x450,_0x2e6746:0x4af,_0x3235ea:0x291,_0x17bf52:0x444,_0x433cf6:0x389,_0x32d25e:0x365,_0x50f076:0x3f1,_0x3eaab9:0x22f,_0xe092e0:0x4ed,_0x163361:0x389,_0x22e380:0x334},_0x213af1={_0x2e45c0:0x385,_0x5ad830:0x317},_0x1538a0={_0x1cae66:0x388,_0x31722a:0x317},_0x1da099={_0x17e702:0x317},_0x44dd72={_0xf212a:0x313},_0x50aca4={_0x30d21b:0x4d9},_0x3b41dc=_0x94aeb3;document[_0x3b41dc(0x365)](_0x3b41dc(_0xbd4ce7._0x4ab363))?.['remove']();const _0x16ab58=document[_0x3b41dc(_0xbd4ce7._0x20d425)]('div');_0x16ab58['id']=_0x3b41dc(_0xbd4ce7._0x3b15bb),_0x16ab58[_0x3b41dc(_0xbd4ce7._0x59cf3c)]=_0x3b41dc(_0xbd4ce7._0x4ab363);const _0x16222f=new URLSearchParams(_0x5b763a['split']('?')[0x1]||''),_0x1c60a7=_0x48d6ec||(_0x16222f[_0x3b41dc(_0xbd4ce7._0x45a72f)]('id')?parseInt(_0x16222f['get']('id')):null),_0x756f92=!!_0x16222f['get'](_0x3b41dc(0x454))&&!!_0x1c60a7;_0x16ab58['innerHTML']=_0x3b41dc(0x1f0)+esc(_0x22c816[_0x3b41dc(0x3dd)]>0x1c?_0x22c816['slice'](0x0,0x1c)+'…':_0x22c816)+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sv-ctx-divider\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22sv-ctx-item\x20sv-ctx-btn\x22\x20id=\x22sv-ctx-newtab\x22>'+icon('newtab',0xd)+_0x3b41dc(_0xbd4ce7._0x54dfa4)+icon(_0x3b41dc(_0xbd4ce7._0x28a86f),0xd)+'\x20Copy\x20link</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20'+(_0x756f92?'<div\x20class=\x22sv-ctx-divider\x22></div><button\x20class=\x22sv-ctx-item\x20sv-ctx-btn\x20sv-ctx-danger\x22\x20id=\x22sv-ctx-hide\x22>'+icon(_0x3b41dc(_0xbd4ce7._0x29af16),0xd)+_0x3b41dc(0x41c):''),document['body']['appendChild'](_0x16ab58);const _0x3b1c93=window[_0x3b41dc(_0xbd4ce7._0x4fa66f)],_0xca0515=window['innerHeight'];_0x3b1c93<=0x300?(_0x16ab58[_0x3b41dc(0x291)][_0x3b41dc(_0xbd4ce7._0x5911b8)]=_0x3b41dc(0x2a0),_0x16ab58[_0x3b41dc(_0xbd4ce7._0x172d09)][_0x3b41dc(0x4ae)](_0x3b41dc(_0xbd4ce7._0x2e6746))):(_0x16ab58[_0x3b41dc(_0xbd4ce7._0x3235ea)][_0x3b41dc(0x2b1)]=(_0x2aefea[_0x3b41dc(0x444)]+0xbe>_0x3b1c93?_0x2aefea[_0x3b41dc(_0xbd4ce7._0x17bf52)]-0xbe:_0x2aefea[_0x3b41dc(0x444)])+'px',_0x16ab58[_0x3b41dc(_0xbd4ce7._0x3235ea)][_0x3b41dc(0x3c6)]=(_0x2aefea[_0x3b41dc(0x4d9)]+0x8c>_0xca0515?_0x2aefea[_0x3b41dc(0x4d9)]-0x8c:_0x2aefea['clientY'])+'px');requestAnimationFrame(()=>_0x16ab58[_0x3b41dc(0x450)][_0x3b41dc(0x4ae)]('sv-ctx-visible'));let _0x3d68db=0x0;_0x16ab58[_0x3b41dc(_0xbd4ce7._0x433cf6)]('touchstart',_0x17a69f=>{const _0x54b2c4=_0x3b41dc;_0x3d68db=_0x17a69f[_0x54b2c4(0x313)][0x0][_0x54b2c4(_0x50aca4._0x30d21b)];},{'passive':!![]}),_0x16ab58[_0x3b41dc(_0xbd4ce7._0x433cf6)](_0x3b41dc(0x204),_0x5ec412=>{const _0x4160ed=_0x3b41dc;_0x5ec412[_0x4160ed(_0x44dd72._0xf212a)][0x0][_0x4160ed(0x4d9)]-_0x3d68db>0x3c&&_0x16ab58[_0x4160ed(0x317)]();},{'passive':!![]});const _0x1c59ec=location['origin']+_0x5b763a;document[_0x3b41dc(_0xbd4ce7._0x32d25e)](_0x3b41dc(_0xbd4ce7._0x50f076))[_0x3b41dc(_0xbd4ce7._0x433cf6)](_0x3b41dc(_0xbd4ce7._0x3eaab9),()=>{const _0x5ecb00=_0x3b41dc;window[_0x5ecb00(0x48f)](_0x1c59ec,_0x5ecb00(0x3e1),_0x5ecb00(0x3b5)),_0x16ab58[_0x5ecb00(_0x1da099._0x17e702)]();}),document['getElementById'](_0x3b41dc(_0xbd4ce7._0xe092e0))[_0x3b41dc(0x389)](_0x3b41dc(0x22f),()=>{const _0x318648=_0x3b41dc;navigator['clipboard'][_0x318648(_0x1538a0._0x1cae66)](_0x1c59ec)['then'](()=>showToast(_0x318648(0x494))),_0x16ab58[_0x318648(_0x1538a0._0x31722a)]();});_0x756f92&&document['getElementById'](_0x3b41dc(0x4dc))[_0x3b41dc(_0xbd4ce7._0x433cf6)](_0x3b41dc(0x22f),()=>{const _0x48eaab=_0x3b41dc;SV['hidden'][_0x48eaab(0x4ae)](_0x1c60a7);const _0xd0ca1=document['querySelector'](_0x48eaab(0x26a)+_0x1c60a7+'\x22]');if(_0xd0ca1)_0xd0ca1['remove']();allResults=allResults[_0x48eaab(0x2e6)](_0x424ced=>_0x424ced['id']!==_0x1c60a7),showToast(_0x48eaab(0x301)),_0x16ab58['remove']();});_0x16ab58[_0x3b41dc(_0xbd4ce7._0x163361)](_0x3b41dc(_0xbd4ce7._0x22e380),_0x192e64=>_0x192e64[_0x3b41dc(0x263)]());const _0xae30c3=_0x2f9867=>{const _0x2d8e6f=_0x3b41dc;!_0x16ab58[_0x2d8e6f(_0x213af1._0x2e45c0)](_0x2f9867['target'])&&(_0x16ab58[_0x2d8e6f(_0x213af1._0x5ad830)](),document['removeEventListener']('mousedown',_0xae30c3));};setTimeout(()=>document['addEventListener']('mousedown',_0xae30c3),0x0);}function showCastContextMenu(_0x5a972e,_0x2d2b6b){const _0x4166c4={_0x4ed319:0x365,_0x350cc9:0x30c,_0x30e005:0x317,_0x4d238e:0x308,_0xabb29d:0x2e8,_0x2c7342:0x291,_0x2a6a12:0x291,_0x431665:0x4d9,_0xe751ba:0x31e,_0x4e4ce0:0x22f,_0x33a2b5:0x418,_0x320faa:0x389,_0x44dac4:0x22f},_0xb8466e={_0x1c661d:0x2fe},_0x2ce531={_0x3431bf:0x385,_0x43e3c1:0x317},_0x59b737={_0x782acb:0x365,_0x125957:0x27d,_0x2ba0fd:0x2d9,_0x331a56:0x365,_0x55bf9a:0x3fe,_0x21a86d:0x365,_0x352b21:0x322,_0x501f9e:0x2e8,_0x16cb08:0x4a6,_0x45a3f8:0x2e6,_0x3cdc6d:0x276,_0x3e1d24:0x3dd,_0x5d7879:0x365},_0x34ebd4={_0x238a6a:0x4d9},_0x44584c={_0x47c74c:0x4d9},_0x2d48a8=_0x94aeb3;document[_0x2d48a8(_0x4166c4._0x4ed319)](_0x2d48a8(_0x4166c4._0x350cc9))?.[_0x2d48a8(_0x4166c4._0x30e005)]();const _0x514056=document[_0x2d48a8(0x1e2)](_0x2d48a8(0x2c2));_0x514056['id']=_0x2d48a8(_0x4166c4._0x350cc9),_0x514056[_0x2d48a8(_0x4166c4._0x4d238e)]=_0x2d48a8(0x30c),_0x514056[_0x2d48a8(_0x4166c4._0xabb29d)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sv-ctx-item\x20sv-ctx-header\x22>'+esc(_0x2d2b6b)+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sv-ctx-divider\x22></div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22sv-ctx-item\x20sv-ctx-btn\x22\x20id=\x22sv-ctx-copyname\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><rect\x20x=\x229\x22\x20y=\x229\x22\x20width=\x2213\x22\x20height=\x2213\x22\x20rx=\x222\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22M5\x2015H4a2\x202\x200\x200\x201-2-2V4a2\x202\x200\x200\x201\x202-2h9a2\x202\x200\x200\x201\x202\x202v1\x22/></svg>Copy\x20name\x0a\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22sv-ctx-item\x20sv-ctx-btn\x22\x20id=\x22sv-ctx-searchactor\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<svg\x20width=\x2213\x22\x20height=\x2213\x22\x20viewBox=\x220\x200\x2024\x2024\x22\x20fill=\x22none\x22\x20stroke=\x22currentColor\x22\x20stroke-width=\x222\x22\x20stroke-linecap=\x22round\x22><circle\x20cx=\x2211\x22\x20cy=\x2211\x22\x20r=\x228\x22/>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<path\x20d=\x22m21\x2021-4.35-4.35\x22/></svg>Search\x20their\x20movies\x0a\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20',document[_0x2d48a8(0x47e)]['appendChild'](_0x514056);const _0x294a64=window[_0x2d48a8(0x2d6)],_0x1e7825=window[_0x2d48a8(0x3d0)];_0x514056[_0x2d48a8(_0x4166c4._0x2c7342)][_0x2d48a8(0x2b1)]=(_0x5a972e[_0x2d48a8(0x444)]+0xbe>_0x294a64?_0x5a972e['clientX']-0xbe:_0x5a972e[_0x2d48a8(0x444)])+'px',_0x514056[_0x2d48a8(_0x4166c4._0x2a6a12)][_0x2d48a8(0x3c6)]=(_0x5a972e['clientY']+0x6e>_0x1e7825?_0x5a972e['clientY']-0x6e:_0x5a972e[_0x2d48a8(_0x4166c4._0x431665)])+'px',requestAnimationFrame(()=>_0x514056[_0x2d48a8(0x450)][_0x2d48a8(0x4ae)](_0x2d48a8(0x3ad)));let _0x130747=0x0;_0x514056[_0x2d48a8(0x389)](_0x2d48a8(_0x4166c4._0xe751ba),_0x1cef5e=>{const _0xc4d9ae=_0x2d48a8;_0x130747=_0x1cef5e['touches'][0x0][_0xc4d9ae(_0x44584c._0x47c74c)];},{'passive':!![]}),_0x514056[_0x2d48a8(0x389)]('touchmove',_0x4517dd=>{const _0x378755=_0x2d48a8;_0x4517dd[_0x378755(0x313)][0x0][_0x378755(_0x34ebd4._0x238a6a)]-_0x130747>0x28&&_0x514056['remove']();},{'passive':!![]}),document[_0x2d48a8(0x365)](_0x2d48a8(0x4a0))['addEventListener'](_0x2d48a8(_0x4166c4._0x4e4ce0),()=>{const _0x16fbe0=_0x2d48a8;navigator[_0x16fbe0(0x241)]['writeText'](_0x2d2b6b)['then'](()=>showToast(_0x16fbe0(0x37b))),_0x514056['remove']();}),document[_0x2d48a8(0x365)](_0x2d48a8(_0x4166c4._0x33a2b5))[_0x2d48a8(_0x4166c4._0x320faa)](_0x2d48a8(_0x4166c4._0x44dac4),async()=>{const _0x331e61={_0x36a147:0x3a6},_0x1ec060=_0x2d48a8;_0x514056['remove'](),showPage('search-page'),document[_0x1ec060(_0x59b737._0x782acb)](_0x1ec060(0x3a2))[_0x1ec060(0x2d9)]=_0x2d2b6b,document['getElementById'](_0x1ec060(_0x59b737._0x125957))[_0x1ec060(_0x59b737._0x2ba0fd)]=_0x1ec060(0x4cc),document[_0x1ec060(_0x59b737._0x331a56)](_0x1ec060(_0x59b737._0x55bf9a))[_0x1ec060(0x2e8)]='<div\x20class=\x22spinner\x22></div>',document[_0x1ec060(_0x59b737._0x21a86d)]('genre-bar')['style'][_0x1ec060(0x437)]='none';try{const _0x33ee81=await tmdb(_0x1ec060(_0x59b737._0x352b21),{'query':_0x2d2b6b,'page':0x1}),_0x3546fd=_0x33ee81['results'][0x0];if(!_0x3546fd){document['getElementById'](_0x1ec060(_0x59b737._0x55bf9a))[_0x1ec060(_0x59b737._0x501f9e)]='<div\x20class=\x22empty-state\x22><p>No\x20results\x20found.</p></div>';return;}const _0x4fa26f=await tmdb(_0x1ec060(0x3cf)+_0x3546fd['id']+_0x1ec060(0x281)),_0x15cf01=new Set(),_0x21b510=[..._0x4fa26f[_0x1ec060(_0x59b737._0x16cb08)]||[]][_0x1ec060(_0x59b737._0x45a3f8)](_0x21947e=>{const _0x2f7c58=_0x1ec060,_0x2852d0=_0x21947e[_0x2f7c58(_0x331e61._0x36a147)]+'-'+_0x21947e['id'];if(_0x15cf01['has'](_0x2852d0)||!_0x21947e[_0x2f7c58(0x1dd)])return![];return _0x15cf01[_0x2f7c58(0x4ae)](_0x2852d0),!![];})[_0x1ec060(0x459)]((_0x25d35a,_0x1e140b)=>(_0x1e140b[_0x1ec060(0x1e3)]||0x0)-(_0x25d35a['popularity']||0x0))[_0x1ec060(_0x59b737._0x3cdc6d)](0x0,0x28);document[_0x1ec060(0x365)]('search-count')[_0x1ec060(0x2d9)]=_0x21b510[_0x1ec060(_0x59b737._0x3e1d24)]+_0x1ec060(0x4ca),allResults=_0x21b510,renderCards(_0x1ec060(_0x59b737._0x55bf9a),_0x21b510);}catch(_0x1c4bcc){document[_0x1ec060(_0x59b737._0x5d7879)]('search-results')[_0x1ec060(0x2e8)]=_0x1ec060(0x351);}});const _0x2239a0=_0x1d4167=>{const _0x2765d6=_0x2d48a8;!_0x514056[_0x2765d6(_0x2ce531._0x3431bf)](_0x1d4167['target'])&&(_0x514056[_0x2765d6(_0x2ce531._0x43e3c1)](),document['removeEventListener'](_0x2765d6(0x4c9),_0x2239a0));},_0x33bdd7=()=>{const _0x2c76b2=_0x2d48a8;_0x514056['remove'](),window[_0x2c76b2(_0xb8466e._0x1c661d)](_0x2c76b2(0x3d4),_0x33bdd7,!![]);};setTimeout(()=>document[_0x2d48a8(0x389)](_0x2d48a8(0x4c9),_0x2239a0),0x0),window[_0x2d48a8(0x389)](_0x2d48a8(0x3d4),_0x33bdd7,!![]);}function showSourceContextMenu(_0x100108,_0x4ba5fe,_0x5e0383){const _0x552222={_0x2bf4a9:0x30c,_0x1c8c8f:0x2c2,_0x38707e:0x25e,_0x3901f4:0x291,_0x126af8:0x291,_0x1735ef:0x3c6,_0x138f71:0x4d9,_0x2ad5a7:0x4d9,_0x30189f:0x389,_0x5b535b:0x3fa,_0x384b75:0x22f,_0x244c04:0x217,_0x381f4d:0x22f,_0x42fde6:0x365},_0x56d675={_0x4399a7:0x317},_0x180b4c={_0x3be906:0x3d7,_0x7456a8:0x2fe},_0x40a313={_0x43cce4:0x3b5},_0x28c148={_0x45e238:0x4d9},_0x2d1f5e={_0x3c84a1:0x313,_0x5be4b2:0x4d9},_0x42a3de=_0x94aeb3;document[_0x42a3de(0x365)](_0x42a3de(_0x552222._0x2bf4a9))?.['remove']();const _0x1e6f23=document['createElement'](_0x42a3de(_0x552222._0x1c8c8f));_0x1e6f23['id']='sv-context-menu',_0x1e6f23[_0x42a3de(0x308)]='sv-context-menu';const {type:_0xc40a43,imdb:_0x17da61,tmdbId:_0x3b7901,season:_0x4376b3,episode:_0x56c0a5}=currentEmbed,_0x414ebc=_0xc40a43?buildEmbedUrl(_0x4ba5fe,_0xc40a43,_0x17da61,_0x3b7901,_0x4376b3,_0x56c0a5):null;_0x1e6f23['innerHTML']='\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22sv-ctx-item\x20sv-ctx-header\x22>'+esc(_0x5e0383)+_0x42a3de(_0x552222._0x38707e)+esc(_0x5e0383)+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20</button>'+(_0x414ebc?_0x42a3de(0x485):'')+_0x42a3de(0x4bb),document[_0x42a3de(0x47e)]['appendChild'](_0x1e6f23);const _0x81a3c8=window[_0x42a3de(0x2d6)],_0xa61da4=window[_0x42a3de(0x3d0)];_0x1e6f23[_0x42a3de(_0x552222._0x3901f4)][_0x42a3de(0x2b1)]=(_0x100108[_0x42a3de(0x444)]+0xbe>_0x81a3c8?_0x100108['clientX']-0xbe:_0x100108['clientX'])+'px',_0x1e6f23[_0x42a3de(_0x552222._0x126af8)][_0x42a3de(_0x552222._0x1735ef)]=(_0x100108[_0x42a3de(0x4d9)]+0x82>_0xa61da4?_0x100108[_0x42a3de(_0x552222._0x138f71)]-0x82:_0x100108[_0x42a3de(_0x552222._0x2ad5a7)])+'px',requestAnimationFrame(()=>_0x1e6f23[_0x42a3de(0x450)][_0x42a3de(0x4ae)](_0x42a3de(0x3ad)));let _0x3f26ad=0x0;_0x1e6f23[_0x42a3de(0x389)]('touchstart',_0x177b20=>{const _0x34c013=_0x42a3de;_0x3f26ad=_0x177b20[_0x34c013(_0x2d1f5e._0x3c84a1)][0x0][_0x34c013(_0x2d1f5e._0x5be4b2)];},{'passive':!![]}),_0x1e6f23[_0x42a3de(_0x552222._0x30189f)](_0x42a3de(0x204),_0x534ecb=>{const _0x10b7ee=_0x42a3de;_0x534ecb[_0x10b7ee(0x313)][0x0][_0x10b7ee(_0x28c148._0x45e238)]-_0x3f26ad>0x28&&_0x1e6f23['remove']();},{'passive':!![]}),document[_0x42a3de(0x365)](_0x42a3de(_0x552222._0x5b535b))['addEventListener'](_0x42a3de(_0x552222._0x384b75),()=>{const _0x58eb34=_0x42a3de;switchSource(_0x4ba5fe),_0x1e6f23[_0x58eb34(0x317)]();});_0x414ebc&&(document[_0x42a3de(0x365)](_0x42a3de(_0x552222._0x244c04))['addEventListener'](_0x42a3de(_0x552222._0x381f4d),()=>{const _0x521349=_0x42a3de;window['open'](_0x414ebc,'_blank',_0x521349(_0x40a313._0x43cce4)),_0x1e6f23[_0x521349(0x317)]();}),document[_0x42a3de(_0x552222._0x42fde6)](_0x42a3de(0x48c))[_0x42a3de(_0x552222._0x30189f)]('click',()=>{const _0x5682d4=_0x42a3de;navigator['clipboard'][_0x5682d4(0x388)](_0x414ebc)[_0x5682d4(0x3d3)](()=>showToast(_0x5682d4(0x305))),_0x1e6f23[_0x5682d4(0x317)]();}));const _0xece05d=_0x184f02=>{const _0x125dd5=_0x42a3de;!_0x1e6f23['contains'](_0x184f02[_0x125dd5(_0x180b4c._0x3be906)])&&(_0x1e6f23[_0x125dd5(0x317)](),document[_0x125dd5(_0x180b4c._0x7456a8)]('mousedown',_0xece05d));},_0xf48dca=()=>{const _0x1ed31a=_0x42a3de;_0x1e6f23[_0x1ed31a(_0x56d675._0x4399a7)](),window['removeEventListener'](_0x1ed31a(0x3d4),_0xf48dca,!![]);};setTimeout(()=>document[_0x42a3de(0x389)](_0x42a3de(0x4c9),_0xece05d),0x0),window[_0x42a3de(0x389)](_0x42a3de(0x3d4),_0xf48dca,!![]);}let watchTogetherTimer=null;function generateWatchTogetherLink(){const _0x2ff2a1={_0x459f69:0x2de,_0x4fda6b:0x3f5,_0x185f4d:0x1cc,_0x10f54f:0x2c3,_0x47fd6e:0x3da,_0x1dc3fa:0x282,_0x8b41b3:0x37f},_0x5a876e=_0x94aeb3,_0xb0ff04=Date['now']()+0x7530,_0x13e662=new URLSearchParams(location[_0x5a876e(0x239)]);_0x13e662[_0x5a876e(_0x2ff2a1._0x459f69)](_0x5a876e(0x3ea),_0xb0ff04);const _0x558812=''+location[_0x5a876e(_0x2ff2a1._0x4fda6b)]+location[_0x5a876e(_0x2ff2a1._0x185f4d)]+'?'+_0x13e662[_0x5a876e(_0x2ff2a1._0x10f54f)]();navigator['share']?navigator[_0x5a876e(_0x2ff2a1._0x47fd6e)]({'title':_0x5a876e(_0x2ff2a1._0x1dc3fa),'text':_0x5a876e(_0x2ff2a1._0x8b41b3),'url':_0x558812})['catch'](()=>copyLinkToClipboard(_0x558812)):copyLinkToClipboard(_0x558812),startWatchTogetherCountdown(_0xb0ff04);}function copyLinkToClipboard(_0x26ea7d){const _0x4d97cd={_0x1b3e60:0x365,_0x5361ce:0x388},_0x1565b8={_0x2fbbd0:0x291,_0x3c050d:0x4ee},_0x563cd6={_0x302e65:0x2e8,_0x54298a:0x4ee},_0x63fb21=_0x94aeb3,_0x2ac1ba=document[_0x63fb21(_0x4d97cd._0x1b3e60)](_0x63fb21(0x4a7));if(!_0x2ac1ba)return;navigator[_0x63fb21(0x241)][_0x63fb21(_0x4d97cd._0x5361ce)](_0x26ea7d)['then'](()=>{const _0x580774=_0x63fb21,_0x33faaa=_0x2ac1ba[_0x580774(0x2e8)];_0x2ac1ba['innerHTML']=_0x580774(0x2e2),_0x2ac1ba[_0x580774(_0x1565b8._0x2fbbd0)][_0x580774(_0x1565b8._0x3c050d)]=_0x580774(0x2f0),setTimeout(()=>{const _0x1e6a6e=_0x580774;_0x2ac1ba[_0x1e6a6e(_0x563cd6._0x302e65)]=_0x33faaa,_0x2ac1ba[_0x1e6a6e(0x291)][_0x1e6a6e(_0x563cd6._0x54298a)]='';},0x9c4);});}function startWatchTogetherCountdown(_0x351308){const _0x1419fe={_0x4a8ef0:0x365,_0x84eade:0x2b2},_0x4929cf={_0x4697e2:0x437,_0x5080e6:0x37e,_0x1505ca:0x37e,_0x23798f:0x51b,_0x15d6f8:0x3ea,_0x2afa3a:0x2c3,_0x486b4d:0x2d9},_0x26864f=_0x94aeb3,_0x1d1f18=document[_0x26864f(_0x1419fe._0x4a8ef0)](_0x26864f(0x2f3)),_0x279b0b=document['getElementById'](_0x26864f(_0x1419fe._0x84eade)),_0x21772d=document[_0x26864f(0x365)](_0x26864f(0x43f));_0x1d1f18[_0x26864f(0x291)][_0x26864f(0x437)]=_0x26864f(0x3e2);if(_0x21772d)_0x21772d[_0x26864f(0x229)]='';clearInterval(watchTogetherTimer),watchTogetherTimer=setInterval(()=>{const _0x3ff672=_0x26864f,_0x30cbc5=Math['ceil']((_0x351308-Date[_0x3ff672(0x4fb)]())/0x3e8);if(_0x30cbc5<=0x0){clearInterval(watchTogetherTimer),_0x1d1f18[_0x3ff672(0x291)][_0x3ff672(_0x4929cf._0x4697e2)]='none';const _0x23ac88=getMediaInfoFromUrl(),_0x2682c0=currentEmbed[_0x3ff672(0x454)]||_0x23ac88['type'],_0x4b4f2f=currentEmbed['tmdbId']||_0x23ac88['id'];_0x2682c0&&_0x4b4f2f&&_0x21772d&&(_0x21772d[_0x3ff672(0x229)]=buildEmbedUrl(currentSource,_0x2682c0,null,_0x4b4f2f,currentEmbed[_0x3ff672(_0x4929cf._0x5080e6)]||_0x23ac88[_0x3ff672(_0x4929cf._0x1505ca)],currentEmbed['episode']||_0x23ac88[_0x3ff672(0x304)],0x0));const _0x8bfbc1=new URLSearchParams(location['search']);_0x8bfbc1[_0x3ff672(_0x4929cf._0x23798f)](_0x3ff672(_0x4929cf._0x15d6f8)),history['replaceState']({},'',location[_0x3ff672(0x1cc)]+'?'+_0x8bfbc1[_0x3ff672(_0x4929cf._0x2afa3a)]());}else _0x279b0b[_0x3ff672(_0x4929cf._0x486b4d)]=_0x30cbc5;},0xfa);}function cancelWatchTogether(){const _0x18dffc={_0x31c141:0x34a,_0x507954:0x229},_0x58fe26=_0x94aeb3;clearInterval(watchTogetherTimer),document[_0x58fe26(0x365)](_0x58fe26(0x2f3))[_0x58fe26(0x291)]['display']=_0x58fe26(_0x18dffc._0x31c141);const {type:_0x13ee44,imdb:_0x19fab5,tmdbId:_0x35c9fe,season:_0x4abd8c,episode:_0x5f2482}=currentEmbed,_0xf96af6=document[_0x58fe26(0x365)](_0x58fe26(0x43f));_0x13ee44&&_0xf96af6&&(_0xf96af6[_0x58fe26(_0x18dffc._0x507954)]=buildEmbedUrl(currentSource,_0x13ee44,_0x19fab5,_0x35c9fe,_0x4abd8c,_0x5f2482,0x0));}function getMediaInfoFromUrl(){const _0x3eb982={_0x44e386:0x454,_0x1a01f9:0x4c5,_0x56a62c:0x304},_0x4ebfb6=_0x94aeb3,_0xbd00d=new URLSearchParams(location[_0x4ebfb6(0x239)]);return{'type':_0xbd00d[_0x4ebfb6(0x4c5)](_0x4ebfb6(_0x3eb982._0x44e386)),'id':_0xbd00d['get']('id'),'season':_0xbd00d[_0x4ebfb6(_0x3eb982._0x1a01f9)](_0x4ebfb6(0x37e)),'episode':_0xbd00d[_0x4ebfb6(0x4c5)](_0x4ebfb6(_0x3eb982._0x56a62c))};}function copyToClipboard(_0x561494){const _0x358073={_0x48c253:0x388,_0x365d3a:0x1df,_0x4b11a6:0x45f,_0x4d765e:0x40e},_0x39f61b=_0x94aeb3;if(navigator[_0x39f61b(0x241)]?.[_0x39f61b(0x388)])return navigator['clipboard'][_0x39f61b(_0x358073._0x48c253)](_0x561494);const _0x80e0db=document[_0x39f61b(0x1e2)]('textarea');return _0x80e0db[_0x39f61b(0x2e5)]=_0x561494,_0x80e0db[_0x39f61b(0x291)][_0x39f61b(_0x358073._0x365d3a)]=_0x39f61b(0x4f0),_0x80e0db['style'][_0x39f61b(_0x358073._0x4b11a6)]='0',document[_0x39f61b(0x47e)][_0x39f61b(0x26e)](_0x80e0db),_0x80e0db['focus'](),_0x80e0db[_0x39f61b(0x302)](),document[_0x39f61b(_0x358073._0x4d765e)](_0x39f61b(0x4a8)),document['body'][_0x39f61b(0x296)](_0x80e0db),Promise[_0x39f61b(0x266)]();}function shareUrl(){const _0xd2e5aa={_0x1b37f6:0x228,_0x490fd7:0x3d3},_0x92f2df={_0x5f29db:0x303,_0x2c1f6c:0x2e8},_0x4b4ca0=_0x94aeb3;if(navigator[_0x4b4ca0(0x3da)]){navigator[_0x4b4ca0(0x3da)]({'title':document[_0x4b4ca0(_0xd2e5aa._0x1b37f6)],'url':location['href']});return;}copyToClipboard(location['href'])[_0x4b4ca0(_0xd2e5aa._0x490fd7)](()=>{const _0x5b839a={_0x207f80:0x450},_0xc41173=_0x4b4ca0,_0x1b3a08=document[_0xc41173(0x365)](_0xc41173(_0x92f2df._0x5f29db));_0x1b3a08['classList'][_0xc41173(0x4ae)](_0xc41173(0x3a8)),_0x1b3a08[_0xc41173(_0x92f2df._0x2c1f6c)]=_0xc41173(0x3fb),setTimeout(()=>{const _0x20a96b=_0xc41173;_0x1b3a08[_0x20a96b(_0x5b839a._0x207f80)][_0x20a96b(0x317)]('copied'),_0x1b3a08['innerHTML']=_0x20a96b(0x51c);},0x7d0);});}let activeFilters={'type':_0x94aeb3(0x3bf),'sort':'popularity.desc','lang':'','yearFrom':0x79e,'yearTo':new Date()['getFullYear'](),'rating':0x0,'genre':'','network':'','networkType':''};function toggleFilterPanel(){const _0xd89fbb={_0x2c2a98:0x402,_0x33c764:0x291,_0x5e0714:0x437,_0x46bf18:0x4e5,_0x450ddc:0x34a,_0xa168b5:0x475,_0x42b7ef:0x3f6,_0x1419d0:0x4c4,_0x242e64:0x39f},_0x58c324=_0x94aeb3,_0x2da2cb=document['getElementById'](_0x58c324(_0xd89fbb._0x2c2a98)),_0x238630=document[_0x58c324(0x365)](_0x58c324(0x377)),_0x3a26c4=_0x2da2cb[_0x58c324(_0xd89fbb._0x33c764)][_0x58c324(_0xd89fbb._0x5e0714)]===_0x58c324(_0xd89fbb._0x46bf18);_0x2da2cb[_0x58c324(0x291)][_0x58c324(0x437)]=_0x3a26c4?_0x58c324(_0xd89fbb._0x450ddc):_0x58c324(0x4e5),_0x238630[_0x58c324(0x2d9)]=_0x3a26c4?_0x58c324(0x413):_0x58c324(_0xd89fbb._0xa168b5),document[_0x58c324(0x365)](_0x58c324(_0xd89fbb._0x42b7ef))[_0x58c324(0x291)][_0x58c324(_0xd89fbb._0x1419d0)]=_0x58c324(_0xd89fbb._0x242e64);}function _0xf103(_0x3918ec,_0x483062){_0x3918ec=_0x3918ec-0x1ca;const _0x23499f=_0x2349();let _0xf1035f=_0x23499f[_0x3918ec];return _0xf1035f;}function setFilter(_0x165c24,_0x13f082,_0x3a8fe1){const _0x59b18f=_0x94aeb3;activeFilters[_0x165c24]=_0x13f082,_0x3a8fe1[_0x59b18f(0x36f)](_0x59b18f(0x2c2))['querySelectorAll']('.filter-pill')['forEach'](_0x12f8b3=>_0x12f8b3[_0x59b18f(0x450)][_0x59b18f(0x410)](_0x59b18f(0x4f3),_0x12f8b3[_0x59b18f(0x427)][_0x59b18f(0x3cc)]===_0x13f082));}function updateYearLabel(){const _0x3990d4={_0x3b245e:0x365,_0x5a8915:0x2e5,_0x3482cf:0x365,_0x2c2647:0x339},_0x25fadf=_0x94aeb3;let _0x5c5e73=parseInt(document[_0x25fadf(_0x3990d4._0x3b245e)](_0x25fadf(0x429))[_0x25fadf(_0x3990d4._0x5a8915)])||0x79e,_0x1f9b6a=parseInt(document[_0x25fadf(0x365)](_0x25fadf(0x3ce))[_0x25fadf(0x2e5)])||0x7ea;_0x5c5e73>_0x1f9b6a&&(_0x1f9b6a=_0x5c5e73,document[_0x25fadf(_0x3990d4._0x3482cf)]('year-to')[_0x25fadf(_0x3990d4._0x5a8915)]=_0x1f9b6a),activeFilters['yearFrom']=_0x5c5e73,activeFilters[_0x25fadf(_0x3990d4._0x2c2647)]=_0x1f9b6a;}function resetFilters(){const _0x145796={_0x2df07c:0x3bf,_0xd0a0a6:0x46e,_0x5ed015:0x365,_0x513d79:0x2e5,_0x2e63e4:0x46e,_0xca5aec:0x365,_0x47e54d:0x513},_0x202b3a=_0x94aeb3;activeFilters={'type':_0x202b3a(_0x145796._0x2df07c),'sort':_0x202b3a(_0x145796._0xd0a0a6),'lang':'','yearFrom':0x79e,'yearTo':0x7ea,'rating':0x0,'genre':'','network':'','networkType':''},document[_0x202b3a(_0x145796._0x5ed015)]('filter-type')[_0x202b3a(_0x145796._0x513d79)]=_0x202b3a(0x3bf),document[_0x202b3a(_0x145796._0x5ed015)]('filter-sort')[_0x202b3a(_0x145796._0x513d79)]=_0x202b3a(_0x145796._0x2e63e4),document[_0x202b3a(0x365)](_0x202b3a(0x41e))[_0x202b3a(0x2e5)]='',document['getElementById']('filter-genre')[_0x202b3a(0x2e5)]='',document[_0x202b3a(0x365)](_0x202b3a(0x3e7))[_0x202b3a(0x2e5)]='',document['getElementById'](_0x202b3a(0x429))[_0x202b3a(0x2e5)]=0x79e,document[_0x202b3a(_0x145796._0xca5aec)]('year-to')[_0x202b3a(_0x145796._0x513d79)]=new Date()['getFullYear'](),document[_0x202b3a(_0x145796._0x5ed015)](_0x202b3a(_0x145796._0x47e54d))[_0x202b3a(0x2e5)]=0x0,document['getElementById'](_0x202b3a(0x3c5))[_0x202b3a(0x2d9)]='0+';}async function applyFilters(_0x393432=![]){const _0x3fe1fa={_0x493449:0x20f,_0xf4ac0b:0x365,_0x2bd256:0x242,_0x55ebf5:0x2e5,_0x556a03:0x365,_0x2db025:0x2e5,_0x2b8438:0x255,_0x17c9b3:0x3e7,_0x31ca7f:0x3b2,_0x13d7c1:0x454,_0xfb7afa:0x429,_0x7a1bd:0x3ce,_0x25be1d:0x2e5,_0x56191c:0x499,_0x14d15:0x513,_0x296f10:0x2e5,_0x53b0d0:0x3bf,_0x478503:0x419,_0x546966:0x2e6,_0x235ce0:0x2d9,_0x496f5c:0x365,_0x3913c0:0x2e8,_0x1fad9b:0x4ea,_0x301eaf:0x402,_0x38abfc:0x291,_0x367377:0x34a,_0x2dec13:0x365,_0x3726da:0x413,_0x554388:0x3bf,_0x1418cf:0x213,_0x5c3601:0x459,_0x398b6e:0x45a,_0x49345f:0x437,_0x595049:0x3e2,_0x47bbe5:0x27d,_0x5525f5:0x3fe,_0xefd440:0x2e8},_0x4fd77f={_0x133d6c:0x419,_0x4b2c28:0x419,_0x37d7f5:0x2fd,_0x2655ab:0x206,_0x3f605b:0x211,_0x127928:0x428,_0x491504:0x47a,_0xaeeb39:0x219,_0x29afbd:0x512,_0xa25e79:0x266,_0x277d8e:0x4fa,_0x59d778:0x266},_0x18ea57=_0x94aeb3,_0x6c5e61=currentSection?.[_0x18ea57(_0x3fe1fa._0x493449)]==='search'?currentSection[_0x18ea57(0x4f1)]:null;activeFilters['type']=document[_0x18ea57(_0x3fe1fa._0xf4ac0b)]('filter-type')['value'],activeFilters[_0x18ea57(0x459)]=document['getElementById'](_0x18ea57(_0x3fe1fa._0x2bd256))[_0x18ea57(_0x3fe1fa._0x55ebf5)],activeFilters[_0x18ea57(0x4b7)]=document[_0x18ea57(_0x3fe1fa._0x556a03)](_0x18ea57(0x41e))[_0x18ea57(_0x3fe1fa._0x2db025)],activeFilters[_0x18ea57(0x2d3)]=document[_0x18ea57(0x365)](_0x18ea57(_0x3fe1fa._0x2b8438))[_0x18ea57(_0x3fe1fa._0x2db025)],activeFilters['network']=document['getElementById'](_0x18ea57(0x3e7))[_0x18ea57(0x2e5)];const _0xb6c859=document[_0x18ea57(0x365)](_0x18ea57(_0x3fe1fa._0x17c9b3));activeFilters[_0x18ea57(0x24d)]=_0xb6c859[_0x18ea57(0x49d)][_0xb6c859[_0x18ea57(_0x3fe1fa._0x31ca7f)]]?.['dataset']?.[_0x18ea57(_0x3fe1fa._0x13d7c1)]||'',activeFilters['yearFrom']=parseInt(document['getElementById'](_0x18ea57(_0x3fe1fa._0xfb7afa))[_0x18ea57(_0x3fe1fa._0x2db025)])||0x79e,activeFilters[_0x18ea57(0x339)]=parseInt(document[_0x18ea57(0x365)](_0x18ea57(_0x3fe1fa._0x7a1bd))[_0x18ea57(_0x3fe1fa._0x25be1d)])||0x7ea,activeFilters[_0x18ea57(_0x3fe1fa._0x56191c)]=parseInt(document[_0x18ea57(_0x3fe1fa._0x556a03)](_0x18ea57(_0x3fe1fa._0x14d15))[_0x18ea57(_0x3fe1fa._0x296f10)])||0x0;const {type:_0xb2593f,sort:_0x2692d4,lang:_0x373905,yearFrom:_0x43c0a7,yearTo:_0x46175b,rating:_0x4dbe64,genre:_0x51c434,network:_0xb0c61e,networkType:_0x13ddfa}=activeFilters,_0x5919c0=_0xb2593f===_0x18ea57(_0x3fe1fa._0x53b0d0)?[_0x18ea57(_0x3fe1fa._0x478503),'tv']:[_0xb2593f];if(!_0x393432)pushState({'browse':_0x18ea57(_0x3fe1fa._0x546966),'type':_0xb2593f,'sort':_0x2692d4,'lang':_0x373905,'yearFrom':_0x43c0a7,'yearTo':_0x46175b,'rating':_0x4dbe64,'genre':_0x51c434,'network':_0xb0c61e,'networkType':_0x13ddfa});document['getElementById'](_0x18ea57(0x3a2))[_0x18ea57(_0x3fe1fa._0x235ce0)]=_0x18ea57(0x46a),document['getElementById'](_0x18ea57(0x27d))['textContent']=_0x18ea57(0x4cc),document[_0x18ea57(_0x3fe1fa._0x496f5c)]('search-results')[_0x18ea57(_0x3fe1fa._0x3913c0)]=_0x18ea57(_0x3fe1fa._0x1fad9b),document['getElementById'](_0x18ea57(_0x3fe1fa._0x301eaf))[_0x18ea57(_0x3fe1fa._0x38abfc)]['display']=_0x18ea57(_0x3fe1fa._0x367377),document[_0x18ea57(_0x3fe1fa._0x2dec13)](_0x18ea57(0x377))[_0x18ea57(0x2d9)]=_0x18ea57(_0x3fe1fa._0x3726da);try{const _0x5f6f1d=await Promise[_0x18ea57(_0x3fe1fa._0x554388)](_0x5919c0[_0x18ea57(_0x3fe1fa._0x1418cf)](async _0xa2c582=>{const _0x1e18e4=_0x18ea57;if(_0x6c5e61){const _0x327f6c=await tmdb(_0x1e18e4(0x28d)+(_0xa2c582===_0x1e18e4(_0x4fd77f._0x133d6c)?_0x1e18e4(0x419):'tv'),{'query':_0x6c5e61,'page':0x1});let _0x2f54ea=_0x327f6c[_0x1e18e4(0x423)][_0x1e18e4(0x213)](_0x143969=>({..._0x143969,'media_type':_0xa2c582}));if(_0x51c434)_0x2f54ea=_0x2f54ea['filter'](_0x155a67=>(_0x155a67[_0x1e18e4(0x1cd)]||[])[_0x1e18e4(0x271)](parseInt(_0x51c434)));if(_0x373905)_0x2f54ea=_0x2f54ea[_0x1e18e4(0x2e6)](_0x3baa72=>_0x3baa72[_0x1e18e4(0x235)]===_0x373905);if(_0x43c0a7)_0x2f54ea=_0x2f54ea[_0x1e18e4(0x2e6)](_0x3039f5=>parseInt((_0x3039f5[_0x1e18e4(0x1fc)]||_0x3039f5['first_air_date']||'0')[_0x1e18e4(0x276)](0x0,0x4))>=_0x43c0a7);if(_0x46175b)_0x2f54ea=_0x2f54ea[_0x1e18e4(0x2e6)](_0x525356=>parseInt((_0x525356[_0x1e18e4(0x1fc)]||_0x525356[_0x1e18e4(0x47a)]||_0x1e18e4(0x416))['slice'](0x0,0x4))<=_0x46175b);if(_0x4dbe64)_0x2f54ea=_0x2f54ea[_0x1e18e4(0x2e6)](_0xcea511=>(_0xcea511[_0x1e18e4(0x3c9)]||0x0)>=_0x4dbe64);return _0x2f54ea;}const _0x5dd65d=_0xa2c582===_0x1e18e4(_0x4fd77f._0x133d6c)?_0x1e18e4(0x4fe):_0x1e18e4(0x30f),_0x47cce1=_0xa2c582===_0x1e18e4(_0x4fd77f._0x4b2c28)?_0x1e18e4(_0x4fd77f._0x37d7f5):_0x1e18e4(0x4ba),_0x56b88f=(_0x2692d4===_0x1e18e4(_0x4fd77f._0x2655ab)||_0x2692d4==='primary_release_date.asc')&&_0xa2c582==='tv'?_0x2692d4[_0x1e18e4(_0x4fd77f._0x3f605b)](_0x1e18e4(_0x4fd77f._0x127928),_0x1e18e4(_0x4fd77f._0x491504)):_0x2692d4,_0x28833e={'sort_by':_0x56b88f,[_0x5dd65d]:_0x43c0a7+_0x1e18e4(0x352),[_0x47cce1]:_0x46175b+_0x1e18e4(0x2ea),'vote_average.gte':_0x4dbe64,'vote_count.gte':0x32,'page':0x1};if(_0x373905)_0x28833e[_0x1e18e4(0x3f0)]=_0x373905;if(_0x51c434)_0x28833e[_0x1e18e4(_0x4fd77f._0xaeeb39)]=_0x51c434;if(_0xb0c61e){if(!_0x13ddfa){if(_0xa2c582==='tv')_0x28833e[_0x1e18e4(0x3ab)]=_0xb0c61e;if(_0xa2c582===_0x1e18e4(_0x4fd77f._0x4b2c28))_0x28833e['with_companies']=_0xb0c61e;}else{if(_0x13ddfa==='network'&&_0xa2c582==='tv')_0x28833e['with_networks']=_0xb0c61e;if(_0x13ddfa==='company'&&_0xa2c582===_0x1e18e4(0x419))_0x28833e[_0x1e18e4(_0x4fd77f._0x29afbd)]=_0xb0c61e;if(_0x13ddfa===_0x1e18e4(0x42c)&&_0xa2c582===_0x1e18e4(_0x4fd77f._0x4b2c28))return Promise[_0x1e18e4(_0x4fd77f._0xa25e79)]([]);if(_0x13ddfa===_0x1e18e4(_0x4fd77f._0x277d8e)&&_0xa2c582==='tv')return Promise[_0x1e18e4(_0x4fd77f._0x59d778)]([]);}}return tmdb(_0x1e18e4(0x350)+_0xa2c582,_0x28833e)[_0x1e18e4(0x3d3)](_0x14b78b=>_0x14b78b[_0x1e18e4(0x423)][_0x1e18e4(0x213)](_0x2eb10b=>({..._0x2eb10b,'media_type':_0xa2c582})));}));allResults=_0x5f6f1d['flat']()[_0x18ea57(_0x3fe1fa._0x5c3601)]((_0x583ff8,_0x31a58f)=>(_0x31a58f['popularity']||0x0)-(_0x583ff8[_0x18ea57(0x1e3)]||0x0)),activeGenre=_0x18ea57(0x3bf),document['querySelectorAll'](_0x18ea57(_0x3fe1fa._0x398b6e))['forEach'](_0x33ae7a=>_0x33ae7a['classList'][_0x18ea57(0x410)](_0x18ea57(0x4f3),_0x33ae7a[_0x18ea57(0x427)][_0x18ea57(0x2d3)]===_0x18ea57(0x3bf))),document[_0x18ea57(0x365)](_0x18ea57(0x47b))[_0x18ea57(_0x3fe1fa._0x38abfc)][_0x18ea57(_0x3fe1fa._0x49345f)]=_0x18ea57(_0x3fe1fa._0x595049),document[_0x18ea57(_0x3fe1fa._0x2dec13)](_0x18ea57(_0x3fe1fa._0x47bbe5))[_0x18ea57(0x2d9)]=allResults[_0x18ea57(0x3dd)]+_0x18ea57(0x3a3),!allResults[_0x18ea57(0x3dd)]?document['getElementById'](_0x18ea57(_0x3fe1fa._0x5525f5))[_0x18ea57(_0x3fe1fa._0xefd440)]=_0x18ea57(0x1db):renderCards('search-results',allResults),window[_0x18ea57(0x2d6)]<=0x300&&setTimeout(()=>document[_0x18ea57(0x365)](_0x18ea57(0x3fe))?.[_0x18ea57(0x254)]({'behavior':_0x18ea57(0x49a),'block':'start'}),0x64);}catch(_0x45c6b1){document[_0x18ea57(0x365)](_0x18ea57(0x3fe))['innerHTML']=_0x18ea57(0x240);}}function restoreFilters(_0x5b90e6){const _0x141f73={_0x1d6472:0x42c,_0x183126:0x24d,_0x2b9537:0x4c5,_0xeeb61f:0x35d,_0x1866f5:0x339,_0x5965d2:0x2e5,_0x58a369:0x2e5,_0x3fa6b9:0x365,_0x18c23d:0x365,_0x29419b:0x3e7,_0x4efbf7:0x2e5,_0x4eb4f4:0x365,_0x473ba5:0x3c5,_0x3184f9:0x21f,_0x52364b:0x3f6,_0x57413f:0x291},_0x42e640=_0x94aeb3,_0x4641b2=_0x5b90e6[_0x42e640(0x4c5)](_0x42e640(0x454))||_0x42e640(0x3bf),_0x4fcffb=_0x5b90e6['get'](_0x42e640(0x459))||_0x42e640(0x46e),_0x519224=_0x5b90e6['get'](_0x42e640(0x4b7))||'',_0x69a5cb=_0x5b90e6['get']('genre')||'',_0x206513=_0x5b90e6[_0x42e640(0x4c5)](_0x42e640(_0x141f73._0x1d6472))||'',_0x4f8b40=_0x5b90e6['get'](_0x42e640(_0x141f73._0x183126))||'',_0x42f98c=parseInt(_0x5b90e6[_0x42e640(_0x141f73._0x2b9537)](_0x42e640(_0x141f73._0xeeb61f)))||0x79e,_0x4adc71=parseInt(_0x5b90e6['get'](_0x42e640(_0x141f73._0x1866f5)))||0x7ea,_0x160bd0=parseInt(_0x5b90e6[_0x42e640(0x4c5)]('rating'))||0x0;document[_0x42e640(0x365)](_0x42e640(0x3f8))[_0x42e640(_0x141f73._0x5965d2)]=_0x4641b2,document[_0x42e640(0x365)]('filter-sort')[_0x42e640(_0x141f73._0x58a369)]=_0x4fcffb,document[_0x42e640(_0x141f73._0x3fa6b9)]('filter-lang')[_0x42e640(0x2e5)]=_0x519224,document[_0x42e640(0x365)]('filter-genre')[_0x42e640(0x2e5)]=_0x69a5cb,document[_0x42e640(_0x141f73._0x18c23d)](_0x42e640(_0x141f73._0x29419b))[_0x42e640(0x2e5)]=_0x206513,document['getElementById']('year-from')[_0x42e640(_0x141f73._0x4efbf7)]=_0x42f98c,document[_0x42e640(_0x141f73._0x4eb4f4)]('year-to')['value']=_0x4adc71,document[_0x42e640(0x365)]('filter-rating')['value']=_0x160bd0,document[_0x42e640(0x365)](_0x42e640(_0x141f73._0x473ba5))[_0x42e640(0x2d9)]=_0x160bd0+'+',activeFilters={'type':_0x4641b2,'sort':_0x4fcffb,'lang':_0x519224,'genre':_0x69a5cb,'network':_0x206513,'networkType':_0x4f8b40,'yearFrom':_0x42f98c,'yearTo':_0x4adc71,'rating':_0x160bd0},showPage(_0x42e640(_0x141f73._0x3184f9)),document['getElementById'](_0x42e640(_0x141f73._0x52364b))[_0x42e640(_0x141f73._0x57413f)]['cssText']=_0x42e640(0x39f),applyFilters(!![]);}function runExport(){const _0x3510f5={_0x353bc1:0x365,_0xbc86bc:0x452,_0x255be3:0x290,_0x26e9d1:0x1e8,_0x33d875:0x290,_0x17bd83:0x246,_0x21c7b4:0x35a,_0x5aeeaf:0x432,_0x43179d:0x276,_0x4c5983:0x386,_0x2960c5:0x22f,_0x2e9d15:0x296,_0x574d9a:0x4d7},_0x26abbc=_0x94aeb3,_0x34d1fd=document[_0x26abbc(_0x3510f5._0x353bc1)]('exp-history')[_0x26abbc(0x3a1)],_0x5937bb=document[_0x26abbc(0x365)](_0x26abbc(0x2c6))['checked'];if(!_0x34d1fd&&!_0x5937bb){showToast(_0x26abbc(0x1eb));return;}const _0x460f5b={'_exported':new Date()[_0x26abbc(0x35e)](),'_version':0x1};if(_0x34d1fd)_0x460f5b[_0x26abbc(0x3f7)]=JSON[_0x26abbc(_0x3510f5._0xbc86bc)](localStorage[_0x26abbc(_0x3510f5._0x255be3)]('sv_history')||'{}');if(_0x5937bb)_0x460f5b[_0x26abbc(_0x3510f5._0x26e9d1)]=JSON[_0x26abbc(0x452)](localStorage[_0x26abbc(_0x3510f5._0x33d875)](_0x26abbc(0x300))||'[]');const _0x58c1db=new Blob([JSON[_0x26abbc(_0x3510f5._0x17bd83)](_0x460f5b,null,0x2)],{'type':_0x26abbc(0x353)}),_0x10722c=URL[_0x26abbc(0x4dd)](_0x58c1db),_0x2fec02=document[_0x26abbc(0x1e2)]('a');_0x2fec02[_0x26abbc(_0x3510f5._0x21c7b4)]=_0x10722c,_0x2fec02[_0x26abbc(_0x3510f5._0x5aeeaf)]=_0x26abbc(0x4d5)+new Date()[_0x26abbc(0x35e)]()[_0x26abbc(_0x3510f5._0x43179d)](0x0,0xa)+_0x26abbc(_0x3510f5._0x4c5983),document['body'][_0x26abbc(0x26e)](_0x2fec02),_0x2fec02[_0x26abbc(_0x3510f5._0x2960c5)](),document[_0x26abbc(0x47e)][_0x26abbc(_0x3510f5._0x2e9d15)](_0x2fec02),URL['revokeObjectURL'](_0x10722c),closeExportCard(),showToast(_0x26abbc(_0x3510f5._0x574d9a));}function openExportCard(){const _0xf87e71={_0x5be5a1:0x365,_0x233351:0x422,_0x560fdd:0x437,_0x189486:0x450,_0x497318:0x442,_0x522a87:0x47e,_0x4cd50f:0x519,_0x461125:0x4de,_0x4fb3f7:0x317,_0x48d356:0x415,_0x4a80c9:0x4ae},_0x175b01={_0x104478:0x389},_0x1f0f56={_0x22cb30:0x2fe,_0x573d2d:0x4c9},_0x45cef0=_0x94aeb3,_0x48afbe=document[_0x45cef0(_0xf87e71._0x5be5a1)](_0x45cef0(_0xf87e71._0x233351));_0x48afbe['style'][_0x45cef0(_0xf87e71._0x560fdd)]='flex',_0x48afbe[_0x45cef0(_0xf87e71._0x189486)][_0x45cef0(0x317)](_0x45cef0(_0xf87e71._0x497318)),document[_0x45cef0(_0xf87e71._0x522a87)][_0x45cef0(0x291)][_0x45cef0(0x27e)]=_0x45cef0(0x4ab);const _0x38959c=_0x48afbe[_0x45cef0(_0xf87e71._0x4cd50f)](_0x45cef0(_0xf87e71._0x461125));_0x38959c&&(_0x38959c['classList'][_0x45cef0(_0xf87e71._0x4fb3f7)](_0x45cef0(_0xf87e71._0x48d356)),_0x38959c[_0x45cef0(_0xf87e71._0x189486)][_0x45cef0(_0xf87e71._0x4a80c9)](_0x45cef0(0x426))),setTimeout(()=>{const _0x30ca30=_0x45cef0,_0x5847d3=_0x53388d=>{const _0x5ab391=_0xf103;_0x53388d[_0x5ab391(0x3d7)]===_0x48afbe&&(closeExportCard(),_0x48afbe[_0x5ab391(_0x1f0f56._0x22cb30)](_0x5ab391(_0x1f0f56._0x573d2d),_0x5847d3));};_0x48afbe[_0x30ca30(_0x175b01._0x104478)](_0x30ca30(0x4c9),_0x5847d3);},0x0);}function closeExportCard(){const _0x174d65={_0x10ab9b:0x450,_0x562d6c:0x415,_0x3e6d9e:0x450,_0x61311c:0x4ae,_0x518825:0x442,_0x57bda4:0x47e},_0x5df167={_0x5a5b35:0x437,_0x4071fb:0x34a,_0x389d69:0x450,_0x2bd074:0x317,_0x56b983:0x450,_0x53771a:0x317},_0xb485e9=_0x94aeb3,_0x6bd01d=document['getElementById'](_0xb485e9(0x422)),_0x48cad8=_0x6bd01d[_0xb485e9(0x519)](_0xb485e9(0x4de));_0x48cad8&&(_0x48cad8[_0xb485e9(0x450)][_0xb485e9(0x317)](_0xb485e9(0x426)),_0x48cad8[_0xb485e9(_0x174d65._0x10ab9b)][_0xb485e9(0x4ae)](_0xb485e9(_0x174d65._0x562d6c))),_0x6bd01d[_0xb485e9(_0x174d65._0x3e6d9e)][_0xb485e9(_0x174d65._0x61311c)](_0xb485e9(_0x174d65._0x518825)),setTimeout(()=>{const _0x20ae95=_0xb485e9;_0x6bd01d['style'][_0x20ae95(_0x5df167._0x5a5b35)]=_0x20ae95(_0x5df167._0x4071fb),_0x6bd01d[_0x20ae95(_0x5df167._0x389d69)][_0x20ae95(_0x5df167._0x2bd074)](_0x20ae95(0x442));if(_0x48cad8)_0x48cad8[_0x20ae95(_0x5df167._0x56b983)][_0x20ae95(_0x5df167._0x53771a)]('card-closing');},0x104),document[_0xb485e9(_0x174d65._0x57bda4)]['style']['overflow']='';}function openImportCard(){const _0xa3e82a={_0x5444fe:0x437,_0xd25e52:0x415,_0x44bfe0:0x426,_0x391a1c:0x365,_0x5cdbe9:0x3db,_0x4fb943:0x1cb,_0x2fd962:0x389},_0x1c1ba1={_0xd10ca4:0x389,_0x44a788:0x4c9},_0x38cafb={_0x52bc0d:0x263,_0x2e904a:0x311,_0x4fb9ee:0x43d},_0x5d2085={_0x3a3f31:0x450,_0x184708:0x4ae,_0x144129:0x311},_0x5a49d8=_0x94aeb3,_0x9e4d42=document[_0x5a49d8(0x365)](_0x5a49d8(0x24a));_0x9e4d42['style'][_0x5a49d8(_0xa3e82a._0x5444fe)]='flex',_0x9e4d42[_0x5a49d8(0x450)][_0x5a49d8(0x317)]('overlay-closing'),document['body'][_0x5a49d8(0x291)][_0x5a49d8(0x27e)]='hidden';const _0x595b48=_0x9e4d42[_0x5a49d8(0x519)]('.import-card');_0x595b48&&(_0x595b48[_0x5a49d8(0x450)]['remove'](_0x5a49d8(_0xa3e82a._0xd25e52)),_0x595b48['classList']['add'](_0x5a49d8(_0xa3e82a._0x44bfe0)));document[_0x5a49d8(_0xa3e82a._0x391a1c)](_0x5a49d8(_0xa3e82a._0x5cdbe9))['textContent']='';const _0x3da3ed=document['getElementById'](_0x5a49d8(0x4cb));_0x3da3ed[_0x5a49d8(0x389)](_0x5a49d8(_0xa3e82a._0x4fb943),_0x150cde=>{const _0x80fa01=_0x5a49d8;_0x150cde[_0x80fa01(0x263)](),_0x3da3ed[_0x80fa01(_0x5d2085._0x3a3f31)][_0x80fa01(_0x5d2085._0x184708)](_0x80fa01(_0x5d2085._0x144129));}),_0x3da3ed['addEventListener'](_0x5a49d8(0x3df),()=>_0x3da3ed[_0x5a49d8(0x450)]['remove']('drag-over')),_0x3da3ed[_0x5a49d8(_0xa3e82a._0x2fd962)]('drop',_0x1267a9=>{const _0x32d0f0=_0x5a49d8;_0x1267a9[_0x32d0f0(_0x38cafb._0x52bc0d)](),_0x3da3ed['classList']['remove'](_0x32d0f0(_0x38cafb._0x2e904a));const _0x5d2ec8=_0x1267a9[_0x32d0f0(_0x38cafb._0x4fb9ee)][_0x32d0f0(0x50d)][0x0];if(_0x5d2ec8)processImportFile(_0x5d2ec8);}),setTimeout(()=>{const _0x51c2b9={_0x51120e:0x3d7,_0x2f6ad2:0x4c9},_0x19b76c=_0x5a49d8,_0xdfc303=_0x982c57=>{const _0x9b4a41=_0xf103;_0x982c57[_0x9b4a41(_0x51c2b9._0x51120e)]===_0x9e4d42&&(closeImportCard(),_0x9e4d42['removeEventListener'](_0x9b4a41(_0x51c2b9._0x2f6ad2),_0xdfc303));};_0x9e4d42[_0x19b76c(_0x1c1ba1._0xd10ca4)](_0x19b76c(_0x1c1ba1._0x44a788),_0xdfc303);},0x0);}function closeImportCard(){const _0x6a2b6e={_0x40a4d4:0x365,_0x5b6dca:0x47e,_0x4a557:0x291,_0x3c40ce:0x27e},_0x62e3f5={_0x47f1a6:0x317,_0x17ed95:0x450},_0x2e2ff6=_0x94aeb3,_0x25a1d8=document[_0x2e2ff6(_0x6a2b6e._0x40a4d4)](_0x2e2ff6(0x24a)),_0x57bc9c=_0x25a1d8[_0x2e2ff6(0x519)](_0x2e2ff6(0x4de));_0x57bc9c&&(_0x57bc9c[_0x2e2ff6(0x450)]['remove'](_0x2e2ff6(0x426)),_0x57bc9c[_0x2e2ff6(0x450)][_0x2e2ff6(0x4ae)](_0x2e2ff6(0x415))),_0x25a1d8[_0x2e2ff6(0x450)][_0x2e2ff6(0x4ae)](_0x2e2ff6(0x442)),setTimeout(()=>{const _0x426631=_0x2e2ff6;_0x25a1d8['style']['display']=_0x426631(0x34a),_0x25a1d8['classList'][_0x426631(_0x62e3f5._0x47f1a6)](_0x426631(0x442));if(_0x57bc9c)_0x57bc9c[_0x426631(_0x62e3f5._0x17ed95)][_0x426631(_0x62e3f5._0x47f1a6)]('card-closing');},0x104),document[_0x2e2ff6(_0x6a2b6e._0x5b6dca)][_0x2e2ff6(_0x6a2b6e._0x4a557)][_0x2e2ff6(_0x6a2b6e._0x3c40ce)]='';}function toggleImportReplace(){const _0x459c3e={_0x296e3d:0x331,_0x47be82:0x427},_0x59f082=_0x94aeb3;importReplaceMode=!importReplaceMode;const _0x283968=document[_0x59f082(0x365)](_0x59f082(_0x459c3e._0x296e3d));_0x283968[_0x59f082(_0x459c3e._0x47be82)]['on']=importReplaceMode?'true':_0x59f082(0x369);}function handleImportFile(_0x5b5207){const _0xc51dca=_0x94aeb3,_0x238f87=_0x5b5207[_0xc51dca(0x3d7)]['files'][0x0];if(!_0x238f87)return;processImportFile(_0x238f87),_0x5b5207['target'][_0xc51dca(0x2e5)]='';}function processImportFile(_0x1d1892){const _0x1e888e={_0x1bd118:0x365,_0x218d21:0x3db,_0xa69051:0x2d9,_0x23bf2d:0x34d},_0x5646ef={_0x10c62d:0x3d7,_0x40a1b1:0x1ed,_0x2cfd92:0x2d9,_0x281497:0x440,_0x4ce7b0:0x1e8,_0x5b2c30:0x246,_0x76ec24:0x452,_0x2c664f:0x290,_0x355f3b:0x446,_0x5744f8:0x3af,_0x1abc56:0x213,_0x1e7de7:0x2f4,_0x114f6b:0x300,_0x34d2be:0x3dd,_0xd829a:0x39d,_0xa4e045:0x23a,_0xa583ee:0x3dd,_0x3a00ce:0x2d9,_0xde8595:0x29c,_0x511132:0x4bc},_0x39a648=_0x94aeb3,_0x26e47f=document[_0x39a648(_0x1e888e._0x1bd118)](_0x39a648(_0x1e888e._0x218d21));_0x26e47f[_0x39a648(_0x1e888e._0xa69051)]='Reading\x20file…';const _0x49fbfe=new FileReader();_0x49fbfe[_0x39a648(_0x1e888e._0x23bf2d)]=_0x310601=>{const _0x277b8b=_0x39a648;try{const _0x1a1d2a=JSON[_0x277b8b(0x452)](_0x310601[_0x277b8b(_0x5646ef._0x10c62d)][_0x277b8b(0x4e2)]);if(typeof _0x1a1d2a!==_0x277b8b(_0x5646ef._0x40a1b1)||Array[_0x277b8b(0x3d8)](_0x1a1d2a)){_0x26e47f[_0x277b8b(_0x5646ef._0x2cfd92)]=_0x277b8b(_0x5646ef._0x281497);return;}const _0x439e32=_0x1a1d2a['history']||_0x1a1d2a,_0x38fcb6=Array[_0x277b8b(0x3d8)](_0x1a1d2a[_0x277b8b(_0x5646ef._0x4ce7b0)])?_0x1a1d2a[_0x277b8b(_0x5646ef._0x4ce7b0)]:[];if(importReplaceMode)localStorage[_0x277b8b(0x2f4)](_0x277b8b(0x446),JSON[_0x277b8b(0x246)](_0x439e32)),localStorage[_0x277b8b(0x2f4)](_0x277b8b(0x300),JSON[_0x277b8b(_0x5646ef._0x5b2c30)](_0x38fcb6));else{const _0x46807d=JSON[_0x277b8b(_0x5646ef._0x76ec24)](localStorage[_0x277b8b(_0x5646ef._0x2c664f)](_0x277b8b(_0x5646ef._0x355f3b))||'{}'),_0x4e1996={..._0x46807d};let _0x3b042e=0x0;for(const [_0x467114,_0x415fbe]of Object[_0x277b8b(0x380)](_0x439e32)){if(_0x4e1996[_0x467114]){_0x3b042e++;if(_0x415fbe[_0x277b8b(_0x5646ef._0x5744f8)]>_0x4e1996[_0x467114][_0x277b8b(_0x5646ef._0x5744f8)])_0x4e1996[_0x467114]=_0x415fbe;}else _0x4e1996[_0x467114]=_0x415fbe;}localStorage['setItem']('sv_history',JSON[_0x277b8b(0x246)](_0x4e1996));const _0x4d1593=JSON[_0x277b8b(_0x5646ef._0x76ec24)](localStorage['getItem'](_0x277b8b(0x300))||'[]'),_0x363653=new Set(_0x4d1593[_0x277b8b(_0x5646ef._0x1abc56)](_0x11e1b5=>_0x11e1b5[_0x277b8b(0x454)]+'-'+_0x11e1b5['id'])),_0x42a22f=_0x38fcb6['filter'](_0x6920c7=>!_0x363653[_0x277b8b(0x2da)](_0x6920c7[_0x277b8b(0x454)]+'-'+_0x6920c7['id']));localStorage[_0x277b8b(_0x5646ef._0x1e7de7)](_0x277b8b(_0x5646ef._0x114f6b),JSON[_0x277b8b(0x246)]([..._0x4d1593,..._0x42a22f]));const _0xeb88e1=Object[_0x277b8b(0x310)](_0x439e32)[_0x277b8b(_0x5646ef._0x34d2be)],_0x42cb42=_0x3b042e>0x0?'✅\x20Imported\x20'+_0xeb88e1+_0x277b8b(0x23a)+_0x38fcb6[_0x277b8b(_0x5646ef._0x34d2be)]+_0x277b8b(0x3ed)+_0x3b042e+'\x20duplicate'+(_0x3b042e!==0x1?'s':'')+_0x277b8b(_0x5646ef._0xd829a):_0x277b8b(0x34e)+_0xeb88e1+_0x277b8b(_0x5646ef._0xa4e045)+_0x38fcb6[_0x277b8b(_0x5646ef._0xa583ee)]+_0x277b8b(0x3b1);_0x26e47f[_0x277b8b(0x2d9)]=_0x42cb42,setTimeout(closeImportCard,0x708),renderContinueWatching(),renderStats(),renderMyList();return;}const _0xfe700e=Object['keys'](_0x439e32)[_0x277b8b(_0x5646ef._0x34d2be)];_0x26e47f[_0x277b8b(_0x5646ef._0x3a00ce)]=_0x277b8b(_0x5646ef._0xde8595)+_0xfe700e+_0x277b8b(0x23a)+_0x38fcb6[_0x277b8b(_0x5646ef._0x34d2be)]+_0x277b8b(0x3b1),setTimeout(closeImportCard,0x708),renderContinueWatching(),renderStats(),renderMyList();}catch{if(_0x26e47f)_0x26e47f[_0x277b8b(0x2d9)]=_0x277b8b(_0x5646ef._0x511132);}},_0x49fbfe['readAsText'](_0x1d1892);}function showToast(_0x2b35ca){const _0x4c0070={_0x3f80e4:0x268,_0x59114c:0x365,_0x5f4cf7:0x365,_0x3e12f1:0x37d,_0x1b1098:0x2d9,_0x4ac6ed:0x437,_0x31cfa8:0x34a,_0x8a5b4:0x450,_0x2bcc05:0x1e9},_0x43e433=_0x94aeb3,_0x5a87d0=document[_0x43e433(0x365)](_0x43e433(_0x4c0070._0x3f80e4)),_0x407d76=document[_0x43e433(_0x4c0070._0x59114c)]('toast-msg'),_0x230f33=document[_0x43e433(_0x4c0070._0x5f4cf7)](_0x43e433(_0x4c0070._0x3e12f1));_0x407d76[_0x43e433(_0x4c0070._0x1b1098)]=_0x2b35ca,_0x230f33['style'][_0x43e433(_0x4c0070._0x4ac6ed)]=_0x43e433(_0x4c0070._0x31cfa8),_toastUndoFn=null,_0x5a87d0[_0x43e433(_0x4c0070._0x8a5b4)]['add'](_0x43e433(_0x4c0070._0x2bcc05)),clearTimeout(_toastTimer),_toastTimer=setTimeout(()=>_0x5a87d0[_0x43e433(0x450)][_0x43e433(0x317)]('show'),0xbb8);}function showUndoToast(_0x2901ea,_0x17b0a3){const _0x557cc3={_0x2278dd:0x365,_0x1fe840:0x437},_0xedebef={_0x347264:0x317},_0x38021d=_0x94aeb3,_0xa89b98=document[_0x38021d(_0x557cc3._0x2278dd)]('toast'),_0x55044d=document['getElementById'](_0x38021d(0x23e)),_0x2e3534=document[_0x38021d(0x365)]('toast-undo-btn');_0x55044d[_0x38021d(0x2d9)]=_0x2901ea,_0x2e3534['style'][_0x38021d(_0x557cc3._0x1fe840)]='block',_toastUndoFn=_0x17b0a3,_0xa89b98['classList'][_0x38021d(0x4ae)](_0x38021d(0x1e9)),clearTimeout(_toastTimer),_toastTimer=setTimeout(()=>{const _0x4fd80c=_0x38021d;_0xa89b98[_0x4fd80c(0x450)][_0x4fd80c(_0xedebef._0x347264)](_0x4fd80c(0x1e9)),_toastUndoFn=null;},0xfa0);}function triggerToastUndo(){const _0x3e93d3={_0x4c15e3:0x317,_0x3e5c9a:0x1e9},_0x2baf52=_0x94aeb3;clearTimeout(_toastTimer),document['getElementById'](_0x2baf52(0x268))[_0x2baf52(0x450)][_0x2baf52(_0x3e93d3._0x4c15e3)](_0x2baf52(_0x3e93d3._0x3e5c9a)),_toastUndoFn&&(_toastUndoFn(),_toastUndoFn=null);}
+const TMDB_BASE = 'https://api.themoviedb.org/3';
+const TMDB_IMG = 'https://image.tmdb.org/t/p/';
+const PRIME_BASE = 'https://primesrc.me/embed';
+
+let API_KEY = localStorage.getItem('tmdb_api_key') || '';
+let homeLoaded = false;
+let heroItems = [];
+let heroIndex = 0;
+let heroItem = null;
+let heroInterval = null;
+let currentShow = null;
+let currentSeason = 1;
+let searchDebounce = null;
+let _pendingEp = null;
+let watchTimer = null;
+let watchStart = null;
+let _pendingTimestamp = 0;
+let savedScrollY = 0;
+let loadedIds = new Set();
+let _activeTabId = 'tab-home';
+let currentSource = 'primesrc';
+let currentEmbed = { type: null, imdb: null, tmdbId: null, season: null, episode: null };
+let currentPage = 1;
+let currentSection = null;
+let isLoadingMore = false;
+let hasMorePages = true;
+let isFullscreen = false;
+let allResults = [];
+let activeGenre = 'all';
+let autoplayTimer = null;
+let suggestionCache = {};
+let importReplaceMode = false;
+let _toastTimer = null;
+let _toastUndoFn = null;
+let _detailAbortController = null;
+let pendingWatchTogetherStartAt = null;
+
+// ─── SAFE UTILS ───
+function safeClick(id) {
+    const el = document.getElementById(id);
+    if (el) el.click();
+}
+
+function safeFocus(id) {
+    const el = document.getElementById(id);
+    if (el) el.focus();
+}
+
+// ─── STORAGE MODULE ───
+const SV = {
+    _get(key, fallback) {
+        try {return JSON.parse(localStorage.getItem(key)) ?? fallback;} catch {return fallback;}
+    },
+    _set(key, val) {
+        try {
+            const str = JSON.stringify(val);
+            if (str.length > 500000) { console.warn(`SV: ${key} too large, trimming`); return false; }
+            localStorage.setItem(key, str); return true;
+        } catch (e) { console.warn('SV storage error:', e); return false; }
+    },
+    history: {
+        get() { return SV._get('sv_history', {}); },
+        set(v) { return SV._set('sv_history', v); },
+        values() { return Object.values(SV.history.get()).sort((a, b) => b.savedAt - a.savedAt); },
+        add(item) {
+            const h = SV.history.get();
+            const existing = h[item.id] || {};
+            const genre_ids = window._pendingGenreIds?.id === item.id ? window._pendingGenreIds.genre_ids : existing.genre_ids || [];
+            h[item.id] = { ...existing, ...item, genre_ids, savedAt: Date.now() };
+            const entries = Object.entries(h).sort((a, b) => b[1].savedAt - a[1].savedAt);
+            const trimmed = Object.fromEntries(entries.slice(0, 200));
+            SV.history.set(trimmed);
+        },
+        remove(id) { const h = SV.history.get(); delete h[id]; SV.history.set(h); },
+        has(id) { return !!SV.history.get()[id]; },
+    },
+    list: {
+        get() { return SV._get('sv_mylist', []); },
+        set(v) {
+            window._svMyListCache = v;
+            window._svMyListSet = new Set(v.map(i => i.id));
+            return SV._set('sv_mylist', v);
+        },
+        add(item) { const l = SV.list.get(); if (!l.some(i => i.id === item.id)) SV.list.set([item, ...l]); },
+        remove(id) { SV.list.set(SV.list.get().filter(i => i.id !== id)); },
+        has(id) { return SV.list.get().some(i => i.id === id); },
+    },
+    searches: {
+        get() { return SV._get('sv_recent_searches', []); },
+        add(q) { const r = [q, ...SV._get('sv_recent_searches', []).filter(s => s.toLowerCase() !== q.toLowerCase())].slice(0, 5); SV._set('sv_recent_searches', r); },
+        clear() { localStorage.removeItem('sv_recent_searches'); },
+    },
+    hidden: {
+        get() { return new Set(SV._get('sv_hidden', [])); },
+        add(id) { const s = SV.hidden.get(); s.add(id); SV._set('sv_hidden', [...s]); },
+        clear() { localStorage.removeItem('sv_hidden'); },
+        has(id) { return SV.hidden.get().has(id); },
+    },
+    discovered: {
+        get() { return SV._get('sv_discovered_collections', []); },
+        add(col) { if (!col?.id) return; const e = SV.discovered.get(); if (!e.some(c => c.id === col.id)) SV._set('sv_discovered_collections', [{ id: col.id, name: col.name }, ...e].slice(0, 50)); },
+    },
+};
+
+// ─── ICON HELPER ───
+const ICONS = {
+    play: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>`,
+    star: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="var(--gold)"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+    check: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+    plus: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+    info: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+    close: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+    next: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/><line x1="19" y1="3" x2="19" y2="21" stroke="currentColor" stroke-width="2"/></svg>`,
+    filter: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>`,
+    globe: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+    back: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>`,
+    eye_off: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`,
+    newtab: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`,
+    link: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`,
+    search: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>`,
+    copy: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+    clock: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+    calendar: `<svg width="VAR" height="VAR" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+};
+function icon(name, size = 13) {
+    return (ICONS[name] || '').replaceAll('VAR', size);
+}
+
+// ─── INIT ───
+if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+
+window.addEventListener('DOMContentLoaded', () => {
+    // Scroll to top on page load, handle startAt param for Watch Together links, apply saved theme, and show setup if no API key
+    window.scrollTo(0, 0);
+    const params = new URLSearchParams(location.search);
+    const startAt = params.get('startAt');
+    if (startAt) {
+        const urlId = params.get('id');
+        if (urlId) { pendingWatchTogetherStartAt = parseInt(startAt); }
+    }
+    if (localStorage.getItem('sv_theme') === 'light') toggleTheme();
+    if (API_KEY) {
+        document.getElementById('setup-overlay').classList.add('hidden');
+        initApp();
+    } else {
+        document.getElementById('setup-overlay').classList.remove('hidden');
+    }
+
+    // ─── Search clear button (mobile + desktop) ───
+    const clearBtn = document.getElementById('search-clear-btn');
+    const searchInput = document.getElementById('search-input');
+    if (clearBtn && searchInput) {
+        const doClear = e => {
+            e.preventDefault();
+            e.stopPropagation();
+            searchInput.value = '';
+            onSearchInput('');
+            searchInput.focus();
+        };
+        clearBtn.addEventListener('mousedown', doClear);
+        clearBtn.addEventListener('touchstart', doClear, { passive: false });
+    }
+});
+
+function saveApiKey() {
+    const k = document.getElementById('api-key-input').value.trim();
+    if (!k) { showToast('Please enter your TMDB API key'); return; }
+    API_KEY = k;
+    localStorage.setItem('tmdb_api_key', k);
+    suggestionCache = {};
+    document.getElementById('setup-overlay').classList.add('hidden');
+    initApp();
+}
+
+function showSetup() {
+    document.getElementById('api-key-input').value = API_KEY;
+    document.getElementById('setup-overlay').classList.remove('hidden');
+}
+
+function loadHomeContent() {
+    if (homeLoaded) return;
+    homeLoaded = true;
+    loadTrending();
+    loadNewThisWeek();
+    loadPopularMovies();
+    loadPopularTV();
+    loadTurkishSeries();
+}
+
+function initApp() {
+    const p = new URLSearchParams(location.search);
+    const hasRoute = p.get('type') || p.get('browse') || p.get('search');
+    if (hasRoute) {
+        document.getElementById('home-page').classList.add('hidden');
+        setTimeout(loadHomeContent, 500);
+    } else {
+        loadHomeContent();
+    }
+    renderContinueWatching();
+    document.getElementById('year-to').value = new Date().getFullYear();
+    document.getElementById('year-to').max = new Date().getFullYear() + 2;
+    window.addEventListener('popstate', handleRoute);
+    handleRoute();
+}
+
+// ─── URL ROUTING ───
+function slugify(str) {
+    return (str || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+function pushState(params) {
+    const q = new URLSearchParams();
+    for (const [k, v] of Object.entries(params)) if (v !== undefined && v !== null) q.set(k, v);
+    history.pushState(params, '', `${location.pathname}?${q.toString()}`);
+    document.title = buildTitle(params);
+}
+
+function buildTitle(params) {
+    const name = params.name ? decodeURIComponent(params.name) : '';
+    if (params.browse === 'filter') return 'StreamVault';
+    if (params.browse === 'stats') return 'StreamVault';
+    if (params.type === 'movie') return `${name} — StreamVault`;
+    if (params.type === 'tv' && params.season && params.episode) return `${name} · S${String(params.season).padStart(2, '0')}E${String(params.episode).padStart(2, '0')} — StreamVault`;
+    if (params.type === 'tv') return `${name} — StreamVault`;
+    if (params.search) return `StreamVault`;
+    if (params.browse === 'stats') return 'StreamVault';
+    if (params.browse === 'filter') return 'StreamVault';
+    if (params.browse) return `StreamVault`;
+    return 'StreamVault';
+}
+
+function handleRoute() {
+    const p = new URLSearchParams(location.search);
+    const type = p.get('type');
+    const id = p.get('id');
+    const season = p.get('season');
+    const episode = p.get('episode');
+    const search = p.get('search');
+    const startAt = p.get('startAt');
+    const browse = p.get('browse');
+
+    if (type && id) {
+        if (type === 'tv' && season && episode)
+            _pendingEp = { season: parseInt(season), episode: parseInt(episode) };
+        if (startAt) pendingWatchTogetherStartAt = parseInt(startAt);
+        openDetail(parseInt(id), type, false, true);
+    } else if (browse) {
+        if (browse === 'home') {
+            showHome();
+        } else if (browse === 'stats') {
+            showStats(true);
+        } else if (browse === 'filter') {
+            restoreFilters(p);
+        } else if (browse === 'mylist') {
+            showMyList();
+        } else if (browse === 'movie' || browse === 'tv') {
+            fetchSection(browse);
+        } else if (browse === 'collections') {
+            showCollections();
+        }
+    } else if (search) {
+        document.getElementById('search-input').value = decodeURIComponent(search);
+        doSearch(decodeURIComponent(search), true);
+    } else {
+        showHome();
+    }
+}
+
+// ─── XSS HELPER ───
+const _escMap = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'};
+function esc(str) {
+    if (str == null) return '';
+    return String(str).replace(/[&<>"']/g, c => _escMap[c]);
+}
+
+// ─── API FETCH ───
+function isBearerToken(key) { return key && key.startsWith('eyJ'); }
+async function tmdb(path, params = {}, signal = null) {
+    const opts = {};
+    let reqUrl;
+    if (isBearerToken(API_KEY)) {
+        reqUrl = `${TMDB_BASE}${path}?${new URLSearchParams(params)}`;
+        opts.headers = { Authorization: `Bearer ${API_KEY}` };
+    } else {
+        reqUrl = `${TMDB_BASE}${path}?${new URLSearchParams({ api_key: API_KEY, ...params })}`;
+    }
+    if (signal) opts.signal = signal;
+    const res = await fetch(reqUrl, opts);
+    if (!res.ok) {
+        if (res.status === 401) { showToast('Invalid API key — please update it'); showSetup(); }
+        throw new Error('TMDB fetch failed');
+    }
+    return res.json();
+}
+
+// ─── RENDER HELPERS ───
+function posterUrl(path, size = 'w342') {return path ? `${TMDB_IMG}${size}${path}` : null;}
+function backdropUrl(path) {return path ? `${TMDB_IMG}w1280${path}` : null;}
+function starIcon() {return icon('star', 11);}
+
+function makeCard(item, index = 0) {
+    const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
+    const title = item.title || item.name || 'Unknown';
+    const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+    const rating = item.vote_average ? item.vote_average.toFixed(1) : '—';
+    const poster = posterUrl(item.poster_path);
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.dataset.id = item.id;
+    div.style.animationDelay = `${index * 0.04}s`;
+    const releaseDate = item.release_date || item.first_air_date || '';
+    const nowMs = Date.now();
+    const releaseMs = releaseDate ? new Date(releaseDate).getTime() : 0;
+    const daysUntil = releaseMs > nowMs ? Math.ceil((releaseMs - nowMs) / (1000 * 60 * 60 * 24)) : 0;
+    const comingBadge = daysUntil > 0 ? `<div class="coming-soon-badge">${daysUntil === 1 ? 'Tomorrow' : `In ${daysUntil} days`}</div>` : '';
+    const histEntry = (window._svHistoryCache || {})[item.id];
+    const isWatched = mediaType === 'movie' && !!histEntry;
+    const watchedBadge = isWatched
+        ? `<div class="card-watched-badge"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Watched</div>`
+        : (mediaType === 'tv' && histEntry?.season) ? `<div class="card-lastwatched-badge">S${histEntry.season} E${histEntry.episode}</div>`: ''; 
+    const safeTitle = esc(title);
+    const inListNow = isInMyList(item.id);
+    const posterWrap = document.createElement('div');
+    posterWrap.className = 'cw-poster-wrap';
+    posterWrap.style.cursor = 'pointer';
+    if (poster) {
+        posterWrap.innerHTML = `
+            <img class="card-poster" src="${poster}" alt="${safeTitle}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="card-poster-placeholder" style="display:none">${safeTitle}</div>${comingBadge} ${watchedBadge}
+            <div class="cw-hover-overlay">
+                <div class="cw-hover-left">
+                    <button class="cw-hover-btn cw-play-btn" title="Play">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </button>
+                    <button class="cw-hover-btn cw-list-btn" title="My List" data-in-list="${inListNow}">${inListNow
+                ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`
+                : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`
+            }
+                    </button>
+                </div>
+                <div class="cw-hover-right">
+                    <button class="cw-hover-btn cw-detail-btn" title="More Details">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    </button>
+                </div>
+            </div>`;
+    } else {
+        posterWrap.innerHTML = `
+            <div class="card-poster-placeholder">${safeTitle}</div>${comingBadge} ${watchedBadge}
+            <div class="cw-hover-overlay">
+                <div class="cw-hover-left">
+                    <button class="cw-hover-btn cw-play-btn" title="Play">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </button>
+                    <button class="cw-hover-btn cw-list-btn" title="My List" data-in-list="${inListNow}">${inListNow
+                ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`
+                : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`
+            }
+                    </button>
+                </div>
+                <div class="cw-hover-right">
+                    <button class="cw-hover-btn cw-detail-btn" title="More Details">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    </button>
+                </div>
+            </div>`;
+    }
+
+    posterWrap.addEventListener('touchstart', () => {
+        if (posterWrap.classList.contains('is-touching')) return;
+        document.querySelectorAll('.cw-poster-wrap.is-touching').forEach(el => el.classList.remove('is-touching'));
+        posterWrap.classList.add('is-touching');
+    }, {passive: true});
+    posterWrap.addEventListener('click', e => {
+        if (e.target.closest('.cw-hover-btn')) return;
+        if (posterWrap.classList.contains('is-touching') && window.matchMedia('(hover: none)').matches) {
+            openQuickDetail(item.id, mediaType, item);
+            return;
+        }
+        openQuickDetail(item.id, mediaType, item);
+    });
+    posterWrap.querySelector('.cw-play-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        savedScrollY = window.scrollY;
+        if (item.genre_ids?.length) window._pendingGenreIds = { id: item.id, genre_ids: item.genre_ids };
+        openDetail(item.id, mediaType, true);
+    });
+    const listBtn = posterWrap.querySelector('.cw-list-btn');
+    listBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        let list = getMyList();
+        if (isInMyList(item.id)) {
+            saveMyList(list.filter(i => i.id !== item.id));
+            listBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+            listBtn.dataset.inList = 'false';
+            showToast('Removed from My List');
+        } else {
+            const t = item.title || item.name || '';
+            const y = (item.release_date || item.first_air_date || '').slice(0, 4);
+            saveMyList([{ id: item.id, type: mediaType, title: t, year: y, poster: item.poster_path || null, addedAt: nowMs }, ...list]);
+            listBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+            listBtn.dataset.inList = 'true';
+            showToast('Added to My List');
+        }
+    });
+    posterWrap.querySelector('.cw-detail-btn').addEventListener('click', e => {
+        e.stopPropagation();
+        openQuickDetail(item.id, mediaType, item);
+    });
+
+    const titleSlug = slugify(item.title || item.name || 'unknown');
+    const cardUrl = `${location.pathname}?type=${mediaType}&id=${item.id}&name=${titleSlug}`;
+    const infoWrap = document.createElement('div');
+    infoWrap.className = 'card-info';
+    infoWrap.style.cssText = 'display:flex;align-items:flex-start;justify-content:space-between;gap:6px;cursor:pointer;';
+    infoWrap.innerHTML = `
+        <div style="flex:1;min-width:0;">
+            <div class="card-title">${safeTitle}</div>
+            <div class="card-meta">
+                <span>${esc(year)}</span>
+                <span class="card-rating">${starIcon()} ${rating}</span>
+            </div>
+            <div style="margin-top:5px"><span class="card-type-badge">${mediaType === 'movie' ? 'Movie' : 'TV'}</span></div>
+        </div>`;
+
+    infoWrap.addEventListener('click', () => {
+        savedScrollY = window.scrollY;
+        if (item.genre_ids?.length) window._pendingGenreIds = { id: item.id, genre_ids: item.genre_ids };
+        history.pushState({}, '', cardUrl);
+        openDetail(item.id, mediaType);
+    });
+    div.addEventListener('contextmenu', e => { e.preventDefault(); showCardContextMenu(e, cardUrl, title); });
+    div.appendChild(posterWrap);
+    div.appendChild(infoWrap);
+    return div;
+}
+
+// ─── QUICK DETAIL MODAL ───
+function openQuickDetail(id, mediaType, cardItem) {
+    document.getElementById('quick-modal')?.remove();
+    const modal = document.createElement('div');
+    modal.id = 'quick-modal';
+    modal.className = 'qm-backdrop';
+    modal.innerHTML = `
+        <div class="qm-box">
+            <button class="qm-close" id="qm-close-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <div class="qm-backdrop-img" id="qm-backdrop"></div>
+            <div class="qm-trailer-wrap" id="qm-trailer-wrap" style="display:none">
+                <iframe id="qm-trailer-iframe" allow="autoplay; encrypted-media" allowfullscreen frameborder="0"></iframe>
+            </div>
+            <div class="qm-gradient"></div>
+            <div class="qm-content">
+                <div class="qm-title" id="qm-title">${esc(cardItem?.title || cardItem?.name || '')}</div>
+                <div class="qm-actions">
+                    <button class="qm-play-btn" id="qm-play-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        Play
+                    </button>
+                    <button class="qm-list-btn" id="qm-list-btn">
+                        <svg class="qm-icon-add" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        <svg class="qm-icon-check" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="display:none"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span class="qm-list-label">My List</span>
+                    </button>
+                    <button class="qm-detail-btn" id="qm-detail-btn">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        More Details
+                    </button>
+                </div>
+                <div class="qm-meta" id="qm-meta">
+                    <div class="skeleton" style="height:14px;width:60%;border-radius:4px;"></div>
+                </div>
+                <div class="qm-overview" id="qm-overview">
+                    <div class="skeleton" style="height:12px;width:100%;border-radius:4px;margin-bottom:6px;"></div>
+                    <div class="skeleton" style="height:12px;width:85%;border-radius:4px;margin-bottom:6px;"></div>
+                    <div class="skeleton" style="height:12px;width:70%;border-radius:4px;"></div>
+                </div>
+                <div class="qm-genres" id="qm-genres"></div>
+            </div>
+        </div>`;
+
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+
+    let trailerTimer = null;
+    let trailerKey = null;
+    const close = () => {
+        clearTimeout(trailerTimer);
+        const iframe = document.getElementById('qm-trailer-iframe');
+        if (iframe) iframe.src = '';
+        modal.classList.add('qm-closing');
+        document.body.style.overflow = '';
+        setTimeout(() => modal.remove(), 250);
+    };
+    modal.addEventListener('click', e => { if (e.target === modal) close(); });
+    document.getElementById('qm-close-btn').addEventListener('click', close);
+
+    const qmBox = modal.querySelector('.qm-box');
+    let _swipeStartY = 0, _swipeActive = false;
+    qmBox.addEventListener('touchstart', e => { _swipeStartY = e.touches[0].clientY; _swipeActive = true; }, { passive: true });
+    qmBox.addEventListener('touchmove', e => {
+        if (!_swipeActive) return;
+        const delta = e.touches[0].clientY - _swipeStartY;
+        if (delta > 0) qmBox.style.transform = `translateY(${Math.min(delta * 0.4, 80)}px)`;
+    }, { passive: true });
+    qmBox.addEventListener('touchend', e => {
+        if (!_swipeActive) return;
+        _swipeActive = false;
+        const delta = e.changedTouches[0].clientY - _swipeStartY;
+        if (delta > 80) { close(); } else { qmBox.style.transform = ''; }
+    });
+    document.getElementById('qm-play-btn').addEventListener('click', () => { close(); savedScrollY = window.scrollY; openDetail(id, mediaType, true); });
+    document.getElementById('qm-detail-btn').addEventListener('click', () => { close(); savedScrollY = window.scrollY; openDetail(id, mediaType, false); });
+
+    const qmListBtn = document.getElementById('qm-list-btn');
+    const qmIconAdd = qmListBtn.querySelector('.qm-icon-add');
+    const qmIconCheck = qmListBtn.querySelector('.qm-icon-check');
+    const qmLabel = qmListBtn.querySelector('.qm-list-label');
+    const refreshQmList = () => {
+        const inList = isInMyList(id);
+        qmIconAdd.style.display = inList ? 'none' : 'block';
+        qmIconCheck.style.display = inList ? 'block' : 'none';
+        qmLabel.textContent = inList ? 'Saved' : 'My List';
+        qmListBtn.style.borderColor = inList ? 'var(--gold)' : '';
+        qmListBtn.style.color = inList ? 'var(--gold)' : '';
+    };
+    refreshQmList();
+    qmListBtn.addEventListener('click', () => {
+        let list = getMyList();
+        const title = cardItem?.title || cardItem?.name || '';
+        const year = (cardItem?.release_date || cardItem?.first_air_date || '').slice(0, 4);
+        if (isInMyList(id)) {
+            saveMyList(list.filter(i => i.id !== id));
+            showToast('Removed from My List');
+        } else {
+            saveMyList([{ id, type: mediaType, title, year, poster: cardItem?.poster_path || null, addedAt: Date.now() }, ...list]);
+            showToast('Added to My List');
+        }
+        refreshQmList();
+    });
+
+    requestAnimationFrame(() => modal.classList.add('qm-visible'));
+    tmdb(`/${mediaType}/${id}`, { append_to_response: 'credits,videos' }).then(detail => {
+        const backdrop = detail.backdrop_path ? `${TMDB_IMG}w1280${detail.backdrop_path}` : (detail.poster_path ? `${TMDB_IMG}w780${detail.poster_path}` : null);
+        if (backdrop) {
+            const bg = document.getElementById('qm-backdrop');
+            if (bg) bg.style.backgroundImage = `url(${backdrop})`;
+        }
+
+        const videos = detail.videos?.results || [];
+        const trailer = videos.find(v => v.site === 'YouTube' && v.type === 'Trailer' && v.official) || videos.find(v => v.site === 'YouTube' && v.type === 'Trailer') || videos.find(v => v.site === 'YouTube' && v.type === 'Teaser');
+        if (trailer) trailerKey = trailer.key;
+        const titleEl = document.getElementById('qm-title');
+        if (titleEl) titleEl.textContent = detail.title || detail.name || '';
+
+        const year = (detail.release_date || detail.first_air_date || '').slice(0, 4);
+        const rating = detail.vote_average ? detail.vote_average.toFixed(1) : '—';
+        const runtime = detail.runtime ? `${detail.runtime}m` : (detail.episode_run_time?.[0] ? `${detail.episode_run_time[0]}m/ep` : '');
+        const metaEl = document.getElementById('qm-meta');
+        if (metaEl) metaEl.innerHTML = `
+            <span class="qm-year">${esc(year)}</span>
+            ${runtime ? `<span class="qm-runtime">${esc(runtime)}</span>` : ''}
+            <span class="qm-rating">${starIcon()} ${rating}</span>
+            <span class="qm-type-badge">${mediaType === 'movie' ? 'Movie' : 'TV Series'}</span>`;
+
+        const overviewEl = document.getElementById('qm-overview');
+        if (overviewEl) overviewEl.textContent = detail.overview || 'No overview available.';
+        const genresEl = document.getElementById('qm-genres');
+        if (genresEl && detail.genres?.length) {genresEl.innerHTML = detail.genres.slice(0, 4).map(g => `<span class="qm-genre-tag">${esc(g.name)}</span>`).join('');}
+
+        if (trailerKey && document.getElementById('quick-modal')) {
+            trailerTimer = setTimeout(() => {
+                const wrap = document.getElementById('qm-trailer-wrap');
+                const iframe = document.getElementById('qm-trailer-iframe');
+                const bg = document.getElementById('qm-backdrop');
+                const gradient = modal.querySelector('.qm-gradient');
+                if (!wrap || !iframe || !document.getElementById('quick-modal')) return;
+                iframe.src = `https://www.youtube.com/embed/${trailerKey}?autoplay=1&mute=0&controls=1&rel=0&modestbranding=1`;
+                wrap.style.display = 'block';
+                if (bg) bg.style.opacity = '0';
+                if (gradient) gradient.style.opacity = '0';
+                wrap.classList.add('qm-trailer-visible');
+            }, 4000);
+        }
+    }).catch(() => { });
+}
+
+const _HOME_ROWS = new Set(['trending-row', 'movies-row', 'tv-row', 'turkish-row', 'new-this-week-row', 'continue-watching-row']);
+function renderCards(containerId, items) {
+    window._svHistoryCache = JSON.parse(localStorage.getItem('sv_history') || '{}');
+    const parsedList = JSON.parse(localStorage.getItem('sv_mylist') || '[]');
+    window._svMyListCache = parsedList;
+    window._svMyListSet = new Set(parsedList.map(i => i.id));
+    const _hidden = SV.hidden.get();
+    const visibleItems = _hidden.size ? items.filter(i => !_hidden.has(i.id)) : items;
+    const el = document.getElementById(containerId);
+    el.innerHTML = '';
+
+    if (_HOME_ROWS.has(containerId)) {
+        const EAGER = 6; // Number of cards to render immediately for better UX, the rest will be rendered when scrolled into view
+        visibleItems.forEach((item, i) => {
+            if (i < EAGER) {
+                el.appendChild(makeCard(item, i));
+                return;
+            }
+            const placeholder = document.createElement('div');
+            placeholder.className = 'card card-placeholder';
+            placeholder.style.cssText = 'min-width:160px;flex-shrink:0;';
+            el.appendChild(placeholder);
+            const obs = new IntersectionObserver(entries => {
+                if (!entries[0].isIntersecting) return;
+                obs.disconnect();
+                const card = makeCard(item, i);
+                placeholder.replaceWith(card);
+            }, { rootMargin: '0px 200px 0px 0px', root: el.closest('.row-wrap') || null });
+            obs.observe(placeholder);
+        });
+    } else {
+        visibleItems.forEach((item, i) => el.appendChild(makeCard(item, i)));
+    }
+    if (containerId === 'continue-watching-row') {
+        setTimeout(() => {
+            updateScrollButtons(containerId);
+            el.scrollLeft += 1;
+            el.scrollLeft -= 1;
+        }, 100);
+    }
+}
+
+function scrollRow(id, dir) {
+    const el = document.getElementById(id);
+    const scrollAmount = el.clientWidth * 0.8;
+    el.scrollBy({ left: dir * scrollAmount, behavior: 'smooth' });
+    setTimeout(() => updateScrollButtons(id), 400);
+}
+
+function enableDragScroll(el) {
+    let startX;
+    let scrollLeft;
+    let moved = false;
+
+    el.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); } });
+    el.addEventListener('touchstart', e => {
+        if (e.target.closest('.scroll-btn')) return;
+        startX = e.touches[0].pageX;
+        scrollLeft = el.scrollLeft;
+    });
+    el.addEventListener('touchmove', e => {
+        const x = e.touches[0].pageX;
+        const walk = (x - startX);
+        el.scrollLeft = scrollLeft - walk * 1.5;
+    });
+}
+
+function updateScrollButtons(rowId) {
+    const row = document.getElementById(rowId);
+    const wrapper = row.parentElement;
+    const leftBtn = wrapper.querySelector('.scroll-btn.left');
+    const rightBtn = wrapper.querySelector('.scroll-btn.right');
+    const scrollLeft = row.scrollLeft;
+    const maxScroll = row.scrollWidth - row.clientWidth;
+
+    if (scrollLeft > 5)
+        leftBtn.classList.add('show');
+    else
+        leftBtn.classList.remove('show');
+    if (scrollLeft + row.clientWidth < row.scrollWidth - 5)
+        rightBtn.classList.add('show');
+    else
+        rightBtn.classList.remove('show');
+}
+
+function initScrollButtons(rowId) {
+    const row = document.getElementById(rowId);
+    row.addEventListener('scroll', () => updateScrollButtons(rowId));
+    updateScrollButtons(rowId);
+}
+
+function initRowFeatures(rowId) {
+    const row = document.getElementById(rowId);
+    if (!row) return;
+    enableDragScroll(row);
+    initScrollButtons(rowId);
+    setTimeout(() => {
+        row.scrollLeft += 1;
+        row.scrollLeft -= 1;
+        updateScrollButtons(rowId);
+    }, 150);
+}
+setTimeout(() => initRowFeatures('continue-watching-row'), 0);
+
+function showSkeletons(containerId, count = 7) {
+    document.getElementById(containerId).innerHTML = Array(count).fill(`<div class="skeleton skel-card"></div>`).join('');
+}
+
+// ─── HERO ───
+function setHero(items) {
+    heroItems = items.filter(i => i.backdrop_path);
+    if (!heroItems.length) return;
+    heroIndex = 0;
+    updateHero();
+    const dots = document.getElementById('hero-dots');
+    dots.innerHTML = heroItems.slice(0, 5).map((_, i) => `<div class="hero-dot ${i === 0 ? 'active' : ''}" onclick="setHeroIndex(${i})"></div>`).join('');
+    clearInterval(heroInterval);
+    heroInterval = setInterval(() => setHeroIndex((heroIndex + 1) % Math.min(heroItems.length, 5)), 7000);
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        clearInterval(heroInterval);
+    } else if (heroItems.length) {
+        clearInterval(heroInterval);
+        heroInterval = setInterval(() => setHeroIndex((heroIndex + 1) % Math.min(heroItems.length, 5)), 7000);
+    }
+});
+
+// ─── DRAGGABLE HERO ───
+(function () {
+    let startX = 0, isDragging = false, moved = false;
+    const hero = document.getElementById('hero');
+
+    hero.addEventListener('mousedown', e => {
+        if (e.target.closest('button')) return;
+        isDragging = true; moved = false;
+        startX = e.clientX;
+        hero.style.cursor = 'grabbing';
+    });
+    document.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        if (Math.abs(e.clientX - startX) > 5) moved = true;
+    });
+    document.addEventListener('mouseup', e => {
+        if (!isDragging) return;
+        isDragging = false;
+        hero.style.cursor = '';
+        if (!moved) return;
+        const diff = e.clientX - startX;
+        const total = Math.min(heroItems.length, 5);
+        if (diff < -50) setHeroIndex((heroIndex + 1) % total);
+        else if (diff > 50) setHeroIndex((heroIndex - 1 + total) % total);
+    });
+
+    hero.addEventListener('touchstart', e => { startX = e.touches[0].clientX; moved = false; }, { passive: true });
+    hero.addEventListener('touchmove', e => { if (Math.abs(e.touches[0].clientX - startX) > 5) moved = true; }, { passive: true });
+    hero.addEventListener('touchend', e => {
+        if (!moved) return;
+        const diff = e.changedTouches[0].clientX - startX;
+        const total = Math.min(heroItems.length, 5);
+        if (diff < -50) setHeroIndex((heroIndex + 1) % total);
+        else if (diff > 50) setHeroIndex((heroIndex - 1 + total) % total);
+    });
+})();
+
+function setHeroIndex(i) {
+    heroIndex = i;
+    updateHero();
+    document.querySelectorAll('.hero-dot').forEach((d, idx) => d.classList.toggle('active', idx === i));
+}
+
+function updateHero() {
+    const heroBg = document.getElementById('hero-bg');
+    const heroBgPrev = document.getElementById('hero-bg-prev');
+    if (!heroBg) return;
+    const item = heroItems[heroIndex];
+    if (!item) return;
+
+    heroItem = item;
+    const mediaType = item.media_type || (item.title ? 'movie' : 'tv');
+    const title = item.title || item.name;
+    const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+    const rating = item.vote_average ? `${starIcon()} ${item.vote_average.toFixed(1)}` : '';
+
+    if (heroBgPrev && heroBg.style.backgroundImage) {
+        heroBgPrev.style.backgroundImage = heroBg.style.backgroundImage;
+        heroBgPrev.style.opacity = '1';
+    }
+    heroBg.style.opacity = '0';
+    heroBg.style.backgroundImage = `url(${backdropUrl(item.backdrop_path)})`;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        heroBg.style.opacity = '1';
+        if (heroBgPrev) heroBgPrev.style.opacity = '0';
+    }));
+    const elTitle = document.getElementById('hero-title');
+    const elYear = document.getElementById('hero-year');
+    const elType = document.getElementById('hero-type');
+    const elRating = document.getElementById('hero-rating');
+    const elOverview = document.getElementById('hero-overview');
+
+    if (elTitle) elTitle.textContent = title;
+    if (elYear) elYear.textContent = year;
+    if (elType) elType.textContent = mediaType === 'movie' ? 'Movie' : 'TV Series';
+    if (elRating) elRating.innerHTML = rating;
+    if (elOverview) elOverview.textContent = item.overview || '';
+}
+
+function watchHero() {
+    if (!heroItem) return;
+    openDetail(heroItem.id, heroItem.media_type || (heroItem.title ? 'movie' : 'tv'), true);
+}
+function detailHero() {
+    if (!heroItem) return;
+    openDetail(heroItem.id, heroItem.media_type || (heroItem.title ? 'movie' : 'tv'), false);
+}
+
+// ─── DATA LOADERS ───
+async function loadTrending() {
+    showSkeletons('trending-row', 7);
+    try {
+        const data = await tmdb('/trending/all/week');
+        setHero(data.results);
+        renderCards('trending-row', data.results.slice(0, 14));
+    } catch (e) {
+        document.getElementById('trending-row').innerHTML = '<div class="empty-state"><p>Failed to load. Check your API key.</p></div>';
+    }
+}
+
+async function loadPopularMovies() {
+    showSkeletons('movies-row', 7);
+    try {renderCards('movies-row', (await tmdb('/movie/popular')).results.slice(0, 14));} catch (e) { }
+}
+
+async function loadPopularTV() {
+    showSkeletons('tv-row', 7);
+    try {renderCards('tv-row', (await tmdb('/tv/popular')).results.slice(0, 14));} catch (e) { }
+}
+
+async function loadTurkishSeries() {
+    showSkeletons('turkish-row', 7);
+    try {
+        const data = await tmdb('/discover/tv', { with_original_language: 'tr', sort_by: 'first_air_date.desc', 'first_air_date.gte': '2022-01-01', 'vote_count.gte': 10 });
+        renderCards('turkish-row', data.results.slice(0, 14).map(r => ({...r, media_type: 'tv'})));
+    } catch (e) { }
+}
+
+// ─── NAVIGATION ───
+function showPage(pageId) {
+    document.getElementById('genre-bar').style.display = 'none';
+    document.getElementById('filter-toggle').style.display = 'none';
+    document.getElementById('filter-panel').style.display = 'none';
+    document.getElementById('scroll-sentinel')?.remove();
+    window.scrollTo(0, 0);
+    ['home-page', 'search-page', 'player-page', 'stats-page', 'mylist-page', 'collections-page'].forEach(id => {
+        const el = document.getElementById(id);
+        if (id === 'mylist-page' || id === 'collections-page') {
+            const isTarget = id === pageId;
+            el.style.display = isTarget ? 'block' : 'none';
+            if (isTarget) triggerPageEnter(el);
+            return;
+        }
+        if (id === 'home-page') {
+            const isTarget = id === pageId;
+            el.classList.toggle('hidden', !isTarget);
+            if (isTarget) triggerPageEnter(el);
+        } else if (id === 'player-page' || id === 'search-page') {
+            const isTarget = id === pageId;
+            el.classList.toggle('active', isTarget);
+            el.style.display = '';
+            if (isTarget) triggerPageEnter(el);
+        } else {
+            const isTarget = id === pageId;
+            el.style.display = isTarget ? 'block' : 'none';
+            if (isTarget) triggerPageEnter(el);
+        }
+    });
+}
+
+function triggerPageEnter(el) {
+    el.classList.remove('page-enter');
+    el.style.animation = 'none';
+    requestAnimationFrame(() => {
+        el.style.animation = '';
+        el.classList.add('page-enter');
+    });
+}
+
+function showHome() {
+    const homePage = document.getElementById('home-page');
+    const playerIframe = document.getElementById('player-iframe');
+    if (homePage && !homePage.classList.contains('hidden')) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+    }
+    if (playerIframe) { playerIframe.src = 'about:blank'; }
+    stopWatchTimer();
+    const sourceBar = document.getElementById('source-bar');
+    if (sourceBar) sourceBar.style.display = 'none';
+    showPage('home-page');
+    loadHomeContent();
+    const input = document.getElementById('search-input');
+    if (input) {
+        input.value = '';
+        input.placeholder = 'Search movies, shows…';
+    }
+    setActiveTab('tab-home');
+    setMobileTab('mtab-home');
+    history.pushState({ page: 'home', browse: 'home' }, '', location.pathname);
+    document.title = 'StreamVault';
+    window.scrollTo(0, 0);
+}
+
+const TAB_ORDER = ['tab-home', 'tab-movies', 'tab-tv', 'tab-collections', 'tab-mylist', 'tab-stats'];
+function setActiveTab(id) {
+    const prevIdx = TAB_ORDER.indexOf(_activeTabId);
+    const nextIdx = TAB_ORDER.indexOf(id);
+    const dir = nextIdx >= prevIdx ? 1 : -1;
+
+    document.querySelectorAll('.nav-tab').forEach(t => {
+        if (t.classList.contains('active')) {
+            t.classList.add('nav-leaving');
+            setTimeout(() => t.classList.remove('nav-leaving'), 250);
+        }
+        t.classList.remove('active');
+    });
+
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.classList.add('active');
+    _activeTabId = id;
+    const PAGE_MAP = {
+        'tab-home': 'home-page',
+        'tab-movies': 'search-page',
+        'tab-tv': 'search-page',
+        'tab-collections': 'collections-page',
+        'tab-mylist': 'mylist-page',
+        'tab-stats': 'stats-page',
+    };
+    const pageId = PAGE_MAP[id];
+    if (pageId) {
+        const page = document.getElementById(pageId);
+        if (page) {
+            page.style.setProperty('--slide-dir', dir === 1 ? '32px' : '-32px');
+            page.classList.remove('page-slide-enter');
+            requestAnimationFrame(() => requestAnimationFrame(() => page.classList.add('page-slide-enter')));
+            setTimeout(() => page.classList.remove('page-slide-enter'), 350);
+        }
+    }
+}
+
+function goBack() {
+    stopWatchTimer();
+    document.getElementById('player-iframe').src = '';
+    document.getElementById('source-bar').style.display = 'none';
+    const state = history.state;
+    const hasInAppHistory = state && (state.page === 'home' || state.type || state.browse || state.search);
+
+    if (hasInAppHistory && history.length > 1) {
+        history.back();
+        setTimeout(() => {
+            try {
+                window.scrollTo({ top: savedScrollY, behavior: 'instant' });
+            } catch {
+                window.scrollTo(0, savedScrollY);
+            }
+        }, 150);
+    } else {
+        showHome();
+    }
+}
+
+// ─── SEARCH ───
+function onSearchInput(val) {
+    clearTimeout(searchDebounce);
+    const clearBtn = document.getElementById('search-clear-btn');
+    if (clearBtn) clearBtn.style.display = val.length ? 'flex' : 'none';
+    if (!val.trim()) {
+        showRecentSearches();
+        return;
+    }
+    showSearchSuggestions(val);
+    if (val.trim().length >= 2) {
+        searchDebounce = setTimeout(() => fetchSearchSuggestions(val), 280);
+    }
+}
+
+function scoreResult(item, query) {
+    const q = query.toLowerCase();
+    const title = (item.title || item.name || '').toLowerCase();
+    let score = item.popularity || 0;
+    if (title === q) score += 5000;
+    else if (title.startsWith(q)) score += 2000;
+    else if (title.includes(q)) score += 800;
+    const words = q.split(/\s+/);
+    const matchedWords = words.filter(w => title.includes(w)).length;
+    score += (matchedWords / words.length) * 400;
+    if (item.vote_count > 1000) score += 200;
+    if (item.vote_average > 7) score += 100;
+    const year = parseInt((item.release_date || item.first_air_date || '').slice(0, 4));
+    if (year >= 2015) score += 50;
+    return score;
+}
+
+function _renderHiddenCount() {
+    const count = SV.hidden.get().size;
+    if (!count) return;
+    const existing = document.getElementById('hidden-count-note');
+    if (existing) existing.remove();
+    const note = document.createElement('p');
+    note.id = 'hidden-count-note';
+    note.style.cssText = 'text-align:center;font-size:12px;color:var(--text3);padding:16px 0 8px;';
+    note.innerHTML = `${count} title${count !== 1 ? 's' : ''} hidden · <button onclick="SV.hidden.clear();_renderHiddenCount();showToast('Hidden list cleared')" style="color:var(--gold);font-size:12px;text-decoration:underline;background:none;border:none;cursor:pointer;font-family:inherit;">Show all</button>`;
+    const sentinel = document.getElementById('scroll-sentinel');
+    if (sentinel) sentinel.after(note);
+    else document.getElementById('search-results')?.after(note);
+}
+
+function _resetSectionState() {
+    loadedIds = new Set();
+    currentPage = 1;
+    hasMorePages = false;
+    isLoadingMore = false;
+    currentSection = null;
+    allResults = [];
+}
+
+async function doSearch(query, fromRoute = false) {
+    if (!query.trim()) return;
+    SV.searches.add(query);
+    showPage('search-page');
+    renderSkeletons('search-results', 12);
+    _resetSectionState();
+    document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
+    if (!fromRoute) pushState({ search: query });
+    document.getElementById('search-query-display').textContent = `"${query}"`;
+    document.getElementById('search-count').textContent = 'Searching…';
+    try {
+        const [m1, t1, m2, t2] = await Promise.all([
+            tmdb('/search/movie', { query, page: 1 }),
+            tmdb('/search/tv', { query, page: 1 }),
+            tmdb('/search/movie', { query, page: 2 }).catch(() => ({ results: [] })),
+            tmdb('/search/tv', { query, page: 2 }).catch(() => ({ results: [] })),
+        ]);
+        const movies = [...m1.results, ...m2.results].map(r => ({ ...r, media_type: 'movie' }));
+        const shows = [...t1.results, ...t2.results].map(r => ({ ...r, media_type: 'tv' }));
+        const seen = new Set();
+        const combined = [...movies, ...shows]
+            .filter(r => { const k = `${r.media_type}-${r.id}`; if (seen.has(k)) return false; seen.add(k); return true; })
+            .filter(r => r.poster_path || r.vote_count > 0)
+            .sort((a, b) => scoreResult(b, query) - scoreResult(a, query));
+
+        document.getElementById('search-count').textContent = `${combined.length} results`;
+        if (!combined.length) {
+            showDidYouMean(query);
+        } else {
+            allResults = combined;
+            activeGenre = 'all';
+            document.querySelectorAll('.genre-btn').forEach(b => b.classList.toggle('active', b.dataset.genre === 'all'));
+            document.getElementById('genre-bar').style.display = 'flex';
+            combined.forEach(item => loadedIds.add(`${item.media_type}-${item.id}`));
+            renderCards('search-results', combined);
+            const el = document.getElementById('search-results');
+            el.insertAdjacentHTML('afterend', '<div id="scroll-sentinel"></div>');
+            attachScrollObserver();
+        }
+    } catch (e) {
+        document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>Search failed. Check your API key.</p></div>';
+    }
+}
+
+async function showDidYouMean(query) {
+    document.getElementById('search-results').innerHTML = '<div class="empty-state"><div class="icon">🎬</div><p>No results found.</p><div id="dym-suggestions" style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;"></div></div>';
+    try {
+        const words = query.trim().split(/\s+/);
+        const candidates = new Map();
+        await Promise.all(words.map(async w => {
+            if (w.length < 3) return;
+            const [m, t] = await Promise.all([tmdb('/search/movie', { query: w, page: 1 }).catch(() => ({ results: [] })), tmdb('/search/tv', { query: w, page: 1 }).catch(() => ({ results: [] }))]);
+            [...m.results, ...t.results].slice(0, 3).forEach(r => {
+                const title = r.title || r.name || '';
+                if (title && !candidates.has(r.id)) candidates.set(r.id, title);
+            });
+        }));
+        const box = document.getElementById('dym-suggestions');
+        if (!box || !candidates.size) return;
+        box.innerHTML = '<div style="font-size:13px;color:var(--text3);width:100%;margin-bottom:4px;">Did you mean…</div>';
+        [...candidates.values()].slice(0, 5).forEach(t => {
+            const btn = document.createElement('button');
+            btn.className = 'genre-btn';
+            btn.textContent = t;
+            btn.addEventListener('click', () => { document.getElementById('search-input').value = t; doSearch(t); });
+            box.appendChild(btn);
+        });
+    } catch (e) { }
+}
+
+async function fetchSearchSuggestions(query) {
+    if (!query.trim()) return;
+    try {
+        if (!suggestionCache[query]) {
+            const data = await tmdb('/search/multi', { query, page: 1 });
+            const results = data.results
+                .filter(r => r.media_type === 'movie' || r.media_type === 'tv')
+                .sort((a, b) => scoreResult(b, query) - scoreResult(a, query))
+                .slice(0, 7);
+            suggestionCache[query] = results;
+            const keys = Object.keys(suggestionCache);
+            if (keys.length > 30) delete suggestionCache[keys[0]];
+        }
+        const current = document.getElementById('search-input').value.trim();
+        if (current === query) showSearchSuggestions(query);
+    } catch (e) { }
+}
+
+function showSearchSuggestions(query) {
+    const box = document.getElementById('recent-searches');
+    const results = suggestionCache[query];
+    const recent = getRecentSearches();
+
+    box.addEventListener('mousedown', e => e.preventDefault());
+    box.addEventListener('touchstart', e => { if (!e.target.closest('button')) e.preventDefault(); }, { passive: false });
+
+    const filteredRecent = recent.filter(q => q.toLowerCase().includes(query.toLowerCase())).slice(0, 2);
+    const recentHtml = filteredRecent.length ? `
+        <div class="recent-header">
+            <span>Recent</span>
+            <button class="recent-clear" onmousedown="event.preventDefault();clearRecentSearches()">Clear</button>
+        </div>
+        ${filteredRecent.map(q => `
+            <button class="recent-item" onmousedown="event.preventDefault();pickRecentSearch('${q.replace(/'/g, "\\'")}')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>${esc(q)}</span>
+            </button>`).join('')}`
+        : '';
+
+    const suggestionsHtml = results?.length ? `<div class="recent-header" style="margin-top:${filteredRecent.length ? '4px' : '0'}"><span>Suggestions</span></div>${results.map(r => {
+        const title = r.title || r.name || '';
+        const year = (r.release_date || r.first_air_date || '').slice(0, 4);
+        const type = r.media_type === 'movie' ? 'Movie' : 'TV';
+        const poster = r.poster_path ? `${TMDB_IMG}w92${r.poster_path}` : null;
+        const rating = r.vote_average ? r.vote_average.toFixed(1) : null;
+        return `
+            <button class="suggestion-item" onmousedown="event.preventDefault();pickSuggestion(${r.id},'${r.media_type}','${title.replace(/'/g, "\\'")}')">${poster
+                ? `<img src="${poster}" alt="${esc(title)}" loading="lazy" onerror="this.style.display='none'">`
+                : `<div class="suggestion-poster-placeholder"></div>`}
+                <div class="suggestion-info">
+                    <div class="suggestion-title">${esc(title)}</div>
+                    <div class="suggestion-meta">${esc(year)}${year ? ' · ' : ''}${type}${rating ? ' · ★ ' + rating : ''}</div>
+                </div>
+                <svg class="suggestion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>`;
+    }).join('')}` : (results ? '<div class="recent-empty">No results found</div>' : '<div class="recent-empty" id="suggestions-loading"><span class="suggestions-spinner"></span> Searching…</div>');
+
+    box.innerHTML = recentHtml + suggestionsHtml;
+    box.style.display = 'block';
+}
+
+function pickSuggestion(id, mediaType, title) {
+    document.getElementById('search-input').value = title;
+    document.getElementById('recent-searches').style.display = 'none';
+    saveRecentSearch(title);
+    openDetail(id, mediaType);
+}
+
+function setSearchTitle(text) {
+    const el = document.getElementById('search-query-display');
+    if (!el) return;
+    el.classList.add('title-changing');
+    setTimeout(() => {
+        el.textContent = text;
+        el.classList.remove('title-changing');
+    }, 180);
+}
+
+// ─── RECENT SEARCHES ───
+function saveRecentSearch(query) {SV.searches.add(query);}
+function getRecentSearches() {return SV.searches.get();}
+function clearRecentSearches() {SV.searches.clear(); document.getElementById('recent-searches').style.display = 'none';}
+
+function showRecentSearches() {
+    const recent = getRecentSearches();
+    const box = document.getElementById('recent-searches');
+    const current = document.getElementById('search-input').value.trim();
+    if (current) return;
+    box.innerHTML = recent.length ? `
+        <div class="recent-header">
+            <span>Recent Searches</span>
+            <button class="recent-clear" onmousedown="event.preventDefault();clearRecentSearches()">Clear all</button>
+        </div>
+        ${recent.map(q => `
+            <button class="recent-item" onmousedown="event.preventDefault();pickRecentSearch('${q.replace(/'/g, "\\'")}')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>${esc(q)}</span>
+                <svg class="recent-item-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>`).join('')}`
+        : '<div class="recent-empty">Start typing to search movies & shows</div>';
+    box.style.display = 'block';
+}
+
+function hideRecentSearches() {
+    setTimeout(() => {
+        document.getElementById('recent-searches').style.display = 'none';
+    }, 200);
+}
+
+function pickRecentSearch(query) {
+    document.getElementById('search-input').value = query;
+    document.getElementById('recent-searches').style.display = 'none';
+    doSearch(query);
+}
+
+// ─── GENRE FILTER ───
+function filterGenre(genre) {
+    activeGenre = genre;
+    document.querySelectorAll('.genre-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.genre === genre));
+    const filtered = genre === 'all' ? allResults
+        : allResults.filter(item => {
+            const ids = genre.split(',').map(Number);
+            return (item.genre_ids || []).some(g => ids.includes(g));
+        });
+    const container = document.getElementById('search-results');
+    container.innerHTML = '';
+    if (!filtered.length) {
+        container.innerHTML = '<div class="empty-state"><div class="icon">🎬</div><p>No results in this genre.</p></div>';
+    } else {
+        filtered.forEach((item, i) => container.appendChild(makeCard(item, i)));
+    }
+    document.getElementById('search-count').textContent = `${filtered.length} results`;
+}
+
+// ─── PLAYER SKELETON ───
+function showPlayerSkeleton() {
+    document.getElementById('player-title').innerHTML = '<div class="skeleton" style="height:40px;width:60%;border-radius:6px;"></div>';
+    document.getElementById('player-meta').innerHTML = Array(4).fill('<div class="skeleton" style="height:20px;width:80px;border-radius:4px;"></div>').join('');
+    document.getElementById('player-overview').innerHTML =
+        '<div class="skeleton" style="height:16px;width:100%;border-radius:4px;margin-bottom:8px;"></div><div class="skeleton" style="height:16px;width:90%;border-radius:4px;margin-bottom:8px;"></div><div class="skeleton" style="height:16px;width:75%;border-radius:4px;"></div>';
+    document.getElementById('cast-section').style.display = 'none';
+    document.getElementById('collection-section').style.display = 'none';
+    document.getElementById('player-networks').style.display = 'none';
+}
+
+function renderSkeletons(containerId, count = 10) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const skeletons = Array(count).fill(0).map(() => `<div class="skeleton skel-card"></div>`).join('');
+    container.innerHTML = skeletons;
+}
+
+// ─── DETAIL / PLAYER ───
+async function openDetail(id, mediaType, autoPlay = false, fromRoute = false) {
+    if (_detailAbortController) _detailAbortController.abort();
+    _detailAbortController = new AbortController();
+    const signal = _detailAbortController.signal;
+    showPage('player-page');
+    window.scrollTo(0, 0);
+    showPlayerSkeleton();
+    document.getElementById('player-meta').innerHTML = '';
+    document.getElementById('player-overview').textContent = '';
+    document.getElementById('episodes-section').style.display = 'none';
+    document.getElementById('similar-row').innerHTML = '';
+    document.getElementById('next-ep-bar').style.display = 'none';
+    document.getElementById('collection-section').style.display = 'none';
+    switchDetailTab('cast', document.querySelector('.pd-tab[data-tab="cast"]'));
+    document.getElementById('tab-collection').style.display = 'none';
+    try {
+        const detail = await tmdb(`/${mediaType}/${id}`, { append_to_response: 'external_ids,similar,credits' }, signal);
+        if (signal.aborted) return;
+        const imdb = detail.external_ids?.imdb_id || null;
+        const title = detail.title || detail.name;
+        const slug = slugify(title);
+        const year = (detail.release_date || detail.first_air_date || '').slice(0, 4);
+        const rating = detail.vote_average ? detail.vote_average.toFixed(1) : '—';
+        const t = _pendingTimestamp || 0;
+        _pendingTimestamp = 0;
+        const runtime = detail.runtime ? `${detail.runtime}min` : (detail.episode_run_time?.[0] ? `${detail.episode_run_time[0]}min/ep` : '');
+
+        document.getElementById('player-title').textContent = title;
+        window._currentDetailPoster = detail.poster_path || null;
+        updateMyListBtn(id);
+
+        if (detail.genres?.length) {
+            const h = JSON.parse(localStorage.getItem('sv_history') || '{}');
+            if (h[id]) {
+                h[id].genre_ids = detail.genres.map(g => g.id);
+                localStorage.setItem('sv_history', JSON.stringify(h));
+            }
+            window._pendingGenreIds = { id, genre_ids: detail.genres.map(g => g.id) };
+        }
+        const metaEl = document.getElementById('player-meta');
+        metaEl.innerHTML = `<span>${year}</span>${runtime ? `<span>${runtime}</span>` : ''}<span class="rating">${starIcon()} ${rating}</span>`;
+        (detail.genres || []).slice(0, 3).forEach(g => {
+            const btn = document.createElement('button');
+            btn.className = 'tag-link';
+            btn.innerHTML = `${icon('filter', 10)} ${esc(g.name)}`;
+            btn.addEventListener('click', () => browseGenre(g.id, g.name));
+            btn.addEventListener('contextmenu', e => { e.preventDefault(); showCardContextMenu(e, `/?browse=filter&type=all&genre=${g.id}`, g.name); });
+            metaEl.appendChild(btn);
+        });
+        document.getElementById('player-overview').textContent = detail.overview || '';
+        renderCast(detail.credits?.cast || []);
+        const belongsTo = mediaType === 'movie' ? detail.belongs_to_collection : null;
+        if (belongsTo) saveDiscoveredCollection(belongsTo);
+        renderCollection(belongsTo, id);
+        renderNetworks(detail.networks || [], detail.production_companies || [], mediaType);
+
+        if (detail.backdrop_path)
+            document.getElementById('player-container').style.background = `url(${backdropUrl(detail.backdrop_path)}) center/cover`;
+        if (mediaType === 'movie') {
+            if (!fromRoute) pushState({ type: 'movie', id, name: slug });
+            currentSource = 'primesrc';
+            currentEmbed = { type: 'movie', imdb, tmdbId: id, season: null, episode: null };
+            document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === 'primesrc'));
+            document.getElementById('source-bar').style.display = 'flex';
+            const iframe = document.getElementById('player-iframe');
+            if (iframe && !pendingWatchTogetherStartAt) { iframe.src = buildEmbedUrl('primesrc', 'movie', imdb, id, null, null, t); addIframeBlocker(); }
+            startWatchTimer(id, 'movie', { id, type: 'movie', title, poster: detail.poster_path, year, runtime: detail.runtime || 90 });
+        } else {
+            const isNewShow = !currentShow || currentShow.id !== id;
+            if (isNewShow) {
+                currentSource = 'primesrc';
+                document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === 'primesrc'));
+            }
+            currentShow = { id, detail, imdb, slug };
+            const startS = _pendingEp?.season || 1;
+            const startE = _pendingEp?.episode || 1;
+            _pendingEp = null;
+            currentSeason = startS;
+            document.getElementById('episodes-section').style.display = 'block';
+            renderSeasons(detail, imdb, id, startS);
+            if (!fromRoute) pushState({ type: 'tv', id, name: slug, season: startS, episode: startE });
+            loadEpisode(startS, startE, imdb, id, true, t);
+        }
+        const similar = (detail.similar?.results || []).slice(0, 18);
+        if (similar.length) {
+            const grid = document.getElementById('similar-row');
+            grid.innerHTML = '';
+            similar.map(r => ({ ...r, media_type: mediaType })).forEach((item, i) => grid.appendChild(makeCard(item, i)));
+        }
+        if (pendingWatchTogetherStartAt) {
+            const sat = pendingWatchTogetherStartAt;
+            pendingWatchTogetherStartAt = null;
+            startWatchTogetherCountdown(sat);
+        }
+    } catch (e) {
+        _pendingTimestamp = 0;
+        _pendingEp = null;
+        if (e.name === 'AbortError') return;
+        document.getElementById('player-title').textContent = 'Failed to load';
+    }
+}
+
+function showAutoplayOverlay(nextTitle) {
+    const overlay = document.getElementById('next-ep-autoplay');
+    const titleEl = document.getElementById('next-ep-title');
+    const progressCircle = document.getElementById('autoplay-progress');
+    const numEl = document.getElementById('autoplay-num');
+    titleEl.textContent = nextTitle;
+    overlay.classList.remove('hidden');
+    let timeLeft = 10;
+    const totalOffset = 113;
+    autoplayTimer = setInterval(() => {
+        timeLeft--;
+        numEl.textContent = timeLeft;
+        progressCircle.style.strokeDashoffset = totalOffset - (totalOffset * (10 - timeLeft) / 10);
+        if (timeLeft <= 0) {
+            triggerNextEpisode();
+        }
+    }, 1000);
+}
+
+// ─── SEASONS & EPISODES ───
+function renderSeasons(detail, imdb, tmdbId, activeSeason = 1) {
+    const seasons = (detail.seasons || []).filter(s => s.season_number > 0);
+    const sel = document.getElementById('season-selector');
+    sel.innerHTML = '';
+    seasons.forEach(s => {
+        const btn = document.createElement('button');
+        btn.className = `season-btn${s.season_number === activeSeason ? ' active' : ''}`;
+        btn.id = `s-btn-${s.season_number}`;
+        btn.textContent = `Season ${s.season_number}`;
+        btn.addEventListener('click', () => selectSeason(s.season_number, s.episode_count, imdb, tmdbId));
+        btn.addEventListener('contextmenu', e => { e.preventDefault(); showCardContextMenu(e, `/?type=tv&id=${tmdbId}&name=${currentShow?.slug || ''}&season=${s.season_number}&episode=1`, `Season ${s.season_number}`); });
+        sel.appendChild(btn);
+    });
+    const active = seasons.find(s => s.season_number === activeSeason) || seasons[0];
+    if (active) renderEpisodes(active.episode_count, activeSeason, imdb, tmdbId);
+    setTimeout(() => {document.getElementById(`s-btn-${activeSeason}`)?.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });}, 50);
+}
+
+function selectSeason(num, count, imdb, tmdbId) {
+    currentSeason = num;
+    document.querySelectorAll('.season-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`s-btn-${num}`)?.classList.add('active');
+    renderEpisodes(count, num, imdb, tmdbId);
+    loadEpisode(num, 1, imdb, tmdbId);
+}
+
+async function renderEpisodes(count, season, imdb, tmdbId, activeEp = 1) {
+    const h = SV.history.get();
+    const showId = currentShow?.id;
+    const watchedEps = new Set();
+    if (showId && h[showId]) {
+        const entry = h[showId];
+        if (entry.season === season) {
+            for (let e = 1; e <= entry.episode; e++) watchedEps.add(e);
+        } else if (entry.season > season) {
+            for (let e = 1; e <= count; e++) watchedEps.add(e);
+        }
+    }
+
+    let airDates = {};
+    try {
+        const seasonData = await tmdb(`/tv/${tmdbId}/season/${season}`);
+        const todayStr = new Date().toISOString().slice(0, 10);
+        (seasonData.episodes || []).forEach(ep => {
+            if (ep.air_date) {
+                airDates[ep.episode_number] = { date: ep.air_date, future: ep.air_date > todayStr };
+            }
+        });
+    } catch { }
+
+    const grid = document.getElementById('episodes-grid');
+    grid.innerHTML = '';
+    Array.from({ length: count }, (_, i) => i + 1).forEach(ep => {
+        const watched = watchedEps.has(ep);
+        const info = airDates[ep];
+        const unreleased = info?.future === true;
+        const btn = document.createElement('button');
+        btn.className = `ep-btn${ep === activeEp ? ' active' : ''}${watched ? ' ep-watched' : ''}${unreleased ? ' ep-unreleased' : ''}`;
+        btn.id = `ep-btn-${season}-${ep}`;
+        btn.disabled = unreleased;
+        if (unreleased) {
+            const dateStr = info.date ? new Date(info.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : '';
+            btn.innerHTML = `Ep ${ep}<span class="ep-unreleased-label">${dateStr ? dateStr : 'Unreleased'}</span>`;
+            btn.title = `Not released yet${info.date ? ' — ' + info.date : ''}`;
+        } else {
+            btn.innerHTML = `Ep ${ep}${watched ? '<span class="ep-check">✓</span>' : ''}`;
+            btn.addEventListener('click', () => loadEpisode(season, ep, imdb, tmdbId));
+            btn.addEventListener('contextmenu', e => { e.preventDefault(); showCardContextMenu(e, `/?type=tv&id=${tmdbId}&name=${currentShow?.slug || ''}&season=${season}&episode=${ep}`, `S${season} E${ep}`); });
+        }
+        grid.appendChild(btn);
+    });
+}
+
+function loadEpisode(season, episode, imdb, tmdbId, skipPush = false, t = 0) {
+    document.querySelectorAll('.ep-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(`ep-btn-${season}-${episode}`)?.classList.add('active');
+    currentEmbed = { type: 'tv', imdb, tmdbId, season, episode };
+    document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === currentSource));
+    document.getElementById('source-bar').style.display = 'flex';
+    const iframe = document.getElementById('player-iframe');
+    if (iframe && !pendingWatchTogetherStartAt) {
+        iframe.src = buildEmbedUrl(currentSource, 'tv', imdb, tmdbId, season, episode, t);
+        addIframeBlocker();
+    }
+    document.getElementById('player-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!skipPush && currentShow) {
+        const slug = currentShow.slug || slugify(currentShow.detail?.name || '');
+        pushState({ type: 'tv', id: tmdbId, name: slug, season, episode });
+    }
+    if (currentShow) {
+        startWatchTimer(currentShow.id, 'tv', {
+            id: currentShow.id,
+            type: 'tv',
+            title: currentShow.detail.name,
+            poster: currentShow.detail.poster_path,
+            year: (currentShow.detail.first_air_date || '').slice(0, 4),
+            season,
+            episode,
+            epRuntime: currentShow.detail.episode_run_time?.[0] || 40
+        });
+    }
+
+    // ── Next episode button ──
+    const seasons = currentShow?.detail?.seasons?.filter(s => s.season_number > 0) || [];
+    const currentSeasonData = seasons.find(s => s.season_number === season);
+    const totalEps = currentSeasonData?.episode_count || 0;
+    const nextSeason = seasons.find(s => s.season_number === season + 1);
+    const bar = document.getElementById('next-ep-bar');
+    const barTop = document.getElementById('next-ep-bar-top');
+    const nbtn = document.getElementById('next-ep-btn');
+    const nextIcon = `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/><line x1="19" y1="3" x2="19" y2="21" stroke="currentColor" stroke-width="2"/></svg>`;
+    if (episode < totalEps) {
+        nbtn.dataset.season = season;
+        nbtn.dataset.episode = episode + 1;
+        nbtn.innerHTML = `${nextIcon} S${season} E${episode + 1}`;
+        nbtn.oncontextmenu = e => { e.preventDefault(); showCardContextMenu(e, `/?type=tv&id=${tmdbId}&name=${currentShow?.slug || ''}&season=${season}&episode=${episode + 1}`, `S${season} E${episode + 1}`); };
+        bar.style.display = 'block';
+        if (barTop) barTop.style.display = 'block';
+    } else if (nextSeason) {
+        nbtn.dataset.season = season + 1;
+        nbtn.dataset.episode = 1;
+        nbtn.innerHTML = `${nextIcon} Season ${season + 1} E1`;
+        nbtn.oncontextmenu = e => { e.preventDefault(); showCardContextMenu(e, `/?type=tv&id=${tmdbId}&name=${currentShow?.slug || ''}&season=${season + 1}&episode=1`, `Season ${season + 1} E1`); };
+        bar.style.display = 'block';
+        if (barTop) barTop.style.display = 'block';
+    } else {
+        bar.style.display = 'none';
+        if (barTop) barTop.style.display = 'none';
+    }
+}
+
+function playNextEpisode() {
+    if (!currentShow) return;
+    const btn = document.getElementById('next-ep-btn');
+    const season = parseInt(btn.dataset.season);
+    const episode = parseInt(btn.dataset.episode);
+    loadEpisode(season, episode, currentShow.imdb, currentShow.id);
+    document.getElementById('player-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function triggerNextEpisode() {
+    cancelAutoplay();
+    const btn = document.querySelector('[onclick="nextEpisode()"]');
+    if (btn) btn.click();
+}
+
+function cancelAutoplay() {
+    clearInterval(autoplayTimer);
+    document.getElementById('next-ep-autoplay').classList.add('hidden');
+    document.getElementById('autoplay-progress').style.strokeDashoffset = 113;
+}
+
+// ─── MOBILE TAB SWITCHING ───
+function setMobileTab(id) {
+    document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id)?.classList.add('active');
+}
+
+function focusMobileSearch() {
+    showPage('search-page');
+    document.getElementById('search-query-display').textContent = 'Search';
+    document.getElementById('search-count').textContent = '';
+    document.getElementById('search-results').innerHTML = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => document.getElementById('search-input').focus(), 300);
+}
+
+// ─── CAST ───
+function renderCast(cast) {
+    const section = document.getElementById('cast-section');
+    const row = document.getElementById('cast-row');
+    const top = cast.slice(0, 20);
+    if (!top.length) { section.style.display = 'none'; return; }
+    section.style.display = 'block';
+    row.innerHTML = '';
+    top.forEach(actor => {
+        const div = document.createElement('div');
+        div.className = 'cast-card';
+        const photo = actor.profile_path ? `${TMDB_IMG}w185${actor.profile_path}` : null;
+        div.innerHTML = photo
+            ? `<img class="cast-avatar" src="${photo}" alt="${esc(actor.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+        <div class="cast-avatar-placeholder" style="display:none">👤</div>`
+            : `<div class="cast-avatar-placeholder">👤</div>`;
+        div.innerHTML += ` <div class="cast-name">${esc(actor.name)}</div> <div class="cast-character">${esc(actor.character)}</div>`;
+        div.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            showCastContextMenu(e, actor.name);
+        });
+        row.appendChild(div);
+    });
+}
+
+// ─── SOURCE SWITCHER ───
+function buildEmbedUrl(source, type, imdb, tmdbId, season, episode, t = 0) {
+    const id = imdb && imdb !== 'null' ? imdb : null;
+    if (type === 'movie') {
+        switch (source) {
+            case 'primesrc': return id ? `https://primesrc.me/embed/movie?imdb=${id}&t=${t}` : `https://primesrc.me/embed/movie?tmdb=${tmdbId}&t=${t}`;
+            case 'embed2': return `https://www.2embed.cc/embed/${id ?? tmdbId}`;
+            case 'moviesapi': return `https://moviesapi.club/movie/${id ?? tmdbId}`;
+        }
+    } else {
+        switch (source) {
+            case 'primesrc': return id ? `https://primesrc.me/embed/tv?imdb=${id}&season=${season}&episode=${episode}&t=${t}` : `https://primesrc.me/embed/tv?tmdb=${tmdbId}&season=${season}&episode=${episode}&t=${t}`;
+            case 'embed2': return `https://www.2embed.cc/embedtv/${id ?? tmdbId}&s=${season}&e=${episode}`;
+            case 'moviesapi': return `https://moviesapi.club/tv/${id ?? tmdbId}-${season}-${episode}`;
+        }
+    }
+}
+
+function switchSource(source) {
+    currentSource = source;
+    localStorage.setItem('sv_source', source);
+    document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === source));
+    const { type, imdb, tmdbId, season, episode } = currentEmbed;
+    if (!type) return;
+    const url = buildEmbedUrl(source, type, imdb, tmdbId, season, episode);
+    document.getElementById('player-iframe').src = url;
+    addIframeBlocker();
+}
+
+// ─── FULLSCREEN TOGGLE ───
+function toggleFullscreen() {
+    const container = document.getElementById('player-container');
+    const btn = document.getElementById('fullscreen-btn');
+    const enterIcon = document.getElementById('fullscreen-icon-enter');
+    const exitIcon = document.getElementById('fullscreen-icon-exit');
+    if (!document.fullscreenElement) {
+        if (container.requestFullscreen) {
+            container.requestFullscreen().catch(err => console.error('Fullscreen failed:', err));
+        } else if (container.webkitRequestFullscreen) {
+            container.webkitRequestFullscreen().catch(err => console.error('Fullscreen failed:', err));
+        } else if (container.msRequestFullscreen) {
+            container.msRequestFullscreen().catch(err => console.error('Fullscreen failed:', err));
+        }
+        isFullscreen = true;
+        enterIcon.style.display = 'none';
+        exitIcon.style.display = 'block';
+        btn.title = 'Exit Fullscreen (Esc)';
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        }
+        isFullscreen = false;
+        enterIcon.style.display = 'block';
+        exitIcon.style.display = 'none';
+        btn.title = 'Toggle Fullscreen (F)';
+    }
+}
+
+document.addEventListener('fullscreenchange', updateFullscreenIcon);
+document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+document.addEventListener('msfullscreenchange', updateFullscreenIcon);
+
+function updateFullscreenIcon() {
+    const container = document.getElementById('player-container');
+    const enterIcon = document.getElementById('fullscreen-icon-enter');
+    const exitIcon = document.getElementById('fullscreen-icon-exit');
+    const btn = document.getElementById('fullscreen-btn');
+    isFullscreen = !!document.fullscreenElement;
+    enterIcon.style.display = isFullscreen ? 'none' : 'block';
+    exitIcon.style.display = isFullscreen ? 'block' : 'none';
+    btn.title = isFullscreen ? 'Exit Fullscreen (Esc)' : 'Toggle Fullscreen (F)';
+}
+
+function addIframeBlocker() {
+    const container = document.getElementById('player-container');
+    const existing = document.getElementById('iframe-blocker');
+    if (existing) existing.remove();
+    const blocker = document.createElement('div');
+    blocker.id = 'iframe-blocker';
+    blocker.style.cssText = `position: absolute; inset: 0; z-index: 10; cursor: pointer; background: transparent;`;
+    blocker.addEventListener('click', () => { blocker.remove(); });
+    container.appendChild(blocker);
+}
+
+// Keyboard shortcut
+document.addEventListener('keydown', (e) => {
+    const typing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName) || e.target.isContentEditable;
+    const onPlayer = document.getElementById('player-page')?.classList.contains('active');
+
+    // Fullscreen — player only
+    if (onPlayer && !typing && !e.ctrlKey && !e.metaKey && e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        toggleFullscreen();
+        return;
+    }
+
+    // Escape — close any open overlays
+    if (e.key === 'Escape') {
+        const importOverlay = document.getElementById('import-overlay');
+        const exportOverlay = document.getElementById('export-overlay');
+        if (importOverlay && importOverlay.style.display !== 'none') { closeImportCard(); return; }
+        if (exportOverlay && exportOverlay.style.display !== 'none') { closeExportCard(); return; }
+        closeShortcuts();
+        return;
+    }
+
+    // Focus search
+    if (e.key === '/' && !typing) {
+        e.preventDefault();
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            if (document.getElementById('search-page').style.display === 'none') showPage('search-page');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            searchInput.focus();
+        }
+        return;
+    }
+
+    // Shortcuts modal
+    if (e.key === '?' && !typing) {
+        e.preventDefault();
+        openShortcuts();
+        return;
+    }
+
+    // Nav shortcuts — ignore when typing
+    if (typing || e.ctrlKey || e.metaKey) return;
+    if (e.key.toLowerCase() === 'h') showHome();
+    if (e.key.toLowerCase() === 'l') showMyList();
+    if (e.key.toLowerCase() === 's') showStats();
+    if (e.key.toLowerCase() === 'c') showCollections();
+});
+
+document.addEventListener('click', e => {
+    const box = document.getElementById('recent-searches');
+    const input = document.getElementById('search-input');
+    if (!box.contains(e.target) && e.target !== input) {box.style.display = 'none';}
+    if (!e.target.closest('.cw-poster-wrap')) {document.querySelectorAll('.cw-poster-wrap.is-touching').forEach(el => el.classList.remove('is-touching'));}
+});
+
+// ─── NETWORKS & GENRES ───
+function renderNetworks(networks, companies, mediaType) {
+    const el = document.getElementById('player-networks');
+    const KNOWN = {
+        // Network IDs (TV)
+        213: 'Netflix',
+        1024: 'Amazon',
+        49: 'HBO',
+        2739: 'Disney+',
+        453: 'Hulu',
+        2552: 'Apple TV+',
+        56: 'Cartoon Network',
+        21: 'AMC',
+        16: 'NBC',
+        6: 'NBC',
+        19: 'FOX',
+        3186: 'Crunchyroll',
+        4353: 'Paramount+',
+        // Company IDs (Movies)
+        420: 'Marvel Studios',
+        174: 'Warner Bros.',
+        34: 'Sony Pictures',
+        33: 'Universal',
+        4: 'Paramount',
+        2: 'Walt Disney',
+        521: 'A24',
+        923: 'Legendary',
+        7295: 'Blumhouse',
+        9996: 'DC Films',
+        82968: 'Amazon Studios',
+    };
+    const tags = [];
+    // TV networks
+    networks.slice(0, 3).forEach(n => { tags.push({ label: KNOWN[n.id] || n.name, type: 'network', id: n.id, mediaType: 'tv' }); });
+    // Movie companies
+    if (mediaType === 'movie') {
+        companies.slice(0, 3).forEach(c => { if (KNOWN[c.id]) { tags.push({ label: KNOWN[c.id], type: 'company', id: c.id, mediaType: 'movie' }); } });
+    }
+    if (!tags.length) { el.style.display = 'none'; return; }
+    el.style.display = 'flex';
+    el.innerHTML = `<span style="font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-right:4px;">On</span>`;
+    tags.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = 'tag-link';
+        btn.innerHTML = `${icon('globe', 10)} ${esc(t.label)}`;
+        btn.addEventListener('click', () => browseNetwork(t.id, t.label, t.type, t.mediaType));
+        btn.addEventListener('contextmenu', e => { e.preventDefault(); showCardContextMenu(e, `/?browse=filter&network=${t.id}&networkType=${t.type}`, t.label); });
+        el.appendChild(btn);
+    });
+}
+
+async function browseGenre(genreId, genreName) {
+    _resetSectionState();
+    showPage('search-page');
+    document.getElementById('search-input').value = genreName;
+    document.getElementById('search-query-display').textContent = genreName;
+    document.getElementById('search-count').textContent = 'Loading…';
+    document.getElementById('search-results').innerHTML = '<div class="spinner"></div>';
+    document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
+    setActiveTab('');
+    try {
+        const [movies, shows] = await Promise.all([
+            tmdb('/discover/movie', { with_genres: genreId, sort_by: 'popularity.desc', page: 1 }),
+            tmdb('/discover/tv', { with_genres: genreId, sort_by: 'popularity.desc', page: 1 })
+        ]);
+        allResults = [
+            ...movies.results.map(r => ({ ...r, media_type: 'movie' })),
+            ...shows.results.map(r => ({ ...r, media_type: 'tv' }))
+        ].sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+
+        activeGenre = 'all';
+        document.querySelectorAll('.genre-btn').forEach(b => b.classList.toggle('active', b.dataset.genre === 'all'));
+        document.getElementById('genre-bar').style.display = 'flex';
+        document.getElementById('search-count').textContent = `${allResults.length} results`;
+        renderCards('search-results', allResults);
+    } catch (e) {
+        document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>Failed to load.</p></div>';
+    }
+}
+
+async function browseNetwork(networkId, networkName, type, mediaType) {
+    _resetSectionState();
+    showPage('search-page');
+    document.getElementById('search-input').value = networkName;
+    document.getElementById('search-query-display').textContent = networkName;
+    document.getElementById('search-count').textContent = 'Loading…';
+    document.getElementById('search-results').innerHTML = '<div class="spinner"></div>';
+    document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
+    setActiveTab('');
+    try {
+        const param = type === 'network' ? 'with_networks' : 'with_companies';
+        const endpoint = mediaType === 'tv' ? '/discover/tv' : '/discover/movie';
+        const data = await tmdb(endpoint, { [param]: networkId, sort_by: 'popularity.desc', page: 1 });
+
+        allResults = data.results.map(r => ({ ...r, media_type: mediaType }));
+        currentSection = { mode: 'network', networkId, type, mediaType, param };
+        hasMorePages = data.total_pages > 1;
+        activeGenre = 'all';
+        document.querySelectorAll('.genre-btn').forEach(b => b.classList.toggle('active', b.dataset.genre === 'all'));
+        document.getElementById('genre-bar').style.display = 'flex';
+        document.getElementById('search-count').textContent = `${data.total_results} titles`;
+        renderCards('search-results', allResults);
+        const el = document.getElementById('search-results');
+        el.insertAdjacentHTML('afterend', '<div id="scroll-sentinel"></div>');
+        attachScrollObserver();
+    } catch (e) {
+        document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>Failed to load.</p></div>';
+    }
+}
+
+// ─── INFINITE SCROLL ───
+async function loadMoreResults() {
+    if (isLoadingMore || !hasMorePages || !currentSection) return;
+    isLoadingMore = true;
+    const sentinel = document.getElementById('scroll-sentinel');
+    if (sentinel) sentinel.innerHTML = '<div class="spinner" style="margin:20px auto;width:28px;height:28px;"></div>';
+
+    try {
+        let data;
+        const { mediaType, mode, query } = currentSection;
+        if (mode === 'search') {
+            data = await tmdb('/search/multi', { query, page: currentPage + 1 });
+        } else if (mode === 'network') {
+            const { networkId, type, mediaType: mt, param } = currentSection;
+            const endpoint = mt === 'tv' ? '/discover/tv' : '/discover/movie';
+            data = await tmdb(endpoint, { [param]: networkId, sort_by: 'popularity.desc', page: currentPage + 1 });
+            data.results = data.results.map(r => ({ ...r, media_type: mt }));
+        } else {
+            data = await tmdb(`/${mediaType}/popular`, { page: currentPage + 1 });
+        }
+        currentPage++;
+        hasMorePages = currentPage < data.total_pages;
+
+        const items = mode === 'search' ? data.results.filter(r => r.media_type === 'movie' || r.media_type === 'tv') : data.results.map(r => ({ ...r, media_type: mediaType }));
+        const container = document.getElementById('search-results');
+        items.forEach((item, i) => {
+            const uniqueId = `${item.media_type}-${item.id}`;
+            if (!loadedIds.has(uniqueId)) {
+                loadedIds.add(uniqueId);
+                container.appendChild(makeCard(item, i));
+            }
+        });
+    } catch (e) { }
+
+    isLoadingMore = false;
+    const sentinel2 = document.getElementById('scroll-sentinel');
+    if (sentinel2) sentinel2.innerHTML = hasMorePages ? '' : '<p style="text-align:center;color:var(--text3);font-size:13px;padding:24px">No more results</p>';
+}
+
+const scrollObserver = new IntersectionObserver(entries => { if (entries[0].isIntersecting) loadMoreResults(); }, { rootMargin: '200px' });
+function attachScrollObserver() {
+    const sentinel = document.getElementById('scroll-sentinel');
+    if (sentinel) scrollObserver.observe(sentinel);
+}
+
+// ─── WATCH HISTORY ───
+function saveHistory(item) {SV.history.add(item);}
+function getHistory() {return SV.history.values();}
+
+function clearHistoryItem(id) {
+    const prev = SV.history.get();
+    SV.history.remove(id);
+    renderContinueWatching();
+    showUndoToast('Removed from Continue Watching', () => {
+        SV.history.set(prev);
+        renderContinueWatching();
+    });
+}
+
+function renderContinueWatching() {
+    const section = document.getElementById('continue-watching-section');
+    const row = document.getElementById('continue-watching-row');
+    const items = getHistory().slice(0, 14);
+
+    if (!items.length) { section.style.display = 'none'; return; }
+    section.style.display = 'block';
+    row.innerHTML = '';
+
+    items.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.style.animationDelay = `${i * 0.04}s`;
+        div.style.position = 'relative';
+
+        const poster = posterUrl(item.poster);
+        const sub = item.type === 'tv' ? `S${item.season} E${item.episode}` : item.year || '';
+        const timestamp = item.timestamp || 0;
+        const runtime = item.type === 'movie' ? (item.runtime || 90) * 60 : (item.epRuntime || 40) * 60;
+        const pct = runtime > 0 ? Math.min(Math.round((timestamp / runtime) * 100), 99) : 0;
+        const placeholderIcon =
+            `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`;
+        const posterWrapHtml = poster
+            ? `<img class="card-poster" src="${poster}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+            <div class="card-poster-placeholder" style="display:none">${placeholderIcon}<span>${esc(item.title)}</span></div>`
+            : `<div class="card-poster-placeholder">${placeholderIcon}<span>${esc(item.title)}</span></div>`;
+
+        const inListNow = isInMyList(item.id);
+        div.innerHTML = `
+            <div class="cw-poster-wrap" style="position:relative;cursor:pointer;">
+                ${posterWrapHtml}
+                ${pct > 0 ? `<div class="card-progress"><div class="card-progress-fill" style="width:${pct}%"></div></div>` : ''}
+                <div class="cw-hover-overlay">
+                    <div class="cw-hover-left">
+                        <button class="cw-hover-btn cw-play-btn" title="Play">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        </button>
+                        <button class="cw-hover-btn cw-list-btn" title="My List" data-in-list="${inListNow}"> ${inListNow
+                ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`
+                : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`
+            }
+                        </button>
+                    </div>
+                    <div class="cw-hover-right">
+                        <button class="cw-hover-btn cw-detail-btn" title="Details">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-info">
+                <div class="card-title">${esc(item.title)}</div>
+                <div class="card-meta">
+                    <span style="color:var(--gold);font-size:11px">${esc(sub)}</span>
+                    <button class="cw-remove-btn" style="position:relative;z-index:2;"> ✕ </button>
+                </div>
+            </div>`;
+
+        div.querySelector('.cw-remove-btn').addEventListener('click', e => {
+            e.stopPropagation();
+            clearHistoryItem(item.id);
+        });
+
+        const posterWrap = div.querySelector('.cw-poster-wrap');
+        posterWrap.addEventListener('click', e => {
+            if (e.target.closest('.cw-hover-btn')) return;
+            openQuickDetail(item.id, item.type, {
+                id: item.id,
+                title: item.title,
+                name: item.title,
+                poster_path: item.poster,
+                release_date: item.year ? `${item.year}-01-01` : '',
+                first_air_date: item.year ? `${item.year}-01-01` : '',
+                media_type: item.type
+            });
+        });
+
+        div.querySelector('.cw-play-btn').addEventListener('click', e => {
+            e.stopPropagation();
+            savedScrollY = window.scrollY;
+            const resumeAt = item.timestamp || 0;
+            if (item.type === 'tv') {
+                _pendingEp = { season: item.season, episode: item.episode };
+                _pendingTimestamp = resumeAt;
+            } else {
+                _pendingTimestamp = resumeAt;
+            }
+            openDetail(item.id, item.type, true, false);
+        });
+
+        const listBtn = div.querySelector('.cw-list-btn');
+        listBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            let list = getMyList();
+            if (isInMyList(item.id)) {
+                saveMyList(list.filter(i => i.id !== item.id));
+                listBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+                listBtn.dataset.inList = 'false';
+                showToast('Removed from My List');
+            } else {
+                saveMyList([{ id: item.id, type: item.type, title: item.title, year: item.year, poster: item.poster || null, addedAt: Date.now() }, ...list]);
+                listBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+                listBtn.dataset.inList = 'true';
+                showToast('Added to My List');
+            }
+        });
+
+        div.querySelector('.cw-detail-btn').addEventListener('click', e => {
+            e.stopPropagation();
+            openQuickDetail(item.id, item.type, {
+                id: item.id,
+                title: item.title,
+                name: item.title,
+                poster_path: item.poster,
+                release_date: item.year ? `${item.year}-01-01` : '',
+                first_air_date: item.year ? `${item.year}-01-01` : '',
+                media_type: item.type
+            });
+        });
+        div.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            showCardContextMenu(e, `/?type=${item.type}&id=${item.id}&name=${slugify(item.title || '')}`, item.title || '');
+        });
+        row.appendChild(div);
+    });
+}
+
+function startWatchTimer(id, type, pendingHistoryItem = null) {
+    stopWatchTimer();
+    watchStart = null;
+    let historySaved = pendingHistoryItem === null;
+    watchTimer = setInterval(() => {
+        if (!watchStart) watchStart = Date.now();
+        const elapsed = Math.floor((Date.now() - watchStart) / 1000);
+        if (!historySaved && elapsed >= 180) {
+            saveHistory(pendingHistoryItem);
+            historySaved = true;
+            renderContinueWatching();
+        }
+        if (historySaved) {
+            const h = SV.history.get();
+            if (h[id]) {
+                h[id].timestamp = elapsed;
+                SV.history.set(h);
+            }
+        }
+    }, 20000);
+}
+
+function stopWatchTimer() {
+    clearInterval(watchTimer);
+    watchTimer = null;
+    watchStart = null;
+}
+
+// ─── SCROLL TO TOP BUTTON ───
+let _scrollRaf = false;
+window.addEventListener('scroll', () => {
+    if (_scrollRaf) return;
+    _scrollRaf = true;
+    requestAnimationFrame(() => {
+        document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 400);
+        _scrollRaf = false;
+    });
+}, {passive: true});
+
+// ─── SECTION VIEW ───
+async function fetchSection(mediaType) {
+    _resetSectionState();
+    showPage('search-page');
+    pushState({ browse: mediaType });
+    document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
+    const label = mediaType === 'movie' ? 'Movies' : 'TV Shows';
+    const input = document.getElementById('search-input');
+    input.value = '';
+    input.placeholder = 'Search movies, shows…';
+    document.getElementById('search-query-display').textContent = label;
+    document.getElementById('search-count').textContent = 'Loading…';
+    document.getElementById('search-results').innerHTML = '<div class="spinner"></div>';
+    setActiveTab(mediaType === 'movie' ? 'tab-movies' : 'tab-tv');
+    try {
+        const data = await tmdb(`/discover/${mediaType}`, { sort_by: 'popularity.desc', 'vote_count.gte': 100, page: 1 });
+        document.getElementById('search-count').textContent = `${data.total_results} titles`;
+        allResults = data.results.map(r => ({ ...r, media_type: mediaType }));
+        currentSection = { mode: 'section', mediaType };
+        hasMorePages = data.total_pages > 1;
+        activeGenre = 'all';
+        document.querySelectorAll('.genre-btn').forEach(b => b.classList.toggle('active', b.dataset.genre === 'all'));
+        document.getElementById('genre-bar').style.display = 'flex';
+        renderCards('search-results', allResults);
+        const el = document.getElementById('search-results');
+        el.insertAdjacentHTML('afterend', '<div id="scroll-sentinel"></div>');
+        attachScrollObserver();
+        _renderHiddenCount();
+    } catch (e) { }
+}
+
+// ─── COLLECTION ───
+async function renderCollection(belongsToCollection, currentId) {
+    const section = document.getElementById('collection-section');
+    const tabBtn = document.getElementById('tab-collection');
+    if (!belongsToCollection) { section.style.display = 'none'; tabBtn.style.display = 'none'; return; }
+    try {
+        const data = await tmdb(`/collection/${belongsToCollection.id}`);
+        const parts = (data.parts || [])
+            .sort((a, b) => (a.release_date || '').localeCompare(b.release_date || ''));
+        if (parts.length <= 1) { section.style.display = 'none'; tabBtn.style.display = 'none'; return; }
+        document.getElementById('collection-title').textContent = data.name || 'Part of a Collection';
+        const row = document.getElementById('collection-row');
+        row.innerHTML = '';
+        parts.forEach((item, i) => {
+            const isCurrent = item.id === currentId;
+            const card = makeCard({ ...item, media_type: 'movie' }, i);
+            if (isCurrent) card.style.outline = '2px solid var(--gold)';
+            row.appendChild(card);
+        });
+        section.style.display = 'block';
+        tabBtn.style.display = 'inline-flex';
+    } catch (e) {
+        section.style.display = 'none';
+        tabBtn.style.display = 'none';
+    }
+}
+
+// ─── THEME TOGGLE ───
+function toggleTheme() {
+    const isLight = document.body.classList.toggle('light');
+    localStorage.setItem('sv_theme', isLight ? 'light' : 'dark');
+    document.getElementById('theme-icon-moon').style.display = isLight ? 'none' : 'block';
+    document.getElementById('theme-icon-sun').style.display = isLight ? 'block' : 'none';
+    document.getElementById('theme-toggle').style.color = isLight ? 'var(--gold)' : 'var(--text2)';
+}
+
+// ─ DETAIL TABS ─
+function switchDetailTab(tab, btn) {
+    document.querySelectorAll('.pd-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.pd-tab-panel').forEach(p => p.style.display = 'none');
+    if (btn) btn.classList.add('active');
+    const panel = document.getElementById(`pd-tab-${tab}`);
+    if (panel) panel.style.display = 'block';
+}
+
+function scrollToPlayer() {
+    document.getElementById('player-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── STATS PAGE ───
+function showStats(fromRoute = false) {
+    showPage('stats-page');
+    setActiveTab('tab-stats');
+    setMobileTab('mtab-stats');
+    if (!fromRoute) pushState({ browse: 'stats' });
+    document.title = 'StreamVault';
+    const input = document.getElementById('search-input');
+    if (input) {
+        input.value = '';
+        input.placeholder = 'Search movies, shows…';
+    }
+    renderStats();
+}
+
+function renderStats() {
+    const history = JSON.parse(localStorage.getItem('sv_history') || '{}');
+    const items = Object.values(history);
+    const movies = items.filter(i => i.type === 'movie');
+    const episodes = items.filter(i => i.type === 'tv');
+    let totalSeconds = 0;
+    items.forEach(i => { totalSeconds += i.timestamp || 0; });
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const days = new Set(items.map(i => new Date(i.savedAt).toDateString()));
+    document.getElementById('stats-grid').innerHTML = [
+        { value: hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`, label: 'Total Watch Time', sub: 'across all titles' },
+        { value: movies.length, label: 'Movies Started', sub: `from your history` },
+        { value: episodes.reduce((acc, s) => acc + (s.episode || 0), 0), label: 'Episodes Watched', sub: `across all shows` },
+        { value: days.size, label: 'Days Watched', sub: `different days` },
+    ].map(s => `
+        <div class="stat-card">
+            <div class="stat-value">${s.value}</div>
+            <div class="stat-label">${s.label}</div>
+            <div class="stat-sub">${s.sub}</div>
+        </div>`
+    ).join('');
+    const genreMap = {
+        28: 'Action', 35: 'Comedy', 18: 'Drama', 27: 'Horror', 878: 'Sci-Fi',
+        12: 'Adventure', 16: 'Animation', 80: 'Crime', 10749: 'Romance',
+        53: 'Thriller', 99: 'Documentary', 14: 'Fantasy', 10765: 'Sci-Fi & Fantasy',
+        10759: 'Action & Adventure', 10762: 'Kids', 10763: 'News', 10764: 'Reality'
+    };
+    const genreCounts = {};
+    items.forEach(i => { (i.genre_ids || []).forEach(gid => { const name = genreMap[gid] || null; if (name) genreCounts[name] = (genreCounts[name] || 0) + 1; }); });
+    const topGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    const maxG = topGenres[0]?.[1] || 1;
+    document.getElementById('stats-genres').innerHTML = topGenres.length ? topGenres.map(([name, count]) => `
+        <div class="genre-bar-row">
+            <div class="genre-bar-label">${name}</div>
+            <div class="genre-bar-track">
+                <div class="genre-bar-fill" data-width="${Math.round((count / maxG) * 100)}"></div>
+            </div>
+            <div class="genre-bar-count">${count}</div>
+        </div>`).join('')
+        : '<div style="color:var(--text3);font-size:13px">Watch more to see your top genres</div>';
+    if (topGenres.length) {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            document.querySelectorAll('.genre-bar-fill[data-width]').forEach(el => {
+                el.style.width = el.dataset.width + '%';
+            });
+        }));
+    }
+
+    // ─ Recently watched ─
+    const recent = items.sort((a, b) => b.savedAt - a.savedAt).slice(0, 6);
+    document.getElementById('stats-recent').innerHTML = recent.map(item => {
+        const poster = item.poster ? `${TMDB_IMG}w92${item.poster}` : null;
+        const sub = item.type === 'tv' ? `S${item.season} E${item.episode}` : item.year || '';
+        const ago = timeAgo(item.savedAt);
+        return `
+            <div class="recent-item-stat">${poster ? `<img src="${poster}" onerror="this.style.opacity='0'">` : `<div style="width:36px;height:54px;background:var(--surface2);border-radius:4px;flex-shrink:0"></div>`}
+                <div class="info">
+                    <div class="rtitle">${esc(item.title)}</div>
+                    <div class="rsub">${esc(sub)} · ${esc(ago)}</div>
+                </div>
+            </div>`;
+    }).join('') || '<div style="color:var(--text3);font-size:13px">Nothing watched yet</div>';
+
+    const activityMap = {};
+    items.forEach(i => { const d = new Date(i.savedAt).toDateString(); activityMap[d] = (activityMap[d] || 0) + 1; });
+    const dots = [];
+    for (let i = 29; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const key = d.toDateString();
+        const count = activityMap[key] || 0;
+        const cls = count === 0 ? '' : count >= 4 ? 'has-watch most' : count >= 2 ? 'has-watch more' : 'has-watch';
+        dots.push(`<div class="activity-dot ${cls}" title="${key}: ${count} title(s)"></div>`);
+    }
+    document.getElementById('stats-activity').innerHTML = dots.join('');
+}
+
+function timeAgo(ts) {
+    const diff = Date.now() - ts;
+    const m = Math.floor(diff / 60000);
+    const h = Math.floor(diff / 3600000);
+    const d = Math.floor(diff / 86400000);
+    if (m < 1) return 'just now';
+    if (m < 60) return `${m}m ago`;
+    if (h < 24) return `${h}h ago`;
+    if (d < 7) return `${d}d ago`;
+    return new Date(ts).toLocaleDateString();
+}
+
+// ─── SERVICE WORKER ───
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+        console.log('SW registered:', reg.scope)
+        setInterval(() => {reg.update();}, 600000);
+        reg.addEventListener('updatefound', () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed') {
+                    if (navigator.serviceWorker.controller) {
+                        showToast('New update available. 🚀 Refreshing...');
+                    }
+                }
+            });
+        });
+    }).catch(err => console.log('SW failed:', err));
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        window.location.reload();
+    });
+}
+
+async function loadNewThisWeek() {
+    showSkeletons('new-this-week-row', 7);
+    try {
+        const today = new Date();
+        const week = new Date(today);
+        week.setDate(today.getDate() - 7);
+        const fmt = d => d.toISOString().slice(0, 10);
+        const from = fmt(week);
+        const to = fmt(today);
+        const [movies, shows] = await Promise.all([
+            tmdb('/discover/movie', { 'primary_release_date.gte': from, 'primary_release_date.lte': to, sort_by: 'popularity.desc' }),
+            tmdb('/discover/tv', { 'first_air_date.gte': from, 'first_air_date.lte': to, sort_by: 'popularity.desc' })
+        ]);
+        const combined = [
+            ...movies.results.map(r => ({ ...r, media_type: 'movie' })),
+            ...shows.results.map(r => ({ ...r, media_type: 'tv' }))
+        ].sort((a, b) => (b.popularity || 0) - (a.popularity || 0)).slice(0, 14);
+        if (!combined.length) {
+            document.getElementById('new-this-week-row').innerHTML = '<div class="empty-state"><p>Nothing new this week yet.</p></div>';
+            return;
+        }
+        renderCards('new-this-week-row', combined);
+    } catch (e) { }
+}
+
+// ─── MY LIST ───
+function getMyList() { return SV.list.get(); }
+function saveMyList(list) {
+    SV.list.set(list);
+    window._svMyListCache = list;
+    window._svMyListSet = new Set(list.map(i => i.id));
+}
+function updateMyListBtn(id) { syncMyListBtns(isInMyList(id)); }
+function isInMyList(id) {
+    if (!window._svMyListSet) {
+        const list = SV.list.get();
+        window._svMyListCache = list;
+        window._svMyListSet = new Set(list.map(i => i.id));
+    }
+    return window._svMyListSet.has(id);
+}
+
+function syncMyListBtns(inList) {
+    ['2'].forEach(suffix => {
+        const add = document.getElementById('my-list-icon-add' + suffix);
+        const check = document.getElementById('my-list-icon-check' + suffix);
+        const lbl = document.getElementById('my-list-label' + suffix);
+        if (add) add.style.display = inList ? 'none' : 'block';
+        if (check) check.style.display = inList ? 'block' : 'none';
+        if (lbl) lbl.textContent = inList ? 'Saved' : 'My List';
+    });
+}
+
+function toggleMyList() {
+    const p = new URLSearchParams(location.search);
+    const id = parseInt(p.get('id'));
+    const type = p.get('type');
+    if (!id || !type) return;
+    const titleEl = document.getElementById('player-title');
+    const title = titleEl ? titleEl.textContent : '';
+    const metaEl = document.getElementById('player-meta');
+    const yearMatch = metaEl ? metaEl.textContent.match(/\d{4}/) : null;
+    const year = yearMatch ? yearMatch[0] : '';
+    const detail = currentShow?.detail || null;
+    const poster = window._currentDetailPoster || detail?.poster_path || null;
+
+    let list = getMyList();
+    const exists = list.some(i => i.id === id);
+    if (exists) {
+        list = list.filter(i => i.id !== id);
+        syncMyListBtns(false);
+        const snapshot = [...list];
+        showUndoToast('Removed from My List', () => {saveMyList(snapshot); syncMyListBtns(true);});
+    } else {
+        list.unshift({id, type, title, year, poster, addedAt: Date.now()});
+        syncMyListBtns(true);
+        showToast('Added to My List');
+    }
+    saveMyList(list);
+}
+
+let myListFilter = 'all';
+function filterMyList(type) {
+    myListFilter = type;
+    ['all', 'movie', 'tv'].forEach(t => {
+        const btn = document.getElementById(`mylist-filter-${t}`);
+        if (btn) btn.classList.toggle('active', t === type);
+    });
+    renderMyList();
+}
+
+function showMyList() {
+    showPage('mylist-page');
+    setActiveTab('tab-mylist');
+    setMobileTab('mtab-mylist');
+    pushState({ browse: 'mylist' });
+    document.title = 'StreamVault';
+    myListFilter = 'all';
+    ['all', 'movie', 'tv'].forEach(t => {
+        const btn = document.getElementById(`mylist-filter-${t}`);
+        if (btn) btn.classList.toggle('active', t === 'all');
+    });
+    renderMyList();
+}
+
+function renderMyList() {
+    const allItems = getMyList();
+    const list = myListFilter === 'all' ? allItems : allItems.filter(i => i.type === myListFilter);
+    const grid = document.getElementById('mylist-grid');
+    grid.className = 'cards-grid';
+    const empty = document.getElementById('mylist-empty');
+    const count = document.getElementById('mylist-count');
+    const total = allItems.length;
+    const filtered = list.length;
+    count.textContent = myListFilter === 'all' ? `${total} title${total !== 1 ? 's' : ''} saved` : `${filtered} of ${total} title${total !== 1 ? 's' : ''}`;
+
+    if (!list.length) {
+        empty.style.display = 'block';
+        empty.querySelector('div[style*="font-size:16px"]').textContent =
+            total === 0 ? 'Your list is empty' : `No ${myListFilter === 'movie' ? 'movies' : 'TV shows'} saved`;
+        empty.querySelector('div[style*="font-size:13px"]').textContent =
+            total === 0 ? 'Hit the + My List button on any movie or show to save it here.' : 'Try a different filter.';
+        grid.innerHTML = '';
+        return;
+    }
+    empty.style.display = 'none';
+    grid.innerHTML = '';
+    list.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.style.animationDelay = `${i * 0.04}s`;
+        div.style.position = 'relative';
+        const poster = item.poster ? `${TMDB_IMG}w342${item.poster}` : null;
+        const wasWatched = !!(JSON.parse(localStorage.getItem('sv_history') || '{}')[item.id]);
+        const watchedBadge = wasWatched ? `<div class="mylist-watched-badge" title="In your watch history">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Watched</div>` : '';
+        div.innerHTML = poster
+            ? `<div style="position:relative">
+                    <img class="card-poster" src="${poster}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+                    <div class="card-poster-placeholder" style="display:none">${esc(item.title)}</div>${watchedBadge}
+                </div>`
+            : `<div style="position:relative"><div class="card-poster-placeholder">${esc(item.title)}</div>${watchedBadge}</div>`;
+        div.innerHTML += `<div class="card-info">
+            <div class="card-title">${esc(item.title)}</div>
+            <div class="card-meta">
+                <span>${esc(item.year || '')}</span>
+                <span class="card-type-badge">${item.type === 'movie' ? 'Movie' : 'TV'}</span>
+            </div>
+            <div style="margin-top:6px">
+                <button class="cw-remove-btn mylist-remove-btn" onclick="event.stopPropagation();removeFromMyList(${item.id})" style="position:relative;z-index:2;" title="Remove from My List">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Remove
+                </button>
+            </div>
+        </div>`;
+
+        const anchor = document.createElement('a');
+        anchor.href = `/?type=${item.type}&id=${item.id}&name=${slugify(item.title)}`;
+        anchor.style.cssText = 'position:absolute;inset:0;z-index:1;opacity:0;';
+        anchor.setAttribute('aria-hidden', 'true');
+        anchor.setAttribute('tabindex', '-1');
+        anchor.addEventListener('click', e => {
+            if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+            e.preventDefault();
+            openDetail(item.id, item.type);
+        });
+        div.style.position = 'relative';
+        div.addEventListener('contextmenu', e => {
+            e.preventDefault();
+            showCardContextMenu(e, `/?type=${item.type}&id=${item.id}&name=${slugify(item.title)}`, item.title || '');
+        });
+        div.appendChild(anchor);
+        grid.appendChild(div);
+    });
+}
+
+function removeFromMyList(id) {
+    const prev = getMyList();
+    saveMyList(prev.filter(i => i.id !== id));
+    renderMyList();
+    showUndoToast('Removed from My List', () => {saveMyList(prev); renderMyList();});
+}
+
+const KNOWN_COLLECTIONS = [
+    {id: 531241, name: 'Spider-Man (MCU)'},
+    {id: 86311, name: 'The Avengers'},
+    {id: 263, name: 'The Dark Knight'},
+    {id: 119, name: 'The Lord of the Rings'},
+    {id: 121938, name: 'John Wick'},
+    {id: 8091, name: 'Alien'},
+    {id: 2980, name: 'Indiana Jones'},
+    {id: 9485, name: 'Fast & Furious'},
+    {id: 748, name: 'Pirates of the Caribbean'},
+    {id: 422837, name: 'Spider-Man (Sony)'},
+    {id: 131296, name: 'Thor'},
+    {id: 84, name: 'Terminator'},
+    {id: 645, name: 'James Bond'},
+    {id: 10, name: 'Star Wars'},
+    {id: 304378, name: 'Doctor Strange'},
+    {id: 131, name: 'Harry Potter'},
+    {id: 468552, name: 'Wonder Woman'},
+    {id: 115838, name: 'Guardians of the Galaxy'},
+    {id: 87096, name: 'Captain America'},
+    {id: 8650, name: 'Jurassic Park'},
+    {id: 2344, name: 'Matrix'},
+    {id: 1570, name: 'Die Hard'},
+    {id: 230, name: 'Batman'},
+    {id: 328, name: 'Jurassic World'},
+    {id: 529892, name: 'Black Panther'},
+    {id: 131635, name: 'The Hunger Games'},
+    {id: 31562, name: 'The Bourne Series'},
+    {id: 556, name: 'The Transporter'},
+    {id: 1241, name: 'Harry Potter Complete'},
+    {id: 124879, name: '300 Series'},
+    {id: 295, name: 'Resident Evil'},
+    {id: 328372, name: 'Frozen Collection'},
+    {id: 735, name: 'The Mummy'},
+    {id: 89137, name: 'The Conjuring Universe'},
+    {id: 86055, name: 'Men in Black'},
+    {id: 9744, name: 'Lethal Weapon'},
+    {id: 87359, name: 'Mission: Impossible'},
+    {id: 94860, name: 'The Equalizer'},
+    {id: 496, name: 'Transformers'},
+    {id: 735, name: 'The Mummy'},
+    {id: 2636, name: 'Mad Max'},
+    {id: 420, name: 'The Chronicles of Narnia'},
+    {id: 448150, name: 'Deadpool Collection'},
+    {id: 131292, name: 'Iron Man'},
+    {id: 131295, name: 'Captain Marvel'},
+    {id: 52984, name: 'Sherlock Holmes'},
+    {id: 404609, name: 'Kingsman'},
+    {id: 335983, name: 'Venom Collection'},
+    {id: 531242, name: 'Spider-Verse'},
+    {id: 453993, name: 'The Hitman’s Bodyguard'},
+    {id: 91746, name: 'The Expendables'},
+    {id: 4438, name: 'Rambo'},
+    {id: 8581, name: 'Rush Hour'},
+    {id: 86119, name: 'The Lego Movie'},
+    {id: 100965, name: 'Fantastic Beasts'},
+    {id: 623911, name: 'Knives Out Collection'}
+];
+
+function getDiscoveredCollections() {
+    return JSON.parse(localStorage.getItem('sv_discovered_collections') || '[]');
+}
+
+function saveDiscoveredCollection(col) {
+    if (!col?.id) return;
+    const existing = getDiscoveredCollections();
+    if (existing.some(c => c.id === col.id)) return;
+    existing.unshift({id: col.id, name: col.name });
+    localStorage.setItem('sv_discovered_collections', JSON.stringify(existing.slice(0, 50)));
+}
+
+function _buildCollectionCard(c) {
+    const backdrop = c.backdrop_path ? `${TMDB_IMG}w780${c.backdrop_path}` : (c.poster_path ? `${TMDB_IMG}w342${c.poster_path}` : null);
+    const histObj = JSON.parse(localStorage.getItem('sv_history') || '{}');
+    const watched = c.parts.filter(p => histObj[p.id]).length;
+    const div = document.createElement('div');
+    div.className = 'collection-card';
+    div.innerHTML = `
+        <div class="collection-backdrop" style="${backdrop ? `background-image:url(${backdrop})` : ''}">
+            <div class="collection-overlay">
+                <div class="collection-name">${esc(c.name)}</div>
+                <div class="collection-meta">${c.parts.length} films${watched ? ` · <span style="color:var(--gold)">${watched} watched</span>` : ''}</div>
+            </div>
+        </div>`;
+    div.addEventListener('click', () => openCollectionDetail(c.id, c.name));
+    div.addEventListener('contextmenu', e => { e.preventDefault(); showCardContextMenu(e, `/?browse=collections&id=${c.id}`, c.name); });
+    return div;
+}
+
+async function showCollections() {
+    showPage('collections-page');
+    setActiveTab('tab-collections');
+    setMobileTab('mtab-collections');
+    pushState({ browse: 'collections' });
+    document.title = 'Collections — StreamVault';
+    const grid = document.getElementById('collections-grid');
+    const count = document.getElementById('collections-count');
+    count.textContent = 'Loading…';
+    grid.innerHTML = Array(12).fill(`<div class="skeleton" style="aspect-ratio:16/9;border-radius:12px;"></div>`).join('');
+
+    const knownIds = new Set(KNOWN_COLLECTIONS.map(c => c.id));
+    const discovered = getDiscoveredCollections().filter(c => !knownIds.has(c.id));
+    const allToFetch = [...KNOWN_COLLECTIONS, ...discovered];
+    const results = await Promise.allSettled(allToFetch.map(c => tmdb(`/collection/${c.id}`)));
+    const all = results.filter(r => r.status === 'fulfilled').map(r => r.value).filter(c => c.parts?.length > 1);
+    const discoveredSet = new Set(discovered.map(c => c.id));
+    const discoveredCols = all.filter(c => discoveredSet.has(c.id));
+    const curatedCols = all.filter(c => !discoveredSet.has(c.id));
+
+    count.textContent = `${all.length} collection${all.length !== 1 ? 's' : ''}`;
+    grid.innerHTML = '';
+
+    if (discoveredCols.length) {
+        const label = document.createElement('div');
+        label.style.cssText = 'grid-column:1/-1;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin-bottom:4px;';
+        label.textContent = 'Discovered from your history';
+        grid.appendChild(label);
+        discoveredCols.forEach(c => grid.appendChild(_buildCollectionCard(c)));
+        const divider = document.createElement('div');
+        divider.style.cssText = 'grid-column:1/-1;height:1px;background:var(--border);margin:8px 0 12px;';
+        grid.appendChild(divider);
+    }
+    curatedCols.forEach(c => grid.appendChild(_buildCollectionCard(c)));
+}
+
+async function openCollectionDetail(id, name) {
+    showPage('search-page');
+    document.getElementById('search-query-display').textContent = name;
+    document.getElementById('search-count').textContent = 'Loading…';
+    document.getElementById('search-results').innerHTML = '<div class="spinner"></div>';
+    document.getElementById('genre-bar').style.display = 'none';
+    try {
+        const data = await tmdb(`/collection/${id}`);
+        const parts = (data.parts || [])
+            .sort((a, b) => (a.release_date || '').localeCompare(b.release_date || ''))
+            .map(r => ({ ...r, media_type: 'movie' }));
+        document.getElementById('search-count').textContent = `${parts.length} films`;
+        renderCards('search-results', parts);
+    } catch (e) {
+        document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>Failed to load collection.</p></div>';
+    }
+}
+
+function openShortcuts() {
+    const m = document.getElementById('shortcuts-modal');
+    m.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+        const outside = e => {
+            if (e.target === m) { closeShortcuts(); m.removeEventListener('mousedown', outside); }
+        };
+        m.addEventListener('mousedown', outside);
+    }, 0);
+}
+
+function closeShortcuts() {
+    const m = document.getElementById('shortcuts-modal');
+    m.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+// ─── CONTEXT MENUS ───
+function showCardContextMenu(e, url, title, itemId = null) {
+    document.getElementById('sv-context-menu')?.remove();
+    const menu = document.createElement('div');
+    menu.id = 'sv-context-menu';
+    menu.className = 'sv-context-menu';
+    const urlParams = new URLSearchParams(url.split('?')[1] || '');
+    const cardId = itemId || (urlParams.get('id') ? parseInt(urlParams.get('id')) : null);
+    const isCard = !!urlParams.get('type') && !!cardId;
+
+    menu.innerHTML = `<div class="sv-ctx-item sv-ctx-header">${esc(title.length > 28 ? title.slice(0, 28) + '…' : title)}</div>
+        <div class="sv-ctx-divider"></div>
+        <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-newtab">${icon('newtab', 13)} Open in new tab</button>
+        <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-copylink">${icon('link', 13)} Copy link</button>
+        ${isCard ? `<div class="sv-ctx-divider"></div><button class="sv-ctx-item sv-ctx-btn sv-ctx-danger" id="sv-ctx-hide">${icon('eye_off', 13)} Not interested</button>` : ''}`;
+
+    document.body.appendChild(menu);
+    const vw = window.innerWidth, vh = window.innerHeight;
+    let mobileBackdrop = null;
+    if (vw <= 768) {
+        menu.style.cssText = `left:0;right:0;bottom:0;top:auto;width:100%;border-radius:16px 16px 0 0;position:fixed;`;
+        menu.classList.add('sv-ctx-mobile');
+        mobileBackdrop = document.createElement('div');
+        mobileBackdrop.className = 'sv-ctx-mobile-backdrop';
+        document.body.insertBefore(mobileBackdrop, menu);
+        mobileBackdrop.addEventListener('click', () => { menu.remove(); mobileBackdrop.remove(); });
+    } else {
+        menu.style.left = (e.clientX + 190 > vw ? e.clientX - 190 : e.clientX) + 'px';
+        menu.style.top = (e.clientY + 140 > vh ? e.clientY - 140 : e.clientY) + 'px';
+    }
+    requestAnimationFrame(() => menu.classList.add('sv-ctx-visible'));
+    let touchStartY = 0;
+    menu.addEventListener('touchstart', ev => { touchStartY = ev.touches[0].clientY; }, { passive: true });
+    menu.addEventListener('touchmove', ev => { if (ev.touches[0].clientY - touchStartY > 60) { menu.remove(); } }, { passive: true });
+    const fullUrl = location.origin + url;
+    document.getElementById('sv-ctx-newtab').addEventListener('click', () => { window.open(fullUrl, '_blank', 'noopener'); menu.remove(); mobileBackdrop?.remove(); });
+    document.getElementById('sv-ctx-copylink').addEventListener('click', () => { navigator.clipboard.writeText(fullUrl).then(() => showToast('Link copied!')); menu.remove(); mobileBackdrop?.remove(); });
+    if (isCard) {
+        document.getElementById('sv-ctx-hide').addEventListener('click', () => {
+            const cardEl = document.querySelector(`[data-id="${cardId}"]`);
+            const cardParent = cardEl?.parentNode;
+            const cardNextSibling = cardEl?.nextSibling;
+            const prevAllResults = [...allResults];
+            const prevHidden = [...SV.hidden.get()];
+            SV.hidden.add(cardId);
+            if (cardEl) cardEl.remove();
+            allResults = allResults.filter(r => r.id !== cardId);
+            menu.remove();
+            showUndoToast('Hidden — won\'t show again', () => {
+                SV._set('sv_hidden', prevHidden);
+                if (cardParent) {
+                    if (cardNextSibling) cardParent.insertBefore(cardEl, cardNextSibling);
+                    else cardParent.appendChild(cardEl);
+                }
+                allResults = prevAllResults;
+            });
+        });
+    }
+    const close = ev => { if (!menu.contains(ev.target) && ev.target !== mobileBackdrop) { menu.remove(); mobileBackdrop?.remove(); document.removeEventListener('mousedown', close); } };
+    const closeOnScroll = () => { menu.remove(); mobileBackdrop?.remove(); window.removeEventListener('scroll', closeOnScroll, true); };
+    setTimeout(() => document.addEventListener('mousedown', close), 0);
+    window.addEventListener('scroll', closeOnScroll, { passive: true, capture: true });
+}
+
+function showCastContextMenu(e, name) {
+    document.getElementById('sv-context-menu')?.remove();
+    const menu = document.createElement('div');
+    menu.id = 'sv-context-menu';
+    menu.className = 'sv-context-menu';
+    menu.innerHTML = `
+        <div class="sv-ctx-item sv-ctx-header">${esc(name)}</div>
+        <div class="sv-ctx-divider"></div>
+        <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-copyname">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy name
+        </button>
+        <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-searchactor">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.35-4.35"/></svg>Search their movies
+        </button>
+    `;
+    document.body.appendChild(menu);
+    const vw = window.innerWidth, vh = window.innerHeight;
+    menu.style.left = (e.clientX + 190 > vw ? e.clientX - 190 : e.clientX) + 'px';
+    menu.style.top = (e.clientY + 110 > vh ? e.clientY - 110 : e.clientY) + 'px';
+    requestAnimationFrame(() => menu.classList.add('sv-ctx-visible'));
+    let touchStartY = 0;
+    menu.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+    menu.addEventListener('touchmove', e => { if (e.touches[0].clientY - touchStartY > 40) { menu.remove(); } }, { passive: true });
+
+    document.getElementById('sv-ctx-copyname').addEventListener('click', () => {
+        navigator.clipboard.writeText(name).then(() => showToast('Name copied!'));
+        menu.remove();
+    });
+    document.getElementById('sv-ctx-searchactor').addEventListener('click', async () => {
+        menu.remove();
+        showPage('search-page');
+        document.getElementById('search-query-display').textContent = name;
+        document.getElementById('search-count').textContent = 'Loading…';
+        document.getElementById('search-results').innerHTML = '<div class="spinner"></div>';
+        document.getElementById('genre-bar').style.display = 'none';
+        try {
+            const people = await tmdb('/search/person', { query: name, page: 1 });
+            const person = people.results[0];
+            if (!person) { document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>No results found.</p></div>'; return; }
+            const credits = await tmdb(`/person/${person.id}/combined_credits`);
+            const seen = new Set();
+            const items = [...(credits.cast || [])].filter(r => {
+                const k = `${r.media_type}-${r.id}`;
+                if (seen.has(k) || !r.poster_path) return false;
+                seen.add(k); return true;
+            }).sort((a, b) => (b.popularity || 0) - (a.popularity || 0)).slice(0, 40);
+            document.getElementById('search-count').textContent = `${items.length} titles`;
+            allResults = items;
+            renderCards('search-results', items);
+        } catch (e) {
+            document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>Failed to load.</p></div>';
+        }
+    });
+
+    const close = e2 => { if (!menu.contains(e2.target)) { menu.remove(); document.removeEventListener('mousedown', close); } };
+    const closeOnScroll = () => { menu.remove(); window.removeEventListener('scroll', closeOnScroll, true); };
+    setTimeout(() => document.addEventListener('mousedown', close), 0);
+    window.addEventListener('scroll', closeOnScroll, true);
+}
+
+function showSourceContextMenu(e, source, label) {
+    document.getElementById('sv-context-menu')?.remove();
+    const menu = document.createElement('div');
+    menu.id = 'sv-context-menu';
+    menu.className = 'sv-context-menu';
+    const { type, imdb, tmdbId, season, episode } = currentEmbed;
+    const embedUrl = type ? buildEmbedUrl(source, type, imdb, tmdbId, season, episode) : null;
+    menu.innerHTML = `
+        <div class="sv-ctx-item sv-ctx-header">${esc(label)}</div>
+        <div class="sv-ctx-divider"></div>
+        <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-src-switch">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>Switch to ${esc(label)}
+        </button>${embedUrl ? `
+        <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-src-newtab">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Open in new tab
+        </button>
+        <button class="sv-ctx-item sv-ctx-btn" id="sv-ctx-src-copy">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy embed URL
+        </button>` : ''}
+    `;
+    document.body.appendChild(menu);
+    const vw = window.innerWidth, vh = window.innerHeight;
+    menu.style.left = (e.clientX + 190 > vw ? e.clientX - 190 : e.clientX) + 'px';
+    menu.style.top = (e.clientY + 130 > vh ? e.clientY - 130 : e.clientY) + 'px';
+    requestAnimationFrame(() => menu.classList.add('sv-ctx-visible'));
+    let touchStartY = 0;
+    menu.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+    menu.addEventListener('touchmove', e => { if (e.touches[0].clientY - touchStartY > 40) { menu.remove(); } }, { passive: true });
+
+    document.getElementById('sv-ctx-src-switch').addEventListener('click', () => { switchSource(source); menu.remove(); });
+    if (embedUrl) {
+        document.getElementById('sv-ctx-src-newtab').addEventListener('click', () => { window.open(embedUrl, '_blank', 'noopener'); menu.remove(); });
+        document.getElementById('sv-ctx-src-copy').addEventListener('click', () => { navigator.clipboard.writeText(embedUrl).then(() => showToast('Embed URL copied!')); menu.remove(); });
+    }
+
+    const close = e2 => { if (!menu.contains(e2.target)) { menu.remove(); document.removeEventListener('mousedown', close); } };
+    const closeOnScroll = () => { menu.remove(); window.removeEventListener('scroll', closeOnScroll, true); };
+    setTimeout(() => document.addEventListener('mousedown', close), 0);
+    window.addEventListener('scroll', closeOnScroll, true);
+}
+
+// ─── WATCH TOGETHER ───
+let watchTogetherTimer = null;
+function generateWatchTogetherLink() {
+    const startAt = Date.now() + 30000;
+    const params = new URLSearchParams(location.search);
+    params.set('startAt', startAt);
+    const url = `${location.origin}${location.pathname}?${params.toString()}`;
+    if (navigator.share) {
+        navigator.share({ title: 'StreamVault Sync', text: '🎬 Watch with me — starts in 30 seconds!', url }).catch(() => copyLinkToClipboard(url));
+    } else {
+        copyLinkToClipboard(url);
+    }
+    startWatchTogetherCountdown(startAt);
+}
+
+function copyLinkToClipboard(url) {
+    const btn = document.getElementById('watch-together-btn');
+    if (!btn) return;
+    navigator.clipboard.writeText(url).then(() => {
+        const orig = btn.innerHTML;
+        btn.innerHTML = `<span>✅ Link Copied!</span>`;
+        btn.style.borderColor = 'var(--gold)';
+        setTimeout(() => {
+            btn.innerHTML = orig;
+            btn.style.borderColor = '';
+        }, 2500);
+    });
+}
+
+function startWatchTogetherCountdown(startAt) {
+    const overlay = document.getElementById('watch-together-overlay');
+    const countEl = document.getElementById('watch-together-countdown');
+    const iframe = document.getElementById('player-iframe');
+    overlay.style.display = 'flex';
+    if (iframe) iframe.src = '';
+    clearInterval(watchTogetherTimer);
+    watchTogetherTimer = setInterval(() => {
+        const remaining = Math.ceil((startAt - Date.now()) / 1000);
+        if (remaining <= 0) {
+            clearInterval(watchTogetherTimer);
+            overlay.style.display = 'none';
+            const urlData = getMediaInfoFromUrl();
+            const type = currentEmbed.type || urlData.type;
+            const id = currentEmbed.tmdbId || urlData.id;
+            if (type && id && iframe) { iframe.src = buildEmbedUrl(currentSource, type, null, id, currentEmbed.season || urlData.season, currentEmbed.episode || urlData.episode, 0); }
+            const p = new URLSearchParams(location.search);
+            p.delete('startAt');
+            history.replaceState({}, '', `${location.pathname}?${p.toString()}`);
+        } else {
+            countEl.textContent = remaining;
+        }
+    }, 250);
+}
+
+function cancelWatchTogether() {
+    clearInterval(watchTogetherTimer);
+    document.getElementById('watch-together-overlay').style.display = 'none';
+    const { type, imdb, tmdbId, season, episode } = currentEmbed;
+    const iframe = document.getElementById('player-iframe');
+    if (type && iframe) { iframe.src = buildEmbedUrl(currentSource, type, imdb, tmdbId, season, episode, 0); }
+}
+
+function getMediaInfoFromUrl() {
+    const params = new URLSearchParams(location.search);
+    return {
+        type: params.get('type'),
+        id: params.get('id'),
+        season: params.get('season'),
+        episode: params.get('episode')
+    };
+}
+
+// ─── CLIPBOARD HELPER ───
+function copyToClipboard(text) {
+    if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    return Promise.resolve();
+}
+
+// ─── SHARE ───
+function shareUrl() {
+    if (navigator.share) {
+        navigator.share({ title: document.title, url: location.href });
+        return;
+    }
+    copyToClipboard(location.href).then(() => {
+        const btn = document.getElementById('share-btn');
+        btn.classList.add('copied');
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share`;
+        }, 2000);
+    });
+}
+
+// ─── ADVANCED FILTERS ───
+let activeFilters = { type: 'all', sort: 'popularity.desc', lang: '', yearFrom: 1950, yearTo: new Date().getFullYear(), rating: 0, genre: '', network: '', networkType: '' };
+
+function toggleFilterPanel() {
+    const panel = document.getElementById('filter-panel');
+    const label = document.getElementById('filter-toggle-label');
+    const open = panel.style.display === 'block';
+    panel.style.display = open ? 'none' : 'block';
+    label.textContent = open ? 'Filters' : 'Hide Filters';
+    document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
+}
+
+function setFilter(key, val, btn) {
+    activeFilters[key] = val;
+    btn.closest('div').querySelectorAll('.filter-pill').forEach(b => b.classList.toggle('active', b.dataset.val === val));
+}
+
+function updateYearLabel() {
+    let from = parseInt(document.getElementById('year-from').value) || 1950;
+    let to = parseInt(document.getElementById('year-to').value) || 2026;
+    if (from > to) { to = from; document.getElementById('year-to').value = to; }
+    activeFilters.yearFrom = from;
+    activeFilters.yearTo = to;
+}
+
+function resetFilters() {
+    activeFilters = { type: 'all', sort: 'popularity.desc', lang: '', yearFrom: 1950, yearTo: 2026, rating: 0, genre: '', network: '', networkType: '' };
+    document.getElementById('filter-type').value = 'all';
+    document.getElementById('filter-sort').value = 'popularity.desc';
+    document.getElementById('filter-lang').value = '';
+    document.getElementById('filter-genre').value = '';
+    document.getElementById('filter-network').value = '';
+    document.getElementById('year-from').value = 1950;
+    document.getElementById('year-to').value = new Date().getFullYear();
+    document.getElementById('filter-rating').value = 0;
+    document.getElementById('rating-label').textContent = '0+';
+}
+
+async function applyFilters(fromRestore = false) {
+    const currentQuery = currentSection?.mode === 'search' ? currentSection.query : null;
+    activeFilters.type = document.getElementById('filter-type').value
+    activeFilters.sort = document.getElementById('filter-sort').value;
+    activeFilters.lang = document.getElementById('filter-lang').value;
+    activeFilters.genre = document.getElementById('filter-genre').value;
+    activeFilters.network = document.getElementById('filter-network').value;
+    const sel = document.getElementById('filter-network');
+    activeFilters.networkType = sel.options[sel.selectedIndex]?.dataset?.type || '';
+    activeFilters.yearFrom = parseInt(document.getElementById('year-from').value) || 1950;
+    activeFilters.yearTo = parseInt(document.getElementById('year-to').value) || 2026;
+    activeFilters.rating = parseInt(document.getElementById('filter-rating').value) || 0;
+    const { type, sort, lang, yearFrom, yearTo, rating, genre, network, networkType } = activeFilters;
+    const types = type === 'all' ? ['movie', 'tv'] : [type];
+
+    if (!fromRestore) pushState({ browse: 'filter', type, sort, lang, yearFrom, yearTo, rating, genre, network, networkType });
+    document.getElementById('search-query-display').textContent = 'Filtered Results';
+    document.getElementById('search-count').textContent = 'Loading…';
+    document.getElementById('search-results').innerHTML = '<div class="spinner"></div>';
+    document.getElementById('filter-panel').style.display = 'none';
+    document.getElementById('filter-toggle-label').textContent = 'Filters';
+    try {
+        const results = await Promise.all(types.map(async t => {
+            if (currentQuery) {
+                const data = await tmdb(`/search/${t === 'movie' ? 'movie' : 'tv'}`, { query: currentQuery, page: 1 });
+                let items = data.results.map(r => ({ ...r, media_type: t }));
+                if (genre) items = items.filter(r => (r.genre_ids || []).includes(parseInt(genre)));
+                if (lang) items = items.filter(r => r.original_language === lang);
+                if (yearFrom) items = items.filter(r => parseInt((r.release_date || r.first_air_date || '0').slice(0, 4)) >= yearFrom);
+                if (yearTo) items = items.filter(r => parseInt((r.release_date || r.first_air_date || '9999').slice(0, 4)) <= yearTo);
+                if (rating) items = items.filter(r => (r.vote_average || 0) >= rating);
+                return items;
+            }
+            const dateFromKey = t === 'movie' ? 'primary_release_date.gte' : 'first_air_date.gte';
+            const dateToKey = t === 'movie' ? 'primary_release_date.lte' : 'first_air_date.lte';
+            const sortKey = (sort === 'primary_release_date.desc' || sort === 'primary_release_date.asc') && t === 'tv'
+                ? sort.replace('primary_release_date', 'first_air_date') : sort;
+            const params = { sort_by: sortKey, [dateFromKey]: `${yearFrom}-01-01`, [dateToKey]: `${yearTo}-12-31`, 'vote_average.gte': rating, 'vote_count.gte': 50, page: 1 };
+            if (lang) params.with_original_language = lang;
+            if (genre) params.with_genres = genre;
+            if (network) {
+                if (!networkType) {
+                    if (t === 'tv') params.with_networks = network;
+                    if (t === 'movie') params.with_companies = network;
+                } else {
+                    if (networkType === 'network' && t === 'tv') params.with_networks = network;
+                    if (networkType === 'company' && t === 'movie') params.with_companies = network;
+                    if (networkType === 'network' && t === 'movie') return Promise.resolve([]);
+                    if (networkType === 'company' && t === 'tv') return Promise.resolve([]);
+                }
+            }
+            return tmdb(`/discover/${t}`, params).then(d => d.results.map(r => ({ ...r, media_type: t })));
+        }));
+        allResults = results.flat().sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+        activeGenre = 'all';
+        document.querySelectorAll('.genre-btn').forEach(b => b.classList.toggle('active', b.dataset.genre === 'all'));
+        document.getElementById('genre-bar').style.display = 'flex';
+        document.getElementById('search-count').textContent = `${allResults.length} results`;
+        if (!allResults.length) {
+            document.getElementById('search-results').innerHTML = '<div class="empty-state"><div class="icon">🎬</div><p>No results. Try adjusting the filters.</p></div>';
+        } else {
+            renderCards('search-results', allResults);
+        }
+        if (window.innerWidth <= 768) {
+            setTimeout(() => document.getElementById('search-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+    } catch (e) {
+        document.getElementById('search-results').innerHTML = '<div class="empty-state"><p>Failed to load. Try again.</p></div>';
+    }
+}
+
+function restoreFilters(p) {
+    const type = p.get('type') || 'all';
+    const sort = p.get('sort') || 'popularity.desc';
+    const lang = p.get('lang') || '';
+    const genre = p.get('genre') || '';
+    const network = p.get('network') || '';
+    const networkType = p.get('networkType') || '';
+    const yearFrom = parseInt(p.get('yearFrom')) || 1950;
+    const yearTo = parseInt(p.get('yearTo')) || 2026;
+    const rating = parseInt(p.get('rating')) || 0;
+
+    document.getElementById('filter-type').value = type;
+    document.getElementById('filter-sort').value = sort;
+    document.getElementById('filter-lang').value = lang;
+    document.getElementById('filter-genre').value = genre;
+    document.getElementById('filter-network').value = network;
+    document.getElementById('year-from').value = yearFrom;
+    document.getElementById('year-to').value = yearTo;
+    document.getElementById('filter-rating').value = rating;
+    document.getElementById('rating-label').textContent = rating + '+';
+    activeFilters = { type, sort, lang, genre, network, networkType, yearFrom, yearTo, rating };
+    showPage('search-page');
+    document.getElementById('filter-toggle').style.cssText = 'display:flex;margin-bottom:16px;';
+    applyFilters(true);
+}
+
+// ─── EXPORT / IMPORT HISTORY ───
+function runExport() {
+    const inclHistory = document.getElementById('exp-history').checked;
+    const inclMyList = document.getElementById('exp-mylist').checked;
+    if (!inclHistory && !inclMyList) {
+        showToast("Select at least one option to export");
+        return;
+    }
+    const payload = { _exported: new Date().toISOString(), _version: 1 };
+    if (inclHistory) payload.history = JSON.parse(localStorage.getItem('sv_history') || '{}');
+    if (inclMyList) payload.mylist = JSON.parse(localStorage.getItem('sv_mylist') || '[]');
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `streamvault-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    closeExportCard();
+    showToast('Exported successfully');
+}
+
+function openExportCard() {
+    const o = document.getElementById('export-overlay');
+    o.style.display = 'flex';
+    o.classList.remove('overlay-closing');
+    document.body.style.overflow = 'hidden';
+    const card = o.querySelector('.import-card');
+    if (card) { card.classList.remove('card-closing'); card.classList.add('card-opening'); }
+    setTimeout(() => {
+        const outside = e => { if (e.target === o) { closeExportCard(); o.removeEventListener('mousedown', outside); } };
+        o.addEventListener('mousedown', outside);
+    }, 0);
+}
+
+function closeExportCard() {
+    const o = document.getElementById('export-overlay');
+    const card = o.querySelector('.import-card');
+    if (card) { card.classList.remove('card-opening'); card.classList.add('card-closing'); }
+    o.classList.add('overlay-closing');
+    setTimeout(() => {
+        o.style.display = 'none';
+        o.classList.remove('overlay-closing');
+        if (card) card.classList.remove('card-closing');
+    }, 260);
+    document.body.style.overflow = '';
+}
+
+function openImportCard() {
+    const o = document.getElementById('import-overlay');
+    o.style.display = 'flex';
+    o.classList.remove('overlay-closing');
+    document.body.style.overflow = 'hidden';
+    const card = o.querySelector('.import-card');
+    if (card) { card.classList.remove('card-closing'); card.classList.add('card-opening'); }
+    document.getElementById('import-status').textContent = '';
+    const dz = document.getElementById('import-dropzone');
+    dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+    dz.addEventListener('drop', e => {
+        e.preventDefault(); dz.classList.remove('drag-over');
+        const file = e.dataTransfer.files[0];
+        if (file) processImportFile(file);
+    });
+    setTimeout(() => {
+        const outside = e => { if (e.target === o) { closeImportCard(); o.removeEventListener('mousedown', outside); } };
+        o.addEventListener('mousedown', outside);
+    }, 0);
+}
+
+function closeImportCard() {
+    const o = document.getElementById('import-overlay');
+    const card = o.querySelector('.import-card');
+    if (card) { card.classList.remove('card-opening'); card.classList.add('card-closing'); }
+    o.classList.add('overlay-closing');
+    setTimeout(() => {
+        o.style.display = 'none';
+        o.classList.remove('overlay-closing');
+        if (card) card.classList.remove('card-closing');
+    }, 260);
+    document.body.style.overflow = '';
+}
+
+function toggleImportReplace() {
+    importReplaceMode = !importReplaceMode;
+    const btn = document.getElementById('import-replace-toggle');
+    btn.dataset.on = importReplaceMode ? 'true' : 'false';
+}
+
+function handleImportFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    processImportFile(file);
+    event.target.value = '';
+}
+
+function processImportFile(file) {
+    const status = document.getElementById('import-status');
+    status.textContent = 'Reading file…';
+    const reader = new FileReader();
+    reader.onload = e => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (typeof data !== 'object' || Array.isArray(data)) { status.textContent = '❌ Invalid file format'; return; }
+            const historyData = data.history || data;
+            const mylistData = Array.isArray(data.mylist) ? data.mylist : [];
+
+            if (importReplaceMode) {
+                localStorage.setItem('sv_history', JSON.stringify(historyData));
+                localStorage.setItem('sv_mylist', JSON.stringify(mylistData));
+            } else {
+                const existing = JSON.parse(localStorage.getItem('sv_history') || '{}');
+                const merged = { ...existing };
+                let dupes = 0;
+                for (const [id, item] of Object.entries(historyData)) {
+                    if (merged[id]) {
+                        dupes++;
+                        if (item.savedAt > merged[id].savedAt) merged[id] = item;
+                    } else {
+                        merged[id] = item;
+                    }
+                }
+                localStorage.setItem('sv_history', JSON.stringify(merged));
+
+                const existingList = JSON.parse(localStorage.getItem('sv_mylist') || '[]');
+                const existingKeys = new Set(existingList.map(i => `${i.type}-${i.id}`));
+                const newItems = mylistData.filter(i => !existingKeys.has(`${i.type}-${i.id}`));
+                localStorage.setItem('sv_mylist', JSON.stringify([...existingList, ...newItems]));
+                const histCount = Object.keys(historyData).length;
+                const msg = dupes > 0 ? `✅ Imported ${histCount} history + ${mylistData.length} list · ${dupes} duplicate${dupes !== 1 ? 's' : ''} resolved` : `✅ Imported ${histCount} history + ${mylistData.length} list titles`;
+                status.textContent = msg;
+                setTimeout(closeImportCard, 1800);
+                renderContinueWatching(); renderStats(); renderMyList();
+                return;
+            }
+            const histCount = Object.keys(historyData).length;
+            status.textContent = `✅ Replaced with ${histCount} history + ${mylistData.length} list titles`;
+            setTimeout(closeImportCard, 1800);
+            renderContinueWatching(); renderStats(); renderMyList();
+        } catch {
+            if (status) status.textContent = '❌ Failed to read — make sure it\'s a valid export';
+        }
+    };
+    reader.readAsText(file);
+}
+
+// ─── Notification / Toast ───
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    const msgEl = document.getElementById('toast-msg');
+    const undoBtn = document.getElementById('toast-undo-btn');
+    msgEl.textContent = msg;
+    undoBtn.style.display = 'none';
+    _toastUndoFn = null;
+    t.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function showUndoToast(msg, undoFn) {
+    const t = document.getElementById('toast');
+    const msgEl = document.getElementById('toast-msg');
+    const undoBtn = document.getElementById('toast-undo-btn');
+    msgEl.textContent = msg;
+    undoBtn.style.display = 'block';
+    _toastUndoFn = undoFn;
+    t.classList.add('show');
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => {
+        t.classList.remove('show');
+        _toastUndoFn = null;
+    }, 4000);
+}
+
+function triggerToastUndo() {
+    clearTimeout(_toastTimer);
+    document.getElementById('toast').classList.remove('show');
+    if (_toastUndoFn) { _toastUndoFn(); _toastUndoFn = null; }
+}

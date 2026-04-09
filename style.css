@@ -51,16 +51,16 @@ body.light {
     --surface: #faf8f4;
     --surface2: #ede8df;
     --surface3: #e4ddd2;
-    --gold: #b8821f;
-    --gold2: #9a6c15;
+    --gold: #a06c10;
+    --gold2: #c48a1a;
     --red: #b03020;
-    --text: #1c1712;
-    --text2: #5a4f3f;
+    --text: #2a2318;
+    --text2: #6b5f4e;
     --text3: #9a8e7e;
-    --border: #d9d0c2;
+    --border: #ccc3b2;
     --shadow-xs: 0 1px 3px rgba(60, 45, 20, 0.06);
-    --shadow-sm: 0 2px 10px rgba(60, 45, 20, 0.08);
-    --shadow-md: 0 8px 28px rgba(60, 45, 20, 0.12);
+    --shadow-sm: 0 2px 12px rgba(60, 45, 20, 0.11);
+    --shadow-md: 0 8px 32px rgba(60, 45, 20, 0.15);
     --shadow-lg: 0 20px 48px rgba(60, 45, 20, 0.16);
 }
 
@@ -155,7 +155,7 @@ body.light .sv-ctx-btn:hover {background: var(--surface3);}
 
 /* ── Hero ── */
 body.light #hero-bg::after {
-    background: linear-gradient(to right, rgba(28, 23, 18, 0.82) 0%, rgba(28, 23, 18, 0.35) 55%, transparent 100%), linear-gradient(to top, var(--bg) 0%, rgba(28, 23, 18, 0.18) 45%, transparent 100%);
+    background: linear-gradient(to right, rgba(28, 23, 18, 0.75) 0%, rgba(28, 23, 18, 0.2) 55%, transparent 100%), linear-gradient(to top, var(--bg) 0%, rgba(28, 23, 18, 0.1) 40%, transparent 100%);
 }
 
 body.light .hero-badge {
@@ -196,7 +196,7 @@ body.light .hero-dot.active {background: var(--gold);}
 
 /* ── Cards ── */
 body.light .card {
-    background: var(--surface);
+    background: #fdfaf5;
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
     transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.35s ease, border-color 0.35s ease;
@@ -407,7 +407,7 @@ body.light .tag-link:hover {
 
 /* ── Skeleton loaders ── */
 body.light .skeleton {
-    background: linear-gradient(90deg, #e8e2d8 25%, #f2ede4 50%, #e8e2d8 75%);
+    background: linear-gradient(90deg, #f2ede4 25%, #f5f1ea 50%, #f2ede4 75%);
     background-size: 200% 100%;
     animation: shimmer 1.6s ease infinite;
 }
@@ -638,6 +638,12 @@ body.light .mobile-tab.active svg {stroke: var(--gold);}
 body.light .coming-soon-badge {
     background: rgba(184, 130, 31, 0.9);
     color: #fff;
+}
+
+/* ── Last watched badge ── */
+body.light .card-lastwatched-badge {
+    background: rgba(255, 252, 246, 0.88);
+    border-color: rgba(184, 130, 31, 0.4);
 }
 
 /* ── Watched badge ── */
@@ -1389,16 +1395,6 @@ main {padding-top: 70px;}
     border-radius: 3px;
 }
 
-.hero-backdrop {
-    transition: opacity 0.8s ease-in-out;
-    animation: kenburns 20s infinite alternate;
-}
-
-@keyframes kenburns {
-    from {transform: scale(1);}
-    to {transform: scale(1.1);}
-}
-
 /* ─── SECTION ─── */
 .section {padding: 48px 40px;}
 
@@ -1487,7 +1483,7 @@ main {padding-top: 70px;}
 .card:hover {
     transform: translateY(-8px);
     border-color: var(--gold);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(201,168,76,0.12);
 }
 
 .card::after {
@@ -1496,7 +1492,6 @@ main {padding-top: 70px;}
     inset: 0;
     z-index: -1;
     background: var(--gold);
-    filter: blur(20px);
     opacity: 0;
     transition: opacity 0.4s ease;
 }
@@ -1855,7 +1850,7 @@ main {padding-top: 70px;}
     align-items: center;
     gap: 20px;
     flex-wrap: wrap;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text2);
     margin-bottom: 20px;
 }
@@ -1863,14 +1858,6 @@ main {padding-top: 70px;}
 .player-meta .rating {
     color: var(--gold);
     font-weight: 500;
-}
-
-.player-meta {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    font-size: 16px;
 }
 
 .player-overview {
@@ -2698,193 +2685,7 @@ main {padding-top: 70px;}
     gap: 3px;
 }
 
-/* ─── QUICK DETAIL MODAL ─── */
-.qm-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: rgba(0, 0, 0, 0.75);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    transition: opacity 0.25s ease;
-    backdrop-filter: blur(4px);
-}
-
-.qm-backdrop.qm-visible {opacity: 1;}
-
-.qm-backdrop.qm-closing {opacity: 0;}
-
-.qm-box {
-    position: relative;
-    width: 100%;
-    max-width: 700px;
-    max-height: 90vh;
-    background: var(--surface);
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.8);
-    transform: scale(0.92);
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    overflow-y: auto;
-}
-
-.qm-backdrop.qm-visible .qm-box {transform: scale(1);}
-
-.qm-backdrop.qm-closing .qm-box {transform: scale(0.92);}
-
-.qm-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 10;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.15s;
-}
-
-.qm-close:hover {background: rgba(0, 0, 0, 0.9);}
-
-.qm-backdrop-img {
-    width: 100%;
-    height: 320px;
-    background: var(--surface2) center/cover no-repeat;
-    flex-shrink: 0;
-}
-
-.qm-gradient {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 320px;
-    background: linear-gradient(to top, var(--surface) 0%, transparent 60%);
-    pointer-events: none;
-}
-
-.qm-content {padding: 16px 24px 28px;}
-
-.qm-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(20px, 4vw, 28px);
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 14px;
-    line-height: 1.2;
-}
-
-.qm-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-    align-items: center;
-}
-
-.qm-play-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--gold);
-    color: #080808;
-    font-weight: 600;
-    font-size: 14px;
-    padding: 10px 24px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: background 0.15s, transform 0.15s;
-}
-
-.qm-play-btn:hover {
-    background: var(--gold2);
-    transform: translateY(-1px);
-}
-
-.qm-list-btn, .qm-detail-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    background: transparent;
-    color: var(--text2);
-    font-size: 13px;
-    padding: 9px 16px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    font-family: 'DM Sans', sans-serif;
-    transition: color 0.15s, border-color 0.15s;
-}
-
-.qm-list-btn:hover, .qm-detail-btn:hover {
-    color: var(--gold);
-    border-color: rgba(201, 168, 76, 0.5);
-}
-
-.qm-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
-    font-size: 13px;
-    color: var(--text2);
-    min-height: 22px;
-}
-
-.qm-rating {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--gold);
-    font-weight: 500;
-}
-
-.qm-type-badge {
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    background: rgba(201, 168, 76, 0.12);
-    color: var(--gold);
-    border: 1px solid rgba(201, 168, 76, 0.25);
-    border-radius: 20px;
-    padding: 2px 8px;
-}
-
-.qm-overview {
-    font-size: 13px;
-    line-height: 1.7;
-    color: var(--text2);
-    margin-bottom: 14px;
-    min-height: 40px;
-}
-
-.qm-genres {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.qm-genre-tag {
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text3);
-}
-
+/* ─── GENRE BARS ─── */
 .genre-bar-row {
     display: flex;
     align-items: center;
@@ -2942,6 +2743,30 @@ main {padding-top: 70px;}
 @keyframes bar-shimmer {
     100% {left: 100%;}
 }
+
+/* ─── QM TRAILER ─── */
+.qm-trailer-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 300px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    z-index: 2;
+    background: #000;
+}
+
+.qm-trailer-wrap.qm-trailer-visible {opacity: 1;}
+
+.qm-trailer-wrap iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+#qm-backdrop {transition: opacity 0.6s ease;}
 
 .recent-item-stat {
     display: flex;
@@ -3304,12 +3129,6 @@ main {padding-top: 70px;}
 
 .stats-hero-title {margin-bottom: 0;}
 
-.history-controls {
-    display: flex;
-    gap: 10px;
-    margin: 0;
-}
-
 /* ─── COMING SOON BADGE ─── */
 .coming-soon-badge {
     position: absolute;
@@ -3322,6 +3141,23 @@ main {padding-top: 70px;}
     letter-spacing: 0.05em;
     padding: 3px 7px;
     border-radius: 4px;
+    backdrop-filter: blur(4px);
+    white-space: nowrap;
+}
+
+/* ─── LAST WATCHED BADGE (TV) ─── */
+.card-lastwatched-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(8, 8, 8, 0.82);
+    color: var(--gold);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 3px 7px;
+    border-radius: 4px;
+    border: 1px solid rgba(201, 168, 76, 0.4);
     backdrop-filter: blur(4px);
     white-space: nowrap;
 }
@@ -3398,6 +3234,31 @@ main {padding-top: 70px;}
     text-overflow: ellipsis;
     max-width: 90px;
     margin-top: 2px;
+}
+
+/* ─── PERFORMANCE HINTS ─── */
+.cards-row, .cards-row-1 {overscroll-behavior-x: contain;}
+.card {contain: layout style paint;}
+#hero-bg, #hero-bg-prev {will-change: opacity;}
+
+/* ─── MOBILE CONTEXT MENU BACKDROP ─── */
+.sv-ctx-mobile-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    animation: fadeIn 0.15s ease;
+}
+
+/* ─── LARGER TOUCH TARGETS ─── */
+@media (hover: none) and (pointer: coarse) {
+    .ep-btn    { min-height: 48px; touch-action: manipulation; }
+    .season-btn{ min-height: 44px; touch-action: manipulation; }
+    .src-btn   { min-height: 40px; padding: 8px 16px; touch-action: manipulation; }
+    .genre-btn { min-height: 38px; touch-action: manipulation; }
+    .cw-hover-btn { width: 40px; height: 40px; }
 }
 
 /* ─── FOOTER ─── */
@@ -3606,6 +3467,7 @@ footer span {color: var(--gold);}
     height: 300px;
     background: linear-gradient(to top, var(--surface) 0%, transparent 60%);
     pointer-events: none;
+    transition: opacity 0.6s ease;
 }
 
 .qm-content {padding: 16px 24px 28px;}
@@ -3976,16 +3838,30 @@ kbd {
 .card-closing {animation: cardSlideOut 0.22s ease forwards;}
 
 /* ─── PAGE TRANSITIONS ─── */
-#home-page, #search-page, #player-page, #stats-page {animation: none;}
+#home-page, #search-page, #player-page, #stats-page,
+#mylist-page, #collections-page {animation: none;}
 
-#home-page.page-enter, #search-page.page-enter, #player-page.page-enter, #stats-page.page-enter {animation: pageEnter 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;}
+.page-slide-enter {animation: pageSlideIn 0.32s cubic-bezier(0.4, 0, 0.2, 1) both;}
+
+@keyframes pageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(var(--slide-dir, 32px));
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+#home-page.page-enter, #player-page.page-enter {animation: pageEnter 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;}
 
 @keyframes pageEnter {
     from {
         opacity: 0;
         transform: translateY(12px);
     }
-    to {
+    to   {
         opacity: 1;
         transform: translateY(0);
     }
@@ -4202,10 +4078,9 @@ kbd {
 }
 
 @media (max-width: 480px) {
+    .qm-trailer-wrap {height: 200px;}
     .qm-backdrop-img {height: 200px;}
     .qm-gradient {height: 200px;}
-    .qm-gradient {height: 200px;}
-    .qm-backdrop-img {height: 200px;}
     .cards-row {
         grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
         gap: 8px;
