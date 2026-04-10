@@ -665,11 +665,15 @@ main {padding-top: 70px;}
 #home-page {display: block;}
 #home-page.hidden {display: none;}
 
-/* ─── TOAST ─── */
-#toast {position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px); z-index: 500; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 20px; font-size: 14px; color: var(--text2); box-shadow: 0 8px 30px rgba(0,0,0,0.5); transition: transform 0.3s ease, opacity 0.3s ease; opacity: 0; display: flex; align-items: center; gap: 12px; white-space: nowrap;}
-#toast.show {transform: translateX(-50%) translateY(0); opacity: 1;}
-#toast-undo-btn {background: none; border: none; color: var(--gold); font-size: 13px; font-weight: 500; cursor: pointer; padding: 0; font-family: inherit; letter-spacing: 0.03em; flex-shrink: 0;}
-#toast-undo-btn:hover {text-decoration: underline;}
+/* ─── MODERN TOAST ─── */
+#toast {position: fixed; bottom: 100px; left: 50%; min-width: 200px; transform: translateX(-50%) translateY(20px); z-index: 10000; background: rgba(25, 25, 25, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center; text-align: center; gap: 16px; padding: 14px 20px; min-width: 280px; max-width: 90vw; pointer-events: none; opacity: 0; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+#toast.show {transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto;}
+.toast-content {display: flex; align-items: center; gap: 10px; color: #fff; font-size: 14px; font-weight: 400;}
+#toast-undo-btn {background: rgba(201, 168, 76, 0.15); border: none; color: var(--gold); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; padding: 6px 12px; border-radius: 6px; transition: background 0.2s;}
+#toast-undo-btn:hover {background: rgba(201, 168, 76, 0.25);}
+#toast-msg {flex-grow: 1;text-align: center;}
 
 /* ─── DIVIDER ─── */
 .divider {height: 1px; background: var(--border); margin: 0 40px;}
@@ -831,6 +835,7 @@ footer span {color: var(--gold);}
 /* ─── RESPONSIVE ─── */
 @media (min-width: 1440px) {
     .cards-row-1 {grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));}
+    #toast {bottom: 40px;}
 }
 
 @media (min-width: 769px) {

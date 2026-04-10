@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=23" />
+    <link rel="stylesheet" href="style.css?v=24" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -719,7 +719,7 @@
     </button>
 
     <!-- KEYBOARD SHORTCUTS MODAL -->
-    <div id="shortcuts-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;">
+    <div id="shortcuts-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.82);align-items:center;justify-content:center;padding:20px;">
         <div class="shortcuts-box">
             <div class="shortcuts-header">
                 <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;">Keyboard Shortcuts</div>
@@ -739,7 +739,7 @@
     </div>
 
     <!-- IMPORT CARD -->
-    <div id="import-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;">
+    <div id="import-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.82);align-items:center;justify-content:center;padding:20px;">
         <div class="import-card">
             <div class="shortcuts-header">
                 <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">Import Backup</div>
@@ -770,7 +770,7 @@
     </div>
 
     <!-- EXPORT CARD -->
-    <div id="export-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px;">
+    <div id="export-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.82);align-items:center;justify-content:center;padding:20px;">
         <div class="import-card">
             <div class="shortcuts-header">
                 <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">Export Data</div>
@@ -793,7 +793,9 @@
 
     <!-- NOTIFICATION / TOAST -->
     <div id="toast">
-        <span id="toast-msg"></span>
+        <div class="toast-content">
+            <div id="toast-icon"></div> <span id="toast-msg"></span>
+        </div>
         <button id="toast-undo-btn" style="display:none" onclick="triggerToastUndo()">Undo</button>
     </div>
 
@@ -803,6 +805,6 @@
         Powered by <span>PrimeSrc.me</span>&amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
     </footer>
 
-    <script src="main.js?v=23"></script>
+    <script src="main.js?v=24"></script>
 </body>
 </html>
