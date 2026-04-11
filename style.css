@@ -573,6 +573,9 @@ main {padding-top: 70px;}
 .export-option-row:hover {background: var(--surface2); border-color: rgba(201,168,76,0.3);}
 .export-option-row input[type="checkbox"] {accent-color: var(--gold); width: 15px; height: 15px; flex-shrink: 0; cursor: pointer;}
 
+#import-overlay, #export-overlay {will-change: auto;}
+#import-overlay .import-card, #export-overlay .import-card {will-change: auto;}
+
 /* ─── STATS PAGE ─── */
 .stats-hero {padding: 45px; background: linear-gradient(to bottom, rgba(201,168,76,0.06) 0%, transparent 100%); border-bottom: 1px solid var(--border); margin-bottom: 0;}
 .stats-hero-title {font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 52px); font-weight: 900; color: var(--text); margin-bottom: 0; line-height: 1.1;}
