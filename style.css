@@ -127,26 +127,18 @@ body.light .section-title {color: var(--text);}
 body.light .section-title::before {background: var(--gold);}
 body.light .see-all {color: var(--text3);}
 body.light .see-all:hover {color: var(--gold);}
-body.light .filter-select,
-body.light .filter-number {background: var(--surface); border: 1px solid var(--border); color: var(--text); box-shadow: var(--shadow-xs), inset 0 1px 2px rgba(60, 45, 20, 0.04);}
-body.light .filter-select:focus,
-body.light .filter-number:focus {border-color: rgba(160, 108, 16, 0.5); box-shadow: 0 0 0 3px rgba(160, 108, 16, 0.1);}
+body.light .filter-select, body.light .filter-number {background: var(--surface); border: 1px solid var(--border); color: var(--text); box-shadow: var(--shadow-xs), inset 0 1px 2px rgba(60, 45, 20, 0.04);}
+body.light .filter-select:focus, body.light .filter-number:focus {border-color: rgba(160, 108, 16, 0.5); box-shadow: 0 0 0 3px rgba(160, 108, 16, 0.1);}
 body.light .filter-select option {background: var(--surface); color: var(--text);}
 body.light .filter-grid {background: var(--surface); border-color: var(--border); box-shadow: var(--shadow-sm);}
 body.light .filter-label {color: var(--text3);}
-body.light .src-btn,
-body.light .season-btn,
-body.light .ep-btn,
-body.light .filter-pill,
-body.light .genre-btn {background: var(--surface); border: 1px solid var(--border); color: var(--text2); box-shadow: var(--shadow-xs);}
-body.light .src-btn:hover,
-body.light .src-btn.active,
-body.light .season-btn:hover,
-body.light .ep-btn:hover,
-body.light .genre-btn:hover {border-color: rgba(160, 108, 16, 0.45); color: var(--gold); background: rgba(160, 108, 16, 0.05); box-shadow: var(--shadow-sm);}
-body.light .season-btn.active,
-body.light .ep-btn.active,
-body.light .filter-pill.active,
+body.light .filter-chip {background: rgba(160, 108, 16, 0.1);border-color: rgba(160, 108, 16, 0.35);}
+body.light .filter-chip:hover {background: rgba(160, 108, 16, 0.2);}
+body.light .filter-range {background: var(--surface3);}
+body.light .src-btn, body.light .season-btn, body.light .ep-btn, body.light .filter-pill, body.light .genre-btn {background: var(--surface); border: 1px solid var(--border); color: var(--text2); box-shadow: var(--shadow-xs);}
+body.light .src-btn:hover,  body.light .src-btn.active,
+body.light .season-btn:hover, body.light .ep-btn:hover, body.light .genre-btn:hover {border-color: rgba(160, 108, 16, 0.45); color: var(--gold); background: rgba(160, 108, 16, 0.05); box-shadow: var(--shadow-sm);}
+body.light .season-btn.active, body.light .ep-btn.active, body.light .filter-pill.active,
 body.light .genre-btn.active {background: rgba(160, 108, 16, 0.1); border-color: rgba(160, 108, 16, 0.4); color: var(--gold); box-shadow: none;}
 body.light .ep-watched {border-color: rgba(160, 108, 16, 0.3);}
 body.light .ep-check {color: var(--gold);}
@@ -164,10 +156,8 @@ body.light .player-overview {color: var(--text2);}
 body.light .shortcuts-box {background: var(--surface); border-color: var(--border);}
 body.light kbd {background: var(--surface2); border-color: var(--border);}
 body.light #source-bar {background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-xs);}
-body.light .back-btn,
-body.light .share-btn {background: var(--surface); border-color: var(--border); color: var(--text2); box-shadow: var(--shadow-xs);}
-body.light .back-btn:hover,
-body.light .share-btn:hover {color: var(--gold); border-color: rgba(160, 108, 16, 0.45); background: rgba(160, 108, 16, 0.05); box-shadow: var(--shadow-sm);}
+body.light .back-btn, body.light .share-btn {background: var(--surface); border-color: var(--border); color: var(--text2); box-shadow: var(--shadow-xs);}
+body.light .back-btn:hover, body.light .share-btn:hover {color: var(--gold); border-color: rgba(160, 108, 16, 0.45); background: rgba(160, 108, 16, 0.05); box-shadow: var(--shadow-sm);}
 body.light .share-btn.copied {color: #3a8a4a; border-color: #3a8a4a;}
 body.light .divider {background: var(--border);}
 body.light .tag-link {background: var(--surface2); border-color: var(--border); color: var(--text2);}
@@ -293,8 +283,7 @@ button, a, .mobile-tab, .card {touch-action: manipulation;}
 
 /* ─── SOURCE SWITCHER ─── */
 .src-btn {padding: 5px 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; font-size: 12px; color: var(--text2); transition: all var(--transition);}
-.src-btn:hover,
-.src-btn.active {border-color: var(--gold); color: var(--gold); background: rgba(201, 168, 76, 0.12);}
+.src-btn:hover, .src-btn.active {border-color: var(--gold); color: var(--gold); background: rgba(201, 168, 76, 0.12);}
 
 .fullscreen-btn {padding: 6px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; color: var(--text2); cursor: pointer; transition: all var(--transition); display: flex; align-items: center; gap: 4px; font-size: 13px;}
 .fullscreen-btn:hover {border-color: var(--gold); color: var(--gold); background: rgba(201, 168, 76, 0.08);}
@@ -557,6 +546,59 @@ main {padding-top: 70px;}
 .filter-grid {display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 20px;}
 .filter-group {display: flex; flex-direction: column; gap: 8px;}
 .filter-label {font-size: 12px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text3); font-weight: 500;}
+
+/* ─── FILTER CHIPS ─── */
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px 5px 12px;
+    background: rgba(201, 168, 76, 0.12);
+    border: 1px solid rgba(201, 168, 76, 0.35);
+    border-radius: 40px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--gold);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background var(--transition), border-color var(--transition), transform 0.15s ease;
+    white-space: nowrap;
+}
+.filter-chip:hover {background: rgba(201, 168, 76, 0.22); border-color: var(--gold); transform: translateY(-1px);}
+.filter-chip:active {transform: scale(0.95);}
+
+/* ─── RANGE SLIDER ─── */
+.filter-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    background: var(--surface3);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    margin-top: 8px;
+}
+.filter-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--gold);
+    transition: transform 0.15s ease;
+}
+.filter-range::-webkit-slider-thumb:hover {transform: scale(1.2);}
+.filter-range::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--gold);
+    cursor: pointer;
+    border: 2px solid var(--bg);
+}
 
 /* ─── IMPORT CARD ─── */
 .import-card {background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; width: 100%; max-width: 440px; box-shadow: 0 32px 80px rgba(0,0,0,0.6); animation: fadeIn 0.2s ease;}
@@ -860,6 +902,7 @@ footer span {color: var(--gold);}
 
 @media (max-width: 768px) {
     main {padding-top: 70px; padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;}
+    footer {padding-bottom: calc(80px + env(safe-area-inset-bottom));}
     #mobile-nav {display: flex; justify-content: space-around; grid-template-columns: repeat(5, 1fr);}
     nav {padding: 0 12px; gap: 8px; backdrop-filter: none; -webkit-backdrop-filter: none;}
     .nav-tabs {display: none;}

@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=25" />
+    <link rel="stylesheet" href="style.css?v=27">
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -111,7 +111,8 @@
                     <circle cx="11" cy="11" r="8" />
                     <path d="m21 21-4.35-4.35" />
                 </svg>
-                <input id="search-input" type="text" class="nav-search" placeholder="Search movies, shows…" oninput="onSearchInput(this.value)" onkeydown="if(event.key==='Enter'){doSearch(this.value);this.blur();}"
+                <input id="search-input" type="text" class="nav-search" placeholder="Search movies, shows…" oninput="onSearchInput(this.value)"
+                    onkeydown="if(event.key==='Enter'){clearTimeout(window._searchEnterDebounce);window._searchEnterDebounce=setTimeout(()=>{doSearch(this.value);this.blur();},300);}"
                     onfocus="showRecentSearches()" onblur="hideRecentSearches()" autocomplete="off" />
                 <button id="search-clear-btn" class="search-clear-btn" style="display:none">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -266,14 +267,16 @@
             </div>
 
             <!-- FILTER TOGGLE BUTTON -->
-            <button id="filter-toggle" onclick="toggleFilterPanel()" style="display:none;margin-bottom:16px;" class="share-btn">
+            <button id="filter-toggle" onclick="toggleFilterPanel()" style="display:none;margin-bottom:8px;" class="share-btn">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
                 </svg>
                 <span id="filter-toggle-label">Filters</span>
+                <span id="filter-count-badge" style="display:none;background:var(--gold);color:#080808;border-radius:40px;padding:1px 8px;font-size:10px;font-weight:700;margin-left:4px;line-height:1.8;">0</span>
             </button>
+            <div id="active-filter-chips" style="display:none;flex-wrap:wrap;gap:6px;margin-bottom:14px;"></div>
 
-            <!-- ADVANCED FILTERS -->
+            <!-- FILTERS -->
             <div id="filter-panel" style="display:none; margin-bottom:24px;">
                 <div class="filter-grid">
                     <!-- Type -->
@@ -306,7 +309,7 @@
                     </div>
                     <!-- Min Rating -->
                     <div class="filter-group">
-                        <label class="filter-label">Min Rating: <span id="rating-label">0+</span></label>
+                        <label class="filter-label">Min Ratings: <span id="rating-label">0+</span></label>
                         <input type="range" id="filter-rating" class="filter-range" min="0" max="9" step="1" value="0" oninput="document.getElementById('rating-label').textContent=this.value+'+'" />
                     </div>
                     <!-- Language -->
@@ -559,7 +562,9 @@
             <!-- PLAYER EMBED -->
             <div class="player-wrapper">
                 <div class="player-container" id="player-container">
-                    <!--<iframe id="player-iframe" scrolling="no" allow="autoplay; picture-in-picture" referrerpolicy="no-referrer"></iframe>-->
+                    <div id="player-spinner" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:5;pointer-events:none;">
+                        <div class="spinner"></div>
+                    </div>
                     <iframe id="player-iframe" allowfullscreen="" referrerpolicy="origin" oncontextmenu="return false"></iframe>
                     <div id="next-ep-autoplay" class="hidden">
                         <div class="autoplay-card">
@@ -726,10 +731,11 @@
                 <button onclick="closeShortcuts()" style="color:var(--text3);font-size:20px;line-height:1;">✕</button>
             </div>
             <div class="shortcuts-grid">
-                <div class="shortcut-row"><kbd>/</kbd><span>Focus search</span></div>
-                <div class="shortcut-row"><kbd>?</kbd><span>Show this panel</span></div>
-                <div class="shortcut-row"><kbd>F</kbd><span>Toggle fullscreen (on player)</span></div>
-                <div class="shortcut-row"><kbd>Esc</kbd><span>Go back</span></div>
+                <div class="shortcut-row"><kbd>/</kbd><span>Focus Search</span></div>
+                <div class="shortcut-row"><kbd>?</kbd><span>Shows Help Panel</span></div>
+                <div class="shortcut-row"><kbd>F</kbd><span>Toggle Fullscreen (On Player)</span></div>
+                <div class="shortcut-row"><kbd>N</kbd><span>Next Episode (On Player)</span></div>
+                <div class="shortcut-row"><kbd>Esc</kbd><span>Go Back</span></div>
                 <div class="shortcut-row"><kbd>H</kbd><span>Go to Home</span></div>
                 <div class="shortcut-row"><kbd>L</kbd><span>Go to My List</span></div>
                 <div class="shortcut-row"><kbd>S</kbd><span>Go to Stats</span></div>
@@ -802,9 +808,7 @@
     <!-- FOOTER -->
     <footer>
         <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:8px"> StreamVault</div>
-        Powered by <span>PrimeSrc.me</span>&amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
+        Powered by <span>PrimeSrc.me</span> &amp; <span>ECHO | Mohamed ALi</span>· Cinema Unbound
     </footer>
-
-    <script src="main.js?v=25"></script>
 </body>
 </html>
