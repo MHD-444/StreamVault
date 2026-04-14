@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=28">
+    <link rel="stylesheet" href="style.css?v=29">
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -151,9 +151,19 @@
     <main>
         <!-- COLLECTIONS PAGE -->
         <div id="collections-page" style="display:none; padding: 90px 40px 80px;">
-            <div class="search-header">
-                <div class="search-query-display">Collections</div>
-                <div class="search-count" id="collections-count"></div>
+            <div class="search-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
+                <div>
+                    <div class="search-query-display">Collections</div>
+                    <div class="search-count" id="collections-count"></div>
+                </div>
+                <button class="share-btn" onclick="refreshCollectionsCache()" title="Refresh collection list">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <polyline points="23 4 23 10 17 10" />
+                        <polyline points="1 20 1 14 7 14" />
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                    </svg>
+                    Refresh
+                </button>
             </div>
             <div id="collections-grid" class="cards-row" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));gap:20px;"></div>
         </div>
@@ -498,7 +508,7 @@
         </div>
 
         <!-- MY LIST PAGE -->
-        <div id="mylist-page" style="display:none; padding: 32px 24px; max-width: 1400px; margin: 0 auto;">
+        <div id="mylist-page" style="display:none; padding: 90px 24px 32px; max-width: 1400px; margin: 0 auto;">
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; flex-wrap:wrap; gap:12px;">
                 <div>
                     <div class="section-title" style="margin:0">My List</div>
@@ -812,6 +822,6 @@
     </footer>
 
     <!-- JS -->
-    <script src="main.js?v=28"></script>
+    <script src="main.js?v=29"></script>
 </body>
 </html>
