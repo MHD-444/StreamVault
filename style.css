@@ -224,6 +224,11 @@ body.light .mobile-tab {color: var(--text3);}
 body.light .mobile-tab.active {color: var(--gold); background: rgba(160, 108, 16, 0.09);}
 body.light .mobile-tab.active svg {stroke: var(--gold);}
 body.light .coming-soon-badge {background: rgba(160, 108, 16, 0.9); color: #fff;}
+body.light .qm-season-select {background-color: var(--surface2); border-color: var(--border);}
+body.light .qm-ep-row:hover {background: var(--surface2);}
+body.light .qm-ep-current {background: rgba(160,108,16,0.08); border-color: rgba(160,108,16,0.3) !important;}
+body.light .qm-ep-current .qm-ep-num {color: var(--gold);}
+body.light .qm-ep-thumb-placeholder {background: var(--surface3);}
 body.light .card-lastwatched-badge {background: rgba(255, 252, 246, 0.88); border-color: rgba(160, 108, 16, 0.4);}
 body.light .card-watched-badge {background: rgba(16, 150, 80, 0.90);}
 body.light #watch-together-overlay {background: rgba(242, 237, 230, 0.97);}
@@ -245,6 +250,7 @@ body.light .empty-state {color: var(--text3);}
 body.light #search-page {background: var(--bg);}
 body.light .search-query-display {color: var(--text);}
 body.light .search-count {color: var(--text3);}
+body.light .mylist-drag-handle {background: rgba(255, 255, 255, 0.8); border-color: var(--border); color: var(--text2);}
 body.light .mylist-remove-btn {background: transparent; border-color: var(--border); color: var(--text3);}
 body.light .mylist-remove-btn:hover {background: var(--red); border-color: var(--red); color: #fff;}
 body.light ::-webkit-scrollbar-track {background: var(--bg);}
@@ -679,10 +685,8 @@ main {padding-top: 70px;}
 .qm-actions {display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; align-items: center;}
 .qm-play-btn {display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: #080808; font-weight: 600; font-size: 14px; padding: 10px 24px; border-radius: 6px; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: background 0.15s, transform 0.15s;}
 .qm-play-btn:hover {background: var(--gold2); transform: translateY(-1px);}
-.qm-list-btn,
-.qm-detail-btn {display: inline-flex; align-items: center; gap: 7px; background: transparent; color: var(--text2); font-size: 13px; padding: 9px 16px; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: color 0.15s, border-color 0.15s;}
-.qm-list-btn:hover,
-.qm-detail-btn:hover {color: var(--gold); border-color: rgba(201,168,76,0.5);}
+.qm-list-btn, .qm-detail-btn {display: inline-flex; align-items: center; gap: 7px; background: transparent; color: var(--text2); font-size: 13px; padding: 9px 16px; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: color 0.15s, border-color 0.15s;}
+.qm-list-btn:hover, .qm-detail-btn:hover {color: var(--gold); border-color: rgba(201,168,76,0.5);}
 .qm-meta {display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; font-size: 13px; color: var(--text2); min-height: 22px;}
 .qm-rating {display: flex; align-items: center; gap: 4px; color: var(--gold); font-weight: 500;}
 .qm-type-badge {font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; background: rgba(201,168,76,0.12); color: var(--gold); border: 1px solid rgba(201,168,76,0.25); border-radius: 20px; padding: 2px 8px;}
@@ -694,6 +698,119 @@ main {padding-top: 70px;}
 .qm-trailer-wrap {position: absolute; top: 0; left: 0; right: 0; height: 300px; opacity: 0; transition: opacity 0.8s ease; z-index: 2; background: #000; overflow: hidden;}
 .qm-trailer-wrap iframe {position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 180%; height: 180%; border: none; display: block; pointer-events: none;}
 .qm-trailer-wrap.qm-trailer-visible {opacity: 1;}
+
+/* ─── QM EPISODE PICKER ─── */
+.qm-ep-picker {
+    margin-top: 16px;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+}
+.qm-season-select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 9px 32px 9px 12px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235c5548' stroke-width='2' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    margin-bottom: 10px;
+    transition: border-color var(--transition);
+}
+.qm-season-select:focus {border-color: var(--gold);}
+.qm-season-select option {background: var(--surface); color: var(--text);}
+
+.qm-ep-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 280px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--surface3) transparent;
+}
+.qm-ep-list::-webkit-scrollbar {width: 4px;}
+.qm-ep-list::-webkit-scrollbar-thumb {background: var(--surface3); border-radius: 4px;}
+.qm-ep-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s, border-color 0.15s;
+    width: 100%;
+}
+.qm-ep-row:hover {background: var(--surface2); border-color: var(--border);}
+.qm-ep-row:hover .qm-ep-play {opacity: 1;}
+.qm-ep-current {background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.3) !important;}
+.qm-ep-watched .qm-ep-num {color: var(--text3);}
+.qm-ep-thumb {
+    position: relative;
+    width: 80px;
+    height: 46px;
+    border-radius: 5px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--surface2);
+}
+.qm-ep-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.qm-ep-thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface3);
+}
+.qm-ep-watched-dot {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+}
+.qm-ep-info {flex: 1; min-width: 0;}
+.qm-ep-num {font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px;}
+.qm-ep-current .qm-ep-num {color: var(--gold);}
+.qm-ep-name {font-size: 13px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.qm-ep-overview {font-size: 11px; color: var(--text3); margin-top: 2px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden;}
+.qm-ep-play {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    opacity: 0;
+    transition: opacity 0.15s;
+}
 
 /* ─── WATCH TOGETHER ─── */
 #watch-together-overlay {display: none; position: fixed; inset: 0; z-index: 400; background: rgba(8,8,8,0.96); align-items: center; justify-content: center; flex-direction: column; gap: 12px; backdrop-filter: blur(10px);}
@@ -730,6 +847,41 @@ main {padding-top: 70px;}
 
 /* ─── MY LIST PAGE ─── */
 #mylist-page .cards-grid {display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px;}
+
+/* ─── MY LIST DRAG & DROP ─── */
+.mylist-drag-handle {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 10;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    color: #fff;
+    backdrop-filter: blur(4px);
+}
+.card:hover .mylist-drag-handle {opacity: 1;}
+.mylist-drag-handle:active {cursor: grabbing;}
+.ml-dragging {
+    opacity: 0.4;
+    transform: scale(0.97);
+    border-color: var(--gold) !important;
+    transition: opacity 0.15s, transform 0.15s !important;
+}
+.ml-drag-over {
+    border-color: var(--gold) !important;
+    box-shadow: 0 0 0 2px var(--gold), 0 20px 40px rgba(0,0,0,0.4) !important;
+    transform: translateY(-4px);
+    transition: box-shadow 0.15s, transform 0.15s !important;
+}
 
 /* ─── COLLECTION CARDS ─── */
 .collection-card {border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid var(--border); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;}
@@ -969,6 +1121,8 @@ footer span {color: var(--gold);}
     .qm-trailer-wrap {height: 200px;}
     .qm-backdrop-img {height: 200px;}
     .qm-gradient {height: 200px;}
+    .qm-ep-thumb {width: 64px; height: 38px;}
+    .qm-ep-list {max-height: 220px;}
     .cards-row {grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px;}
     .cards-row-1 .card {min-width: 50px;}
     .nav-right {gap: 4px;}

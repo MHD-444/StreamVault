@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=30">
+    <link rel="stylesheet" href="style.css?v=31">
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -582,7 +582,7 @@
                     <div id="player-spinner" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:5;pointer-events:none;">
                         <div class="spinner"></div>
                     </div>
-                    <iframe id="player-iframe" allowfullscreen="" no-referrer oncontextmenu="return false"></iframe>
+                    <iframe id="player-iframe" allowfullscreen referrerpolicy="no-referrer" oncontextmenu="return false"></iframe>
                     <div id="next-ep-autoplay" class="hidden">
                         <div class="autoplay-card">
                             <div class="autoplay-info">
@@ -829,6 +829,6 @@
     </footer>
 
     <!-- JS -->
-    <script src="main.js?v=30"></script>
+    <script src="main.js?v=31"></script>
 </body>
 </html>
