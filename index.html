@@ -32,11 +32,18 @@
     <meta property="twitter:description" content="Explore a massive library of movies and TV shows.">
     <meta property="twitter:image" content="assets/streamvault.png">
     <meta name="theme-color" content="#c9a84c">
+    <script>
+        if (!localStorage.getItem('tmdb_api_key')) {
+            document.addEventListener('DOMContentLoaded', function () {
+                document.getElementById('setup-overlay').style.display = '';
+            });
+        }
+    </script>
 </head>
 
 <body>
     <!-- SETUP OVERLAY -->
-    <div id="setup-overlay">
+    <div id="setup-overlay" style="display:none">
         <div class="setup-box">
             <div class="logo-mark">Stream<span>Vault</span></div>
             <p>This site uses the <strong style="color:var(--text)">TMDB API</strong>for movie data and
@@ -575,7 +582,7 @@
                     <div id="player-spinner" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:5;pointer-events:none;">
                         <div class="spinner"></div>
                     </div>
-                    <iframe id="player-iframe" allowfullscreen="" referrerpolicy="origin" oncontextmenu="return false"></iframe>
+                    <iframe id="player-iframe" allowfullscreen="" no-referrer oncontextmenu="return false"></iframe>
                     <div id="next-ep-autoplay" class="hidden">
                         <div class="autoplay-card">
                             <div class="autoplay-info">
@@ -604,7 +611,7 @@
                 <button class="src-btn active" data-src="primesrc" onclick="switchSource('primesrc')" oncontextmenu="event.preventDefault();showSourceContextMenu(event,'primesrc','PrimeSrc')">PrimeSrc</button>
                 <button class="src-btn" data-src="embed2" onclick="switchSource('embed2')" oncontextmenu="event.preventDefault();showSourceContextMenu(event,'embed2','2Embed')">2Embed</button>
                 <button class="src-btn" data-src="moviesapi" onclick="switchSource('moviesapi')" oncontextmenu="event.preventDefault();showSourceContextMenu(event,'moviesapi','MoviesAPI')">MoviesAPI</button>
-                <button class="fullscreen-btn" id="fullscreen-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)" style="margin-left:auto;">
+                <!--<button class="fullscreen-btn" id="fullscreen-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)" style="margin-left:auto;">
                     <svg id="fullscreen-icon-enter" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                         <path d="M4 8V4h4" />
                         <path d="M20 20v-4h4" />
@@ -618,7 +625,7 @@
                         <path d="M15 19v4h-4" />
                         <path d="M4 19h4v4" />
                     </svg>
-                </button>
+                </button>-->
             </div>
 
             <!-- DETAIL BODY -->
