@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=32">
+    <link rel="stylesheet" href="style.css?v=33">
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -466,8 +466,10 @@
             </div>
             <div class="stats-body">
                 <div id="stats-grid" class="stats-grid"></div>
-                <div class="stats-columns">
-                    <div class="stats-box">
+
+                <!-- Row 1: Genres + Recently Watched -->
+                <div class="stats-columns" style="margin-top:24px;">
+                    <div class="stats-box" id="sb-genres">
                         <div class="stats-box-title">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
@@ -476,7 +478,7 @@
                         </div>
                         <div id="stats-genres"></div>
                     </div>
-                    <div class="stats-box">
+                    <div class="stats-box" id="sb-recent">
                         <div class="stats-box-title">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="10" />
@@ -488,7 +490,38 @@
                     </div>
                 </div>
 
-                <!-- Activity -->
+                <!-- Row 2: Movie vs TV split + Top rated -->
+                <div class="stats-columns stats-columns-3" style="margin-top:24px;">
+                    <div class="stats-box" id="sb-split">
+                        <div class="stats-box-title">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                            </svg>
+                            Movies vs TV
+                        </div>
+                        <div id="stats-split"></div>
+                    </div>
+                    <div class="stats-box" id="sb-toprated">
+                        <div class="stats-box-title">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--gold)">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                            Highest Rated Watched
+                        </div>
+                        <div id="stats-toprated"></div>
+                    </div>
+                    <div class="stats-box" id="sb-activity">
+                        <div class="stats-box-title">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                            </svg>
+                            Watching Pace
+                        </div>
+                        <div id="stats-pace"></div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Calendar -->
                 <div class="stats-box" style="margin-top:24px;">
                     <div class="stats-box-title">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -497,19 +530,9 @@
                             <line x1="8" y1="2" x2="8" y2="6" />
                             <line x1="3" y1="10" x2="21" y2="10" />
                         </svg>
-                        30-Day Activity
+                        Watch Calendar <span id="stats-cal-year" style="font-size:11px;font-weight:400;color:var(--text3);margin-left:6px;font-family:'DM Sans',sans-serif;"></span>
                     </div>
-                    <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">Each square = one day. Brighter = more titles watched.</div>
-                    <div id="stats-activity" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
-                    <div style="display:flex;align-items:center;gap:6px;margin-top:12px;">
-                        <span style="font-size:11px;color:var(--text3)">Less</span>
-                        <div style="width:12px;height:12px;border-radius:3px;background:var(--surface2);border:1px solid var(--border)">
-                        </div>
-                        <div style="width:12px;height:12px;border-radius:3px;background:var(--gold);opacity:0.4"></div>
-                        <div style="width:12px;height:12px;border-radius:3px;background:var(--gold);opacity:0.7"></div>
-                        <div style="width:12px;height:12px;border-radius:3px;background:var(--gold);"></div>
-                        <span style="font-size:11px;color:var(--text3)">More</span>
-                    </div>
+                    <div id="stats-calendar"></div>
                 </div>
             </div>
         </div>
@@ -829,6 +852,6 @@
     </footer>
 
     <!-- JS -->
-    <script src="main.js?v=32"></script>
+    <script src="main.js?v=33"></script>
 </body>
 </html>
