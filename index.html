@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=33">
+    <link rel="stylesheet" href="style.css?v=35">
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -115,11 +115,11 @@
             </button>
             <div class="nav-search-wrap">
                 <svg class="nav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <circle cx="11" cy="11" r="8" />
+                    <circle cx="11" cy="11" r="8" />    
                     <path d="m21 21-4.35-4.35" />
                 </svg>
                 <input id="search-input" type="text" class="nav-search" placeholder="Search movies, shows…" oninput="onSearchInput(this.value)"
-                    onkeydown="if(event.key==='Enter'){clearTimeout(window._searchEnterDebounce);window._searchEnterDebounce=setTimeout(()=>{doSearch(this.value);this.blur();},300);}"
+                    onkeydown="if(event.key==='Enter'){clearTimeout(window._searchEnterDebounce);this.blur();window._searchEnterDebounce=setTimeout(()=>{doSearch(this.value);},100);}"
                     onfocus="showRecentSearches()" onblur="hideRecentSearches()" autocomplete="off" />
                 <button id="search-clear-btn" class="search-clear-btn" style="display:none">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
@@ -129,26 +129,10 @@
                 </button>
                 <div id="recent-searches" class="recent-searches" style="display:none"></div>
             </div>
-            <button id="theme-toggle" onclick="toggleTheme()" title="Toggle theme" class="nav-icon-btn">
-                <svg id="theme-icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                </svg>
-                <svg id="theme-icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none">
-                    <circle cx="12" cy="12" r="5" />
-                    <line x1="12" y1="1" x2="12" y2="3" />
-                    <line x1="12" y1="21" x2="12" y2="23" />
-                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                    <line x1="1" y1="12" x2="3" y2="12" />
-                    <line x1="21" y1="12" x2="23" y2="12" />
-                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                </svg>
-            </button>
-            <button class="nav-icon-btn" onclick="showSetup()" title="API Key">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <button class="nav-icon-btn" id="settings-btn" onclick="showSettings()" title="Settings">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
                     <circle cx="12" cy="12" r="3" />
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14" />
                 </svg>
             </button>
         </div>
@@ -156,23 +140,140 @@
 
     <!-- MAIN -->
     <main>
-        <!-- COLLECTIONS PAGE -->
-        <div id="collections-page" style="display:none; padding: 90px 40px 80px;">
-            <div class="search-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
-                <div>
-                    <div class="search-query-display">Collections</div>
-                    <div class="search-count" id="collections-count"></div>
+
+        <!-- API KEY OVERLAY -->
+        <div id="api-key-overlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
+            <div id="api-key-box" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 28px;width:100%;max-width:440px;position:relative;animation:fadeIn 0.18s ease;box-shadow:0 24px 60px rgba(0,0,0,0.5);">
+                <button onclick="closeApiKeyOverlay()" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--text3);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;">✕</button>
+                <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;">Change API Key</div>
+                <div style="font-size:13px;color:var(--text3);margin-bottom:20px;">Get your free key at <a href="https://www.themoviedb.org/settings/api" target="_blank" style="color:var(--gold);border-bottom:1px solid var(--gold);">themoviedb.org</a></div>
+                <input id="api-key-overlay-input" type="text" class="setup-input" style="margin-bottom:16px;" placeholder="Paste your new TMDB API key…" />
+                <div style="display:flex;gap:10px;">
+                    <button class="btn-gold" style="flex:1;" onclick="saveApiKeyFromOverlay()">Save Key</button>
+                    <button onclick="closeApiKeyOverlay()" style="flex:0 0 auto;padding:14px 20px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text2);font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:border-color 0.2s;">Cancel</button>
                 </div>
-                <button class="share-btn" onclick="refreshCollectionsCache()" title="Refresh collection list">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                        <polyline points="23 4 23 10 17 10" />
-                        <polyline points="1 20 1 14 7 14" />
-                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
-                    </svg>
-                    Refresh
-                </button>
             </div>
-            <div id="collections-grid" class="cards-row" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));gap:20px;"></div>
+        </div>
+
+        <!-- SETTINGS PAGE -->
+        <div id="settings-page" style="display:none; padding: 90px 40px 80px; max-width: 800px; margin: 0 auto;">
+            <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:32px;">Settings</div>
+            <div class="settings-section">
+                <div class="settings-section-title">API Key</div>
+                <div class="settings-row">
+                    <div class="settings-label">TMDB API Key<div class="settings-sub">Update your streaming API key</div></div>
+                    <button class="share-btn" onclick="openApiKeyOverlay()">Change Key</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Appearance</div>
+                <div class="settings-row">
+                    <div class="settings-label">Theme<div class="settings-sub">Light or dark interface</div></div>
+                    <button class="settings-toggle" id="st-theme" onclick="toggleTheme();_syncSettingsToggles()"></button>
+                </div>
+                <div class="settings-row" style="align-items:flex-start;flex-direction:column;gap:16px;">
+                    <div class="settings-label">Accent Color<div class="settings-sub">Pick any color — hover/focus tones auto-adjust</div></div>
+                    <div class="accent-custom-wrap">
+                        <div class="accent-presets">
+                            <button class="accent-swatch" data-accent="#c9a84c" style="--sw:#c9a84c" onclick="applyCustomAccent('#c9a84c')" title="Gold"></button>
+                            <button class="accent-swatch" data-accent="#2ab4a0" style="--sw:#2ab4a0" onclick="applyCustomAccent('#2ab4a0')" title="Teal"></button>
+                            <button class="accent-swatch" data-accent="#c0392b" style="--sw:#c0392b" onclick="applyCustomAccent('#c0392b')" title="Red"></button>
+                            <button class="accent-swatch" data-accent="#8e44ad" style="--sw:#8e44ad" onclick="applyCustomAccent('#8e44ad')" title="Purple"></button>
+                            <button class="accent-swatch" data-accent="#2980b9" style="--sw:#2980b9" onclick="applyCustomAccent('#2980b9')" title="Blue"></button>
+                            <button class="accent-swatch" data-accent="#27ae60" style="--sw:#27ae60" onclick="applyCustomAccent('#27ae60')" title="Green"></button>
+                            <button class="accent-swatch" data-accent="#e67e22" style="--sw:#e67e22" onclick="applyCustomAccent('#e67e22')" title="Orange"></button>
+                        </div>
+                        <div class="accent-inputs">
+                            <input type="color" id="accent-color-picker" oninput="applyCustomAccent(this.value)" title="Pick color" />
+                            <div class="accent-hex-wrap">
+                                <span class="accent-hex-hash">#</span>
+                                <input type="text" id="accent-hex-input" maxlength="6" placeholder="c9a84c" oninput="onHexInput(this.value)" spellcheck="false" />
+                            </div>
+                            <div class="accent-preview" id="accent-preview"></div>
+                        </div>
+                        <button class="accent-reset-btn" onclick="applyCustomAccent('#c9a84c')">↺ Reset</button>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Card Size<div class="settings-sub">How cards appear in browse grids</div></div>
+                    <select class="filter-select" style="width:140px" id="st-card-size" onchange="setCardSize(this.value)">
+                        <option value="default">Default</option>
+                        <option value="compact">Compact</option>
+                        <option value="poster">Poster Only</option>
+                    </select>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Playback</div>
+                <div class="settings-row">
+                    <div class="settings-label">Default Server<div class="settings-sub">Preferred streaming source</div></div>
+                    <select class="filter-select" style="width:140px" id="st-source" onchange="currentSource=this.value;localStorage.setItem('sv_source',this.value)">
+                        <option value="primesrc">PrimeSrc</option>
+                        <option value="embed2">2Embed</option>
+                        <option value="moviesapi">MoviesAPI</option>
+                        <option value="vidking">VidKing</option>
+                    </select>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Content</div>
+                <div class="settings-row">
+                    <div class="settings-label">Default Language<div class="settings-sub">Filter browse results by language</div></div>
+                    <select class="filter-select" style="width:140px" id="st-lang" onchange="setDefaultLang(this.value)">
+                        <option value="">Any Language</option>
+                        <option value="en">English</option>
+                        <option value="fr">French</option>
+                        <option value="ar">Arabic</option>
+                        <option value="ja">Japanese</option>
+                        <option value="ko">Korean</option>
+                        <option value="es">Spanish</option>
+                        <option value="hi">Hindi</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="zh">Chinese</option>
+                        <option value="tr">Turkish</option>
+                    </select>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Hidden Titles<div class="settings-sub">Titles marked "Not interested" in browse</div></div>
+                    <button class="share-btn" onclick="const prev=[...SV.hidden.get()];SV.hidden.clear();showUndoToast('Hidden list cleared',()=>{SV._set('sv_hidden',prev);SV.hidden.invalidate();})">Clear Hidden</button>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Hide Watched while Browsing<div class="settings-sub">Skip already-watched titles in Movies & TV tabs</div></div>
+                    <button class="settings-toggle" id="st-hide-watched" onclick="toggleHideWatched()"></button>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Hide Adult Content<div class="settings-sub">Filter out sexual & explicit titles from browse results</div></div>
+                    <button class="settings-toggle" id="st-hide-adult" onclick="toggleHideAdult()"></button>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Incognito Mode<div class="settings-sub">Watch without saving anything to history</div></div>
+                    <button class="settings-toggle" id="st-incognito" onclick="toggleIncognito()"></button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Home Row Order <span class="settings-sub">Drag to reorder sections</span></div>
+                <div id="home-row-order-list"></div>
+                <div style="display: flex; justify-content: flex-end;">
+                    <button class="accent-reset-btn" id="home-row-order-reset-btn" onclick="localStorage.removeItem('sv_home_row_order'); applyHomeRowOrder(); _renderHomeRowOrder(); showToast('Row order restored')">↺ Reset</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Data Management</div>
+                <div class="settings-row">
+                    <div class="settings-label">Export Backup<div class="settings-sub">Download your watch history & list</div></div>
+                    <button class="share-btn" onclick="openExportCard()">Export</button>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label">Import Backup<div class="settings-sub">Restore from a previous export</div></div>
+                    <button class="share-btn" onclick="openImportCard()">Import</button>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-label" style="color:var(--red)">Clear All Data<div class="settings-sub" style="color:var(--text3)">Permanently delete watch history & list</div></div>
+                    <button class="share-btn" style="color:var(--red);border-color:var(--red)" onclick="clearAllData()">Clear</button>
+                </div>
+            </div>
         </div>
 
         <!-- HOME PAGE -->
@@ -238,7 +339,7 @@
             </div>
 
             <!-- NEW THIS WEEK -->
-            <div class="section">
+            <div class="section" data-row-key="new-this-week">
                 <div class="section-header">
                     <div class="section-title">New This Week</div>
                 </div>
@@ -247,28 +348,28 @@
             <div class="divider"></div>
 
             <!-- Trending -->
-            <div class="section">
+            <div class="section" data-row-key="trending">
                 <div class="section-header">
                     <div class="section-title">Trending This Week</div>
                 </div>
                 <div id="trending-row" class="cards-row"></div>
             </div>
             <div class="divider"></div>
-            <div class="section">
+            <div class="section" data-row-key="movies">
                 <div class="section-header">
                     <div class="section-title">⭐ Popular Movies</div>
                 </div>
                 <div id="movies-row" class="cards-row"></div>
             </div>
             <div class="divider"></div>
-            <div class="section">
+            <div class="section" data-row-key="tv">
                 <div class="section-header">
                     <div class="section-title">⭐ Popular TV Shows</div>
                 </div>
                 <div id="tv-row" class="cards-row"></div>
             </div>
             <div class="divider"></div>
-            <div class="section">
+            <div class="section" data-row-key="turkish">
                 <div class="section-header">
                     <div class="section-title">Turkish Series</div>
                 </div>
@@ -406,8 +507,7 @@
                     </div>
                 </div>
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;">
-                    <button onclick="resetFilters()" style="font-size:12px;color:var(--text3);transition:color var(--transition)"
-                        onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">↺ Reset all
+                    <button onclick="resetFilters()" style="font-size:12px;color:var(--text3);transition:color var(--transition)" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text3)'">↺ Reset all
                     </button>
                     <button class="btn-gold" style="width:auto;padding:10px 32px;" onclick="applyFilters()">Apply Filters</button>
                 </div>
@@ -442,6 +542,7 @@
                     </div>
                     <div class="stats-title-row">
                         <div class="stats-hero-title">Watch Statistics</div>
+                        <!--
                         <div class="history-controls">
                             <button class="history-actions-btn" onclick="openExportCard()">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -460,6 +561,7 @@
                                 Import
                             </button>
                         </div>
+                        -->
                     </div>
                     <div class="stats-hero-sub">Calculated from your local watch history</div>
                 </div>
@@ -560,6 +662,28 @@
             <div id="mylist-grid" class="cards-grid"></div>
         </div>
 
+        <!-- COLLECTIONS PAGE -->
+        <div id="collections-page" style="display:none; padding: 90px 40px 80px;">
+            <div class="search-header"
+                style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
+                <div>
+                    <div class="search-query-display">Collections</div>
+                    <div class="search-count" id="collections-count"></div>
+                </div>
+                <button class="share-btn" onclick="refreshCollectionsCache()" title="Refresh collection list">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round">
+                        <polyline points="23 4 23 10 17 10" />
+                        <polyline points="1 20 1 14 7 14" />
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+            <div id="collections-grid" class="cards-row"
+                style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));gap:20px;"></div>
+        </div>
+
         <!-- PLAYER PAGE -->
         <div id="player-page">
 
@@ -634,6 +758,7 @@
                 <button class="src-btn active" data-src="primesrc" onclick="switchSource('primesrc')" oncontextmenu="event.preventDefault();showSourceContextMenu(event,'primesrc','PrimeSrc')">PrimeSrc</button>
                 <button class="src-btn" data-src="embed2" onclick="switchSource('embed2')" oncontextmenu="event.preventDefault();showSourceContextMenu(event,'embed2','2Embed')">2Embed</button>
                 <button class="src-btn" data-src="moviesapi" onclick="switchSource('moviesapi')" oncontextmenu="event.preventDefault();showSourceContextMenu(event,'moviesapi','MoviesAPI')">MoviesAPI</button>
+                <button class="src-btn" data-src="vidking" onclick="switchSource('vidking')" oncontextmenu="event.preventDefault();showSourceContextMenu(event,'vidking','VidKing')">VidKing</button>
                 <!--<button class="fullscreen-btn" id="fullscreen-btn" onclick="toggleFullscreen()" title="Toggle Fullscreen (F)" style="margin-left:auto;">
                     <svg id="fullscreen-icon-enter" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                         <path d="M4 8V4h4" />
@@ -852,6 +977,6 @@
     </footer>
 
     <!-- JS -->
-    <script src="main.js?v=33"></script>
+    <script src="main.js?v=35"></script>
 </body>
 </html>
