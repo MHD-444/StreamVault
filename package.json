@@ -1,0 +1,19 @@
+{
+  "name": "streamvault",
+  "version": "1.0.0",
+  "description": "Cinema Unbound — Stream movies and TV shows",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'No build step required for static HTML project'"
+  },
+  "keywords": [
+    "streaming",
+    "movies",
+    "tv-shows"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^1.1.1"
+  }
+}
