@@ -406,7 +406,7 @@ main{padding-top: 70px;}
 .cards-row-1 .card img{width: 100%; height: auto; border-radius: 8px;}
 .cards-row{display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; padding: 15px 0; overscroll-behavior-x: contain;}
 
-.card{width: 100%; position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; contain: layout style paint; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;}
+.card{width: 100%; position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; contain: layout style; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;}
 .card:hover{transform:translateY(-8px);border-color:var(--gold);box-shadow:0 20px 40px rgba(0,0,0,0.4),0 0 30px var(--gold-subtle,rgba(201,168,76,0.1));}
 .card-poster{width: 100%; aspect-ratio: 2/3; object-fit: cover; background: var(--surface2);}
 .card-poster-placeholder{width: 100%; aspect-ratio: 2/3; min-height: 200px; background: var(--surface2); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text3); font-size: 12px; text-align: center; padding: 8px; gap: 8px;}
@@ -417,8 +417,7 @@ main{padding-top: 70px;}
 .card-type-badge{font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; background: rgba(201,168,76,0.12); color: var(--gold); padding: 2px 6px; border-radius: 3px;}
 
 .row-wrapper{position: relative;}
-.row-wrapper::before,
-.row-wrapper::after{content: ''; position: absolute; top: 0; width: 80px; height: 100%; z-index: 4; pointer-events: none;}
+.row-wrapper::before, .row-wrapper::after{content: ''; position: absolute; top: 0; width: 80px; height: 100%; z-index: 4; pointer-events: none;}
 .row-wrapper::before{left: 0; background: linear-gradient(to right, var(--bg), transparent);}
 .row-wrapper::after{right: 0; background: linear-gradient(to left, var(--bg), transparent);}
 
@@ -446,10 +445,9 @@ main{padding-top: 70px;}
 .cw-remove-btn:active{transform: scale(0.95);}
 
 /* ─── CW HOVER OVERLAY ─── */
-.cw-poster-wrap{position: relative; overflow: hidden;}
-.cw-hover-overlay{position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 8px 14px; display: flex; align-items: flex-end; justify-content: space-between; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%); opacity: 0; transition: opacity 0.22s ease; pointer-events: none; z-index: 3;}
-.cw-poster-wrap:hover .cw-hover-overlay,
-.cw-poster-wrap.is-touching .cw-hover-overlay{opacity: 1; pointer-events: all;}
+.cw-poster-wrap{position: relative; overflow: visible;}
+.cw-hover-overlay{position: absolute; bottom: 0; left: 0; right: 0; padding: 10px 8px 14px; display: flex; align-items: flex-end; justify-content: space-between; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%); opacity: 0; transition: opacity 0.22s ease; pointer-events: none; z-index: 3; border-radius: 0 0 12px 12px; overflow: hidden;}
+.cw-poster-wrap:hover .cw-hover-overlay, .cw-poster-wrap.is-touching .cw-hover-overlay{opacity: 1; pointer-events: all;}
 .cw-hover-left{display: flex; gap: 6px; align-items: center;}
 .cw-hover-right{display: flex; align-items: center;}
 .cw-hover-btn{background: rgba(255,255,255,0.15); border: 1.5px solid rgba(255,255,255,0.3); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; transition: background 0.18s ease, transform 0.15s ease, border-color 0.18s ease; line-height: 1; padding: 0;}
@@ -466,6 +464,7 @@ main{padding-top: 70px;}
 /* ─── SCROLL TO TOP ─── */
 #scroll-top{position: fixed; bottom: 32px; right: 32px; z-index: 300; width: 44px; height: 44px; border-radius: 50%; background: var(--gold); color: #080808; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(201,168,76,0.35); opacity: 0; transform: translateY(16px); transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s; pointer-events: none;}
 #scroll-top.visible{opacity: 1; transform: translateY(0); pointer-events: auto;}
+#scroll-top.hidden-force{opacity: 0 !important; transform: translateY(16px) !important; pointer-events: none !important;}
 #scroll-top:hover{background: var(--gold2);}
 
 /* ─── PLAYER PAGE ─── */
@@ -1028,7 +1027,18 @@ body[data-card-size="poster"]
 .card-info{display:none;}
 body[data-card-size="poster"]
 .card{border-radius:10px;}
-.settings-section-title .settings-sub {font-size: 11px; color: var(--text3); opacity: 0.7; float: right;}
+.settings-section-title .settings-sub {font-size: 11px; color: var(--text3); opacity: 0.7; margin-left: 8px; font-weight: 400; text-transform: none; letter-spacing: 0;}
+.card-size-picker{display:flex;gap:10px;width:100%;}
+.card-size-opt{flex:1;background:var(--surface2);border:2px solid var(--border);border-radius:10px;padding:12px 8px 10px;cursor:pointer;transition:border-color 0.2s,background 0.2s,transform 0.15s;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;}
+.card-size-opt:hover{border-color:rgba(201,168,76,0.4);background:var(--surface3);transform:translateY(-2px);}
+.card-size-opt.active{border-color:var(--gold);background:rgba(201,168,76,0.08);}
+.card-size-preview{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;width:100%;aspect-ratio:2/1;}
+.card-size-preview.csp-compact{grid-template-columns:repeat(6,1fr);}
+.card-size-preview.csp-poster{grid-template-columns:repeat(3,1fr);}
+.csp-card{background:var(--surface3);border-radius:3px;aspect-ratio:2/3;}
+.card-size-opt.active .csp-card{background:rgba(201,168,76,0.35);}
+.csp-label{font-size:11px;font-weight:500;color:var(--text2);letter-spacing:0.04em;}
+.card-size-opt.active .csp-label{color:var(--gold);}
 #home-row-order-reset-btn {padding: 0px 16px 8px; background: transparent; border: none; cursor: pointer; font-size: 13px; transition: color 0.2s ease;}
 #home-row-order-reset-btn:hover{color: var(--gold);}
 /* ─ INCOGNITO BANNER ─ */

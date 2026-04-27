@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=35">
+    <link rel="stylesheet" href="style.css?v=36">
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -194,14 +194,43 @@
                         <button class="accent-reset-btn" onclick="applyCustomAccent('#c9a84c')">↺ Reset</button>
                     </div>
                 </div>
-                <div class="settings-row">
+                <div class="settings-row" style="align-items:flex-start;flex-direction:column;gap:16px;">
                     <div class="settings-label">Card Size<div class="settings-sub">How cards appear in browse grids</div></div>
-                    <select class="filter-select" style="width:140px" id="st-card-size" onchange="setCardSize(this.value)">
-                        <option value="default">Default</option>
-                        <option value="compact">Compact</option>
-                        <option value="poster">Poster Only</option>
-                    </select>
+                    <div class="card-size-picker" id="card-size-picker">
+                        <button class="card-size-opt" data-size="default" onclick="setCardSize('default');_syncCardSizePicker()">
+                            <div class="card-size-preview">
+                                <div class="csp-card"></div>
+                                <div class="csp-card"></div>
+                                <div class="csp-card"></div>
+                                <div class="csp-card"></div>
+                            </div>
+                            <div class="csp-label">Default</div>
+                        </button>
+                        <button class="card-size-opt" data-size="compact" onclick="setCardSize('compact');_syncCardSizePicker()">
+                            <div class="card-size-preview csp-compact">
+                                <div class="csp-card"></div>
+                                <div class="csp-card"></div>
+                                <div class="csp-card"></div>
+                                <div class="csp-card"></div>
+                                <div class="csp-card"></div>
+                                <div class="csp-card"></div>
+                            </div>
+                            <div class="csp-label">Compact</div>
+                        </button>
+                        <button class="card-size-opt" data-size="poster" onclick="setCardSize('poster');_syncCardSizePicker()">
+                            <div class="card-size-preview csp-poster">
+                                <div class="csp-card"></div>
+                                <div class="csp-card"></div>
+                                <div class="csp-card"></div>
+                            </div>
+                            <div class="csp-label">Poster Only</div>
+                        </button>
+                    </div>
                 </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Navigation Tabs <span class="settings-sub">Toggle which tabs are visible</span></div>
+                <div id="nav-tab-visibility-list"></div>
             </div>
             <div class="settings-section">
                 <div class="settings-section-title">Playback</div>
@@ -269,9 +298,16 @@
                     <div class="settings-label">Import Backup<div class="settings-sub">Restore from a previous export</div></div>
                     <button class="share-btn" onclick="openImportCard()">Import</button>
                 </div>
-                <div class="settings-row">
+                <div class="settings-row" id="clear-data-row">
                     <div class="settings-label" style="color:var(--red)">Clear All Data<div class="settings-sub" style="color:var(--text3)">Permanently delete watch history & list</div></div>
-                    <button class="share-btn" style="color:var(--red);border-color:var(--red)" onclick="clearAllData()">Clear</button>
+                    <button class="share-btn" style="color:var(--red);border-color:var(--red)" onclick="showClearDataConfirm()">Clear</button>
+                </div>
+                <div id="clear-data-confirm" style="display:none;padding:14px 20px;background:rgba(192,57,43,0.07);border-top:1px solid rgba(192,57,43,0.2);">
+                    <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">This will permanently delete your watch history and saved list. This action cannot be undone.</div>
+                    <div style="display:flex;gap:8px;">
+                        <button onclick="clearAllData()" style="padding:9px 20px;background:var(--red);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;font-weight:500;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Yes, delete everything</button>
+                        <button onclick="hideClearDataConfirm()" style="padding:9px 20px;background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;">Cancel</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -977,6 +1013,6 @@
     </footer>
 
     <!-- JS -->
-    <script src="main.js?v=35"></script>
+    <script src="main.js?v=36"></script>
 </body>
 </html>
