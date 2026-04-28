@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=37">
+    <link rel="stylesheet" href="style.css?v=38">
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#080808" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -217,6 +217,14 @@
                                 <div class="csp-card"></div>
                             </div>
                             <div class="csp-label">Compact</div>
+                        </button>
+                        <button class="card-size-opt" data-size="list" onclick="setCardSize('list');_syncCardSizePicker()">
+                            <div class="card-size-preview csp-list">
+                                <div class="csp-list-row"><div class="csp-list-thumb"></div><div class="csp-list-lines"><div></div><div></div></div></div>
+                                <div class="csp-list-row"><div class="csp-list-thumb"></div><div class="csp-list-lines"><div></div><div></div></div></div>
+                                <div class="csp-list-row"><div class="csp-list-thumb"></div><div class="csp-list-lines"><div></div><div></div></div></div>
+                            </div>
+                            <div class="csp-label">List</div>
                         </button>
                         <button class="card-size-opt" data-size="poster" onclick="setCardSize('poster');_syncCardSizePicker()">
                             <div class="card-size-preview csp-poster">
@@ -1014,6 +1022,6 @@
     </footer>
 
     <!-- JS -->
-    <script src="main.js?v=37"></script>
+    <script src="main.js?v=38"></script>
 </body>
 </html>
