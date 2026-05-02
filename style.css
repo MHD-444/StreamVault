@@ -774,6 +774,8 @@ main{padding-top:70px;}
 .mylist-drag-handle:active{cursor:grabbing;}
 .ml-dragging{opacity:0.4;transform:scale(0.97);border-color:var(--gold) !important;transition:opacity 0.15s,transform 0.15s !important;}
 .ml-drag-over{border-color:var(--gold) !important;box-shadow:0 0 0 2px var(--gold),0 20px 40px rgba(0,0,0,0.4) !important;transform:translateY(-4px);transition:box-shadow 0.15s,transform 0.15s !important;}
+#ml-touch-ghost .mylist-drag-handle{display:none;}
+#ml-touch-ghost .cw-hover-overlay{display:none;}
 
 /* ─── COLLECTION CARDS ─── */
 .collection-card{border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid var(--border);transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275),box-shadow 0.3s ease,border-color 0.3s ease;}
@@ -911,7 +913,7 @@ body[data-card-size="list"] .card-watched-badge,.body[data-card-size="list"] .ca
 body[data-card-size="list"] .cw-hover-overlay{border-radius:0 0 10px 0;}
 body[data-card-size="list"] .card:hover{transform:translateX(4px) translateY(0);box-shadow:4px 0 20px rgba(0,0,0,0.4);}
 .settings-section-title .settings-sub{font-size:11px;color:var(--text3);opacity:0.7;float:right;}
-#home-row-order-reset-btn{padding:0px 16px 4px;float:right;background:transparent;border:none;cursor:pointer;font-size:13px;transition:color 0.2s ease;}
+#home-row-order-reset-btn{padding:0px 16px 6px;float:right;background:transparent;border:none;cursor:pointer;font-size:13px;transition:color 0.2s ease;}
 #home-row-order-reset-btn:hover{color:var(--gold);}
 .card-size-picker{display:flex;gap:10px;width:100%;flex-wrap:wrap;}
 .card-size-opt{flex:1;min-width:80px;min-height:110px;background:var(--surface2);border:2px solid var(--border);border-radius:14px;padding:14px 10px 12px;cursor:pointer;transition:border-color 0.25s,background 0.25s,box-shadow 0.25s,transform 0.25s cubic-bezier(0.34,1.56,0.64,1);display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:10px;font-family:'DM Sans',sans-serif;position:relative;overflow:hidden;}
